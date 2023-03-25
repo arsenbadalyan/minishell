@@ -1,21 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strchr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arsbadal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/03/25 20:30:27 by arsbadal         ###   ########.fr       */
+/*   Created: 2023/01/20 22:11:12 by arsbadal          #+#    #+#             */
+/*   Updated: 2023/01/20 22:11:13 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
+char	*ft_strchr(const char *str, int ch)
+{
+	int	i;
 
-#include "libft.h"
-#include "get_next_line.h"
-
-#include <stdio.h>
-
-#endif
+	i = 0;
+	while (str[i])
+	{
+		if ((unsigned char)str[i] == (unsigned char)ch)
+			return ((char *)(str + i));
+		i++;
+	}
+	if (str[i] == ch)
+		return ((char *)(str + i));
+	return (0);
+}

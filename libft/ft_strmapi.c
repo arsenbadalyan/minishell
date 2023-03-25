@@ -1,21 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arsbadal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/03/25 20:30:27 by arsbadal         ###   ########.fr       */
+/*   Created: 2023/01/20 22:14:09 by arsbadal          #+#    #+#             */
+/*   Updated: 2023/01/20 22:14:11 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-
 #include "libft.h"
-#include "get_next_line.h"
 
-#include <stdio.h>
+char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
+{
+	unsigned int	i;
+	char			*str;
 
-#endif
+	i = 0;
+	if (!s || !f)
+		return (NULL);
+	str = ft_strdup(s);
+	if (!str)
+		return (NULL);
+	while (s[i])
+	{
+		str[i] = (*f)(i, s[i]);
+		i++;
+	}
+	return (str);
+}

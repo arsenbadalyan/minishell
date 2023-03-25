@@ -1,21 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Minishell.h                                        :+:      :+:    :+:   */
+/*   ft_strdup.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arsbadal <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/03/25 20:30:27 by arsbadal         ###   ########.fr       */
+/*   Created: 2023/01/20 22:11:19 by arsbadal          #+#    #+#             */
+/*   Updated: 2023/01/20 22:11:20 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef MINISHELL_H
-# define MINISHELL_H
-
 #include "libft.h"
-#include "get_next_line.h"
 
-#include <stdio.h>
+char	*ft_strdup(const char *s1)
+{
+	int		i;
+	char	*ptr_str;
 
-#endif
+	i = -1;
+	ptr_str = (char *)malloc((sizeof(char) * (ft_strlen(s1) + 1)));
+	if (!ptr_str)
+		return ((void *)0);
+	while (s1[++i])
+		ptr_str[i] = s1[i];
+	ptr_str[i] = '\0';
+	return (ptr_str);
+}
