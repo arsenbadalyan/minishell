@@ -1,10 +1,11 @@
 # Main Variables
-NAME     = so_long
+NAME     = minishell
 GCC      = gcc
-CFLAGS   = -Wall -Wextra -Werror
+# CFLAGS   = -Wall -Wextra -Werror
+CFLAGS   =
 RM       = rm -rf
 OUTPUT   = ./$(NAME)
-LIBS     = -I./includes/ -I./readline/
+LIBS     = -I./includes/ -I./readline/include
 LIBS_DIR = includes
 
 # Compiled directories
@@ -25,6 +26,13 @@ LIB_DIR = $(foreach dir, $(LIBS_DIR), $(wildcard $(dir)/*.h))
 LIBFT     = ft
 LIBFT_DIR = ./lib$(LIBFT)/
 
+# Readline Part
+RDLINE        := readline
+RDLINE_PATH   = $(addprefix $(shell pwd)/, $(RDLINE))
+RDLINE_MAIN   = $(addprefix $(RDLINE), -main)
+RDLINE_RESERV = $(addprefix $(RDLINE), -lib)
+RDLINE_DIR    = ./$(RDLINE)/lib
+
 # Colors
 RESET  = \033[0m
 RED    = \033[31m
@@ -32,16 +40,33 @@ GREEN  = \033[32m
 YELLOW = \033[33m
 BLUE   = \033[34m
 
-all: $(NAME)
+all: readline $(NAME)
 	@echo > /dev/null
 
 bonus: all
+
+readline: Makefile
+	@if [ -d $(RDLINE) ]; then \
+		make READLINE_READY; \
+	else \
+		make readline-util; \
+	fi
+
+readline-util:
+	@echo "${YELLOW}Please wait until program compiling...${RESET}"
+	@$(RM) $(RDLINE_RESERV)
+	@cp -R $(RDLINE_MAIN) $(RDLINE_RESERV)
+	@cd $(RDLINE_RESERV) && exec ./configure --prefix=${RDLINE_PATH}
+	@make -C ./$(RDLINE_RESERV)
+	@make -C ./$(RDLINE_RESERV) install
+	@$(RM) $(RDLINE_RESERV)
+	@make READLINE_READY
 
 $(NAME): $(LIB_DIR) Makefile $(OBJS)
 	@make WAIT_COMPILE_MSG
 	@echo "${GREEN}-> Compiling LIBFT...${RESET}"
 	@make -C $(LIBFT_DIR) all
-	@$(GCC) -g $(CFLAGS) $(LIBS) -L$(LIBFT_DIR) -l$(LIBFT) -L./readline/ -lreadline $(OBJS) -o $(NAME)
+	@$(GCC) -g $(CFLAGS) $(LIBS) -L$(LIBFT_DIR) -l$(LIBFT) -L$(RDLINE_DIR) -l$(RDLINE) $(OBJS) -o $(NAME)
 	@make DONE_MSG
 
 $(OBJ)/%.o: $(SRC)/%.c $(LIB_DIR)
@@ -52,19 +77,22 @@ $(OBJ)/%.o: $(SRC)/%.c $(LIB_DIR)
 clean: DELETE_OBJ_MSG
 	@make -C $(LIBFT_DIR) clean
 	@$(RM) $(OBJ)
+	@$(RM) $(RDLINE)
 fclean: clean DELETE_PROGRAM_MSG
 	@make -C $(LIBFT_DIR) fclean
 	@$(RM) $(NAME)
 re: fclean all
 
 # Helper messages
+READLINE_READY:
+	@echo "${GREEN}Readline is Ready!${RESET}"
 WAIT_COMPILE_MSG:
-	@echo "${YELLOW}Please wait until game is compiling...${RESET}"
+	@echo "${YELLOW}Please wait until program compiling...${RESET}"
 DONE_MSG:
-	@echo "${GREEN}! GAME COMPILED SUCCESSFULLY !${RESET}"
+	@echo "${GREEN}! Minishell is ready !${RESET}"
 DELETE_OBJ_MSG:
 	@echo "${RED}Object files deleting...${RESET}"
 DELETE_PROGRAM_MSG:
-	@echo "${RED}! ATTENTION !\nGame is deleting...${RESET}"
+	@echo "${RED}! ATTENTION !\nMinishell is deleting...${RESET}"
 
 .PHONY: all clean fclean re

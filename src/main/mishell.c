@@ -6,17 +6,17 @@
 /*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:42:02 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/03/25 20:36:35 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/03/26 17:02:32 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <readline.h>
-// #include <history.h>
+#include <readline/readline.h>
+#include <readline/history.h>
 
-int main()
+int main(int argc, char **argv, char **envp)
 {
-    // printf("Mishell...");
-    readline("Test");    
+    char *clear[2] = {"/usr/bin/clear", NULL};
+    execve("/usr/bin/clear", clear, NULL);
     return (0);
 }
