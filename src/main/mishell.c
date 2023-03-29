@@ -11,12 +11,14 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-#include <readline/readline.h>
-#include <readline/history.h>
 
 int main(int argc, char **argv, char **envp)
 {
-    char *clear[2] = {"/usr/bin/clear", NULL};
-    execve("/usr/bin/clear", clear, NULL);
-    return (0);
+	t_minishell *shell;
+
+	if(argc > 1)
+		exit(1);
+	shell = init_minishell();
+	read_shell(envp, shell);
+	return (0);
 }
