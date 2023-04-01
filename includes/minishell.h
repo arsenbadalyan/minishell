@@ -6,7 +6,7 @@
 /*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/03/25 20:30:27 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/01 18:21:01 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,14 +30,15 @@
 #include <string.h>
 
 // Defines
-#define SHELL_NAME "\033[32mminishell> \033[0m"
+#define SHELL_NAME "\033[32mmishell> \033[0m"
+#define 
 
 // Took input from user
-void read_shell(char **envp, t_minishell *shell);
+void read_shell(t_minishell *shell);
 
 // Utils
-char *free_single(char **addr);
-char *free_double(char ***addr);
+void *free_single(void **addr);
+void *free_double(void ***addr);
 void force_quit(int errno);
 
 #endif

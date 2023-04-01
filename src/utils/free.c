@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   free.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/01 12:25:52 by arsbadal          #+#    #+#             */
+/*   Updated: 2023/04/01 12:29:57 by arsbadal         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-char *free_single(char **addr)
+void *free_single(void **addr)
 {
     if (*addr)
     {
@@ -10,7 +22,7 @@ char *free_single(char **addr)
     return (0);
 }
 
-char *free_double(char ***addr)
+void *free_double(void ***addr)
 {
     int i;
 
@@ -19,10 +31,10 @@ char *free_double(char ***addr)
     {
         while ((*addr)[i])
         {
-            free((*addr)[i]);
+            free_single(&(*addr)[i]);
             i++;
         }
-        free(*addr);
+        free_single((void *)&(*addr));
     }
     return (0);
 }
