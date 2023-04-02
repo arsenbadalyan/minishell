@@ -12,10 +12,10 @@
 
 #include "minishell.h"
 
-void force_quit(int errno)
+void	force_quit(int errno)
 {
-    char *error;
-
+	char	*error;
+    
     error = strerror(errno);
     printf("minishell: %s\n", error);
     exit(errno);

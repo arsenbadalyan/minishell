@@ -14,12 +14,12 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void read_shell(t_minishell *shell)
+void	read_shell(t_minishell *shell)
 {
-	char *user_input;
-	char *input_cpy;
+	char	*user_input;
+	char	*input_cpy;
 
-	while(1)
+	while (1)
 	{
 		user_input = readline(SHELL_NAME);
 		input_cpy = user_input;

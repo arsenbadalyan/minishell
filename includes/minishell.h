@@ -38,6 +38,13 @@ int		here_doc_params(char *cmd_line, size_t index, int sg_quote, int db_quote);
 int		check_parse_error(char *cmd_line, int index);
 int		check_par_utils(char* str);
 
+// Here_Doc
+int		exe_here_doc(char *limiter, int clean);
+void	wait_limiter(char *limiter, int fd);
+int		here_doc_unlink(int here_doc_num);
+int		here_doc_controller(char *cmd_line);
+int		here_doc_params(char *cmd_line, int index);
+
 // Defines
 # define SHELL_NAME "\033[32mmishell> \033[0m"
 # define HERE_DOC ".here_doc"
