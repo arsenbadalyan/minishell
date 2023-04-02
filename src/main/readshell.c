@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readshell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:25:57 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/01 12:36:44 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/02 15:31:26 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,17 +14,20 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void read_shell(t_minishell *shell)
+void	read_shell(t_minishell *shell)
 {
-	char *user_input;
+	char	*user_input;
+	char	*input_cpy;
 
-	while(1)
+	while (1)
 	{
 		user_input = readline(SHELL_NAME);
-		if(!ft_strlen(user_input))
-			continue;
+		input_cpy = user_input;
+		while (*input_cpy == ' ')
+			input_cpy++;
+		if (!ft_strlen(input_cpy))
+			continue ;
 		add_history(user_input);
-		
 		free_single((void *)(&user_input));
 	}
 }

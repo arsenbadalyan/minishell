@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Minishell.h                                        :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/01 18:21:01 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/01 23:14:40 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,16 @@
 #include <unistd.h>
 #include <string.h>
 
+// Here_Doc
+int		exe_here_doc(char *limiter, int clean);
+void	wait_limiter(char *limiter, int fd);
+int		here_doc_unlink(int here_doc_num);
+int		here_doc_controller(char *cmd_line);
+int		here_doc_params(char *cmd_line, int index);
+
 // Defines
 #define SHELL_NAME "\033[32mmishell> \033[0m"
-#define 
+#define HERE_DOC ".here_doc"
 
 // Took input from user
 void read_shell(t_minishell *shell);
