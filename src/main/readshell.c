@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:25:57 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/02 15:31:26 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/02 21:25:48 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ void	read_shell(t_minishell *shell)
 		input_cpy = user_input;
 		while (*input_cpy == ' ')
 			input_cpy++;
-		if (!ft_strlen(input_cpy))
+		if (!ft_strlen(input_cpy) && !free_single((void *)(&user_input)))
 			continue ;
 		add_history(user_input);
 		free_single((void *)(&user_input));

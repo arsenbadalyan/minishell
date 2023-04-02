@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 18:17:22 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/02 15:31:43 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/02 21:52:36 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,74 +78,45 @@ int	exe_here_doc(char *limiter, int clean)
 
 int	check_parse_error(char *cmd_line, int index)
 {
-	if ((cmd_line[index] == '<') || (cmd_line[index] == '>')
-		|| (cmd_line[index] == '|') || (cmd_line[index] == '&'))
+	if (ft_strchr(METASYMBOLS_SPECIAL, cmd_line[index]))
 	{
 		write (1, "zsh: parse error near `", 23);
 		write (1, &cmd_line[index], 1);
-		if ((cmd_line[index] == '<' && cmd_line[index + 1] == '<')
-			|| (cmd_line[index] == '>' && cmd_line[index + 1] == '>')
-			|| (cmd_line[index] == '|' && cmd_line[index + 1] == '|')
-			|| (cmd_line[index] == '&' && cmd_line[index + 1] == '&'))
-			write (1, &cmd_line[index], 1);
+		if (ft_strchr(METASYMBOLS_SPECIAL, cmd_line[index + 1])
+			&& cmd_line[index] == cmd_line[index + 1])
+				write (1, &cmd_line[index + 1], 1);
 		write (1, "'\n", 2);
 		return (1);
 	}
 	return (0);
 }
 
-int	here_doc_params(char *cmd_line, int index)
+int	here_doc_params(char *cmd_line, size_t index, int sg_quote, int db_quote)
 {
-	int		tmp;
-	int		i;
 	char	*limiter;
+	char	*tmp_limiter;
+	char	current_cmd[2];
 
-	i = 0;
-	while (cmd_line[index] == ' ')
-		index++;
-	tmp = index;
+	limiter = ft_strdup("");
+	current_cmd[1] = 0;
 	if (check_parse_error(cmd_line, index))
 		return (1);
-	while (!(cmd_line[tmp] == ' ' || cmd_line[tmp] == '|'
-			|| cmd_line[tmp] == '&' || cmd_line[tmp] == '<'
-			|| cmd_line[tmp] == '>' || cmd_line[tmp] == '\0'))
-		tmp++;
-	limiter = (char *)malloc(sizeof(char) * (tmp - index + 1));
-	if (!limiter)
-		force_quit(12);
-	while (!(cmd_line[index] == ' ' || cmd_line[index] == '|'
-			|| cmd_line[index] == '&' || cmd_line[index] == '<'
-			|| cmd_line[index] == '>' || cmd_line[index] == '\0'))
-		limiter[i++] = cmd_line[index++];
-	limiter[i] = '\0';
-	printf ("limiter: %s\n", limiter);
+	while (cmd_line[index])
+	{
+		quote_check(&sg_quote, &db_quote, cmd_line[index]);
+		current_cmd[0] = cmd_line[index];
+		tmp_limiter = limiter;
+		limiter = ft_strjoin(limiter, current_cmd);
+		free_single((void *)&tmp_limiter);
+		if (!ft_strchr(METASYMBOLS_ALL, cmd_line[index++])
+			&& !sg_quote && !db_quote)
+			break ;
+	}
+	tmp_limiter = limiter;
+	limiter = _echo(limiter, 1);
+	free_single((void *)&tmp_limiter);
+	printf("%s\n", limiter);
 	exe_here_doc(limiter, 0);
 	free_single((void *)&limiter);
-	return (0);
-}
-
-int	here_doc_controller(char *cmd_line)
-{
-	int	par_num;
-	int	i;
-
-	i = 0;
-	par_num = 0;
-	while (cmd_line[i])
-	{
-		if (cmd_line[i] == '(')
-			par_num++;
-		else if (cmd_line[i] == ')')
-			par_num--;
-		if (par_num < 0)
-		// TODO: add parentheses error
-			write(1, "parentheses error\n", 18);
-		if (cmd_line[i] == '<' && cmd_line[i + 1] == '<')
-			if (here_doc_params(cmd_line, i + 2))
-				return (1);
-		i++;
-	}
-	if (par_num != 0)
-		write(1, "parentheses error\n", 18);
 	return (0);
 }
