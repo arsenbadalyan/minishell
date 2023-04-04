@@ -18,10 +18,11 @@ int main(int argc, char **argv, char **envp)
 
 	if(argc > 1)
 		exit(1);
-	shell = init_minishell();
-	print_header();
-	shell->envp = envp;
-	read_shell(shell);
+	// shell = init_minishell();
+	// print_header();
+	// shell->envp = envp;
+	// read_shell(shell);
+	_pwd();
 	// TODO DELETE IN END V
 	// quote_controller("<< 'hello'\"");
 	// here_doc_controller("<< 'hello'\"");

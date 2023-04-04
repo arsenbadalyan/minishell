@@ -62,11 +62,18 @@ readline-util:
 	@$(RM) $(RDLINE_RESERV)
 	@make READLINE_READY
 
+#$(NAME): $(LIB_DIR) Makefile $(OBJS)
+#	@make WAIT_COMPILE_MSG
+#	@echo "${GREEN}-> Compiling LIBFT...${RESET}"
+#	@make -C $(LIBFT_DIR) all
+#	@$(GCC) -g $(CFLAGS) $(LIBS) -L$(LIBFT_DIR) -l$(LIBFT) -L$(RDLINE_DIR) -l$(RDLINE) $(OBJS) -o $(NAME)
+#	@make DONE_MSG
+
 $(NAME): $(LIB_DIR) Makefile $(OBJS)
 	@make WAIT_COMPILE_MSG
 	@echo "${GREEN}-> Compiling LIBFT...${RESET}"
 	@make -C $(LIBFT_DIR) all
-	@$(GCC) -g $(CFLAGS) $(LIBS) -L$(LIBFT_DIR) -l$(LIBFT) -L$(RDLINE_DIR) -l$(RDLINE) $(OBJS) -o $(NAME)
+	@$(GCC) -o $(NAME) $(OBJS) -g $(CFLAGS) $(LIBS) -L$(LIBFT_DIR) -l$(LIBFT) -L$(RDLINE_DIR) -l$(RDLINE) -lncurses 
 	@make DONE_MSG
 
 $(OBJ)/%.o: $(SRC)/%.c $(LIB_DIR)

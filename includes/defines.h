@@ -6,6 +6,7 @@
 # define HERE_DOC ".here_doc"
 # define METASYMBOLS_ALL "><|&)( "
 # define METASYMBOLS_SPECIAL "><|&)("
+# define PATH_MAX 1024
 
 // Custom Errors
 # define ERROR_UNX "unexpected error"
