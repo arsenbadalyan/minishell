@@ -21,6 +21,7 @@ t_minishell *init_minishell()
         force_quit(12);
     minishell->execute = init_exc_line();
     minishell->status = init_status();
+    minishell->local_env = NULL;
     return (minishell);
 }
 
