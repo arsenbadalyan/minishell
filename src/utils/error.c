@@ -17,8 +17,10 @@ void	force_quit(int errno)
 	char	*error;
     
     error = strerror(errno);
-    printf("minishell: %s\n", error);
-    exit(errno);
+	ft_putstr_fd(SHELL_NAME, 2);
+	ft_putstr_fd(": ", 2);
+	ft_putstr_fd(error, 2);
+	exit(errno);
 }
 
 void	write_exception(int errno, char *addn, char *addn2, int is_exit)
@@ -26,10 +28,11 @@ void	write_exception(int errno, char *addn, char *addn2, int is_exit)
 	char	*error;
 
 	if (errno > 107)
-		error = "command not found: ";
+		error = get_custom_error(errno);
 	else
 		error = strerror(errno);
-	ft_putstr_fd("mishell: ", 2);
+	ft_putstr_fd(SHELL_NAME, 2);
+	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
 	if (addn)
 	{
@@ -38,10 +41,17 @@ void	write_exception(int errno, char *addn, char *addn2, int is_exit)
 	}
 	if (addn2)
 	{
-		ft_putstr_fd("\n", 2);
+		ft_putstr_fd(": ", 2);
 		ft_putstr_fd(addn2, 2);
 	}
 	ft_putstr_fd("\n", 2);
-	if (errno < 128 && is_exit)
+	if (is_exit)
 		exit(errno);
+}
+
+char *get_custom_error(int errno)
+{
+	if(errno == 127)
+		return (ERROR_127);
+	return (ERROR_UNX);
 }

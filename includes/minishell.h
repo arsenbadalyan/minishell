@@ -13,15 +13,6 @@
 #ifndef MINISHELL_H
 # define MINISHELL_H
 
-// Libs
-# include "libft.h"
-# include "get_next_line.h"
-# include "shell.h"
-
-// Readline
-// #include <readline/readline.h>
-// #include <readline/history.h>
-
 // C Libs
 # include <stdio.h>
 # include <stdlib.h>
@@ -29,41 +20,46 @@
 # include <unistd.h>
 # include <string.h>
 
-// Here_Doc
+// Custom Libs
+# include "libft.h"
+# include "get_next_line.h"
+# include "shell.h"
+# include "defines.h"
+# include "built_in.h"
+
+// Readline
+// #include <readline/readline.h>
+// #include <readline/history.h>
+
+// Printf Minishell header on start
+void print_header();
+
+// Work with readline
+void	read_shell(t_minishell *shell);
+
+// Controllers
+int		here_doc_controller(char *cmd_line);
+void	quote_controller(char *line);
+
+// here_doc execution (<<)
 int		exe_here_doc(char *limiter, int clean);
 void	wait_limiter(char *limiter, int fd);
 int		here_doc_unlink(int here_doc_num);
-int		here_doc_controller(char *cmd_line);
 int		here_doc_params(char *cmd_line, size_t index, int sg_quote, int db_quote);
 int		check_parse_error(char *cmd_line, int index);
-int		check_par_utils(char* str);
-
-// Here_Doc
-int		exe_here_doc(char *limiter, int clean);
-void	wait_limiter(char *limiter, int fd);
-int		here_doc_unlink(int here_doc_num);
-int		here_doc_controller(char *cmd_line);
-int		here_doc_params(char *cmd_line, int index);
-
-// Defines
-# define SHELL_NAME "\033[32mmishell> \033[0m"
-# define HERE_DOC ".here_doc"
-# define METASYMBOLS_ALL "><|&)( "
-# define METASYMBOLS_SPECIAL "><|&)("
-
-// Took input from user
-void	read_shell(t_minishell *shell);
 
 // Utils
 void	*free_single(void **addr);
 void	*free_double(void ***addr);
+
+// Local ENV management
+char **is_valid_variable(char *exec_line);
+void add_new_local(t_minishell *shell, char **exec_line);
+t_local_env *fd_md_lvar(t_local_env *head, char *key, char *value, int is_find);
+
+// Error management
 void	force_quit(int errno);
-
-void quote_controller(char *line);
-
-// ECHO 
-char *_echo(char *line, int here_doc_mode);
-char *modify_line(char *line, int here_doc_mode, int sg_quote, int db_quote);
-int quote_check(int *sg_quote, int *db_quote, char c);
+void	write_exception(int errno, char *addn, char *addn2, int is_exit);
+char *get_custom_error(int errno);
 
 #endif

@@ -14,35 +14,6 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-int	check_par_utils(char* str)
-{
-    int *stack;
-    int top;
-	int	i;
-    
-	stack = (int *) malloc(sizeof(int) * ft_strlen(str));
-	if (!stack)
-		force_quit(12);
-	i = -1;
-	top = -1;
-	while (str[++i])
-	{
-		if(str[i] == '(')
-			stack[++top] = i;
-		else if(str[i] == ')')
-		{
-			if(top == -1)
-				return (i);
-			else 
-				top--;
-        }
-    }
-    // if(top == -1)
-    //     return (-1);
-    // else
-        return (ft_strlen(str));
-}
-
 int	here_doc_controller(char *cmd_line)
 {
 	size_t	i;
