@@ -13,11 +13,16 @@
 #ifndef SHELL_H
 #define SHELL_H
 
+// main for one check global
+// parent to go deeper in one line
+// child to get how many childs have one parent
+
 typedef struct s_minishell {
 	struct s_exc_line *execute;
 	struct s_status *status;
 	struct s_local_env *local_env;
 	char **envp;
+	int exit_code;
 } t_minishell;
 
 typedef struct s_exc_line {

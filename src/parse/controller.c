@@ -35,7 +35,7 @@ int	here_doc_controller(char *cmd_line)
 	return (0);
 }
 
-void quote_controller(char *line)
+int quote_controller(char *line)
 {
 	size_t i;
 	int db_quote;
@@ -47,18 +47,10 @@ void quote_controller(char *line)
 	while(line[i])
 	{
 		if(!quote_check(&sg_quote, &db_quote, line[i]))
-		{
-			// TODO make one function for exeptions
-			printf("parse error: unexpeted token \' or \"\n");
-			exit(1);
-		}
+			return (write_exception(130, "(\') or (\")", NULL, 0));
 		i++;
 	}
 	if(db_quote || sg_quote)
-	{
-		// TODO make one function for exeptions
-			printf("parse error: unexpeted token \' or \"\n");
-			exit(1);
-	}
-		
+		return (write_exception(130, "(\') or (\")", NULL, 0));
+	return (0);
 }

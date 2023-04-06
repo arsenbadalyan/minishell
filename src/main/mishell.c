@@ -23,7 +23,6 @@ int main(int argc, char **argv, char **envp)
 	shell->envp = envp;
 	read_shell(shell);
 	// TODO DELETE IN END V
-	// quote_controller("<< 'hello'\"");
 	// here_doc_controller("<< 'hello'\"");
 	// exe_here_doc(NULL, 1);
 	return (0);

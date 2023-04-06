@@ -1,6 +1,6 @@
 # Main Variables
 NAME     = minishell
-GCC      = gcc
+GCC      = clang
 # CFLAGS   = -Wall -Wextra -Werror
 CFLAGS   =
 RM       = rm -rf
