@@ -78,13 +78,12 @@ int	exe_here_doc(char *limiter, int clean)
 
 int	check_parse_error(char *cmd_line, int index)
 {
-	if (ft_strchr(METASYMBOLS_SPECIAL, cmd_line[index]))
+	if (ft_strchr(SEPARATORS_ALL, cmd_line[index]))
 	{
 		write (1, "zsh: parse error near `", 23);
 		write (1, &cmd_line[index], 1);
-		if (ft_strchr(METASYMBOLS_SPECIAL, cmd_line[index + 1])
-			&& cmd_line[index] == cmd_line[index + 1])
-				write (1, &cmd_line[index + 1], 1);
+		if (ft_strchr(SEPARATORS_ALL, cmd_line[index + 1]) && cmd_line[index] == cmd_line[index + 1])
+			write(1, &cmd_line[index + 1], 1);
 		write (1, "'\n", 2);
 		return (1);
 	}

@@ -1,3 +1,68 @@
+## Parse Check Cases
+(
+)
+()()
+(ls)
+(> ls -la) | && 
+<>
+(ls)>ls
+ls -la )
+ls -la ()
+() |
+( |
+ls && (  ls  )
+command (arg1) arg2
+command arg1 | arg2
+command1 ||| command2
+&
+command > output.txt < input.txt
+command ||& command2
+command "arg1'"
+command arg1" "arg2
+command (arg1 && command2
+command arg1&arg2
+command (arg1|command2)
+command1 || command2 || command3
+command arg1 >
+command arg1 arg2 >
+command arg1 arg2 &
+command arg1 > output.txt | command2
+command |
+command | | command2
+command arg1 arg2&arg3
+command (arg1|arg2|arg3))
+command && ||
+command "arg1"
+command 'arg1"
+command "arg1'arg2"
+command arg1 > output.txt >
+command arg1 arg2 > output.txt |
+command arg1 arg2 > output.txt &
+command arg1 &&&& command2
+command | command2
+command arg1 | arg2 | arg3
+command arg1 |& arg2
+command (arg1 | command2
+command arg1 |& command2
+command arg1 arg2 &&& command3
+command arg1 arg2 | command3
+command arg1 || command2 && command3
+command arg1 &&& command2
+command arg1 &&&
+command arg1 && && command2
+command arg1 arg2 &&&
+command arg1 &&& arg2
+command arg1 ||| arg2
+command arg1 || arg2 | command3
+command arg1 | command2 arg3
+command arg1 arg2 > output.txt <
+command arg1 arg2 & | command3
+command arg1 || command2 &&& command3
+command arg1 arg2 > | command3
+command arg1 |& | command2
+command arg1 |& arg2 | command3
+
+
 ## Test cases
 ### __cd__:
 ``` sh
