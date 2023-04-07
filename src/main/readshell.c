@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   readshell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:25:57 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/02 21:25:48 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/07 23:41:10 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ void	read_shell(t_minishell *shell)
 	char	*user_input;
 	char	*input_cpy;
 
+	user_input = NULL;
 	while (1)
 	{
 		user_input = readline(SHELL_NAME);
@@ -28,6 +29,10 @@ void	read_shell(t_minishell *shell)
 		if (!ft_strlen(input_cpy) && !free_single((void *)(&user_input)))
 			continue ;
 		add_history(user_input);
+		controller(shell, user_input);
 		free_single((void *)(&user_input));
+		// rl_on_new_line();
+		// rl_replace_line("", 0);
+		// rl_redisplay();
 	}
 }

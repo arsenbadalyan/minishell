@@ -1,27 +1,35 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   pwd.c                                              :+:      :+:    :+:   */
+/*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/04/01 12:26:38 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/07 23:39:43 by arsbadal         ###   ########.fr       */
+/*   Created: 2023/04/07 18:13:01 by armartir          #+#    #+#             */
+/*   Updated: 2023/04/07 23:34:52 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		_pwd(void)
+size_t	get_2d_array_length(void **array)
 {
-	char	cwd[PATH_MAX];
+	size_t i;
 
-	if (getcwd(cwd, PATH_MAX))
+	i = 0;
+	while(array[i])
 	{
-		printf("%s\n", cwd);
-		return (0);
+		// printf("%s\n", array[i]);
+		i++;
 	}
-	else
+	return (i);
+}
+
+int check_slice(char *line, char *SINGLE, char *DOUBLE)
+{
+	if (ft_strchr(DOUBLE, (*line)) && (*line) == *(line + 1))
+		return (2);
+	else if (ft_strchr(SINGLE, (*line)))
 		return (1);
-	return (1);
+	return (0);
 }

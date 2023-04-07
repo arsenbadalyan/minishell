@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mishell.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:42:02 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/02 22:00:16 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/07 23:51:10 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,14 +17,13 @@ int main(int argc, char **argv, char **envp)
 	t_minishell *shell;
 
 	if(argc > 1)
-		exit(1);
-	// shell = init_minishell();
-	// print_header();
-	// shell->envp = envp;
-	// read_shell(shell);
-	_pwd();
+		exit(1);		
+	shell = init_minishell();
+	print_header();
+	env_controller(shell, envp);
+	read_shell(shell);
+	// printf("%s\n", get_env(shell, "path"));
 	// TODO DELETE IN END V
-	// quote_controller("<< 'hello'\"");
 	// here_doc_controller("<< 'hello'\"");
 	// exe_here_doc(NULL, 1);
 	return (0);
