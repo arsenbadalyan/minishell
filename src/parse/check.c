@@ -14,7 +14,7 @@ int check_cmd_line(char *line, int sg_quote, int db_quote)
 		quote_check(&sg_quote, &db_quote, line[i]);
 		if ((sg_quote || db_quote) && ++sym_counter && ++i)
 			continue;
-		if (check_before_ph(line, i) || check_ph(line, i, &ph) 
+		if (check_before_ph(line, i, line[i]) || check_ph(line, i, &ph) 
 			|| check_meta_s(line, &sym_counter, &i))
 			return (130);
 		if (!ft_strchr(METASYMBOLS_ALL, line[i]))
@@ -26,18 +26,27 @@ int check_cmd_line(char *line, int sg_quote, int db_quote)
 	return (0);
 }
 
-int check_before_ph(char *line, int index)
+int check_before_ph(char *line, int index, char c)
 {
-	if(line[index] == '(')
+	if((c == '(' && index--) || (c == ')' && index++))
 	{
-		while(--index >= 0)
-		{	if(ft_strchr(WHITE_SPACE, line[index]))
-				--index;
-			else if((line[index] == '&' || line[index] == '|') && (!index
-					|| line[index] == '|' || line[index - 1] == line[index]))
+		while(1)
+		{
+			if(ft_strchr(WHITE_SPACE, line[index]))
+			{
+				if(c == '(')
+					--index;
+				else
+					++index;
+			}
+			else if(!index || (line[index] == '(' && c == '(') || ((line[index] == '&' || line[index] == '|')
+				&& (((line[index - 1] == line[index] && c == '(')
+					|| (line[index + 1] == line[index] && c == ')')))))
 				return (0);
 			else
-				return (write_exception(130, "(", NULL, 0));
+				return (write_exception(130, &c, NULL, 0));
+			if(index < 0 || !line[index])
+				break;
 		}
 	}
 	return (0);
@@ -48,7 +57,6 @@ int check_ph(char *line, size_t index, int *parenthesis)
 	size_t is_empty;
 
 	is_empty = 0;
-	printf("%c\n", line[index]);
 	if (line[index] == '(')
 	{
 		*parenthesis += 1;
