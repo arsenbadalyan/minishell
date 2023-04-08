@@ -17,5 +17,6 @@
 # define ERROR_UNX "unexpected error"
 # define ERROR_127 "command does not exit in the PATH or wrong command name"
 # define ERROR_130 "syntax error near unexpected token"
+# define ERROR_128 "too many arguments"
 
 #endif

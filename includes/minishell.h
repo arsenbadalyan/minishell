@@ -6,7 +6,7 @@
 /*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/07 19:42:50 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/07 23:20:04 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	read_shell(t_minishell *shell);
 // Parse Checkers
 int check_cmd_line(char *line, int sg_quote, int db_quote);
 int check_ph(char *line, size_t index, int *parenthesis);
-int check_before_ph(char *line, int index);
+int check_before_ph(char *line, int index, char c);
 int check_meta_s(char *line, size_t *sym_counter, int *index);
 size_t check_syntax(char *line, int index);
 
@@ -63,14 +63,20 @@ int		check_parse_error(char *cmd_line, int index);
 
 // Utils
 int check_slice(char *line, char *SINGLE, char *DOUBLE);
-void add_new_env(t_minishell *shell, char *new_env);
 void	*free_single(void **addr);
 void	*free_double(void ***addr);
+size_t	get_2d_array_length(void **array);
 
 // Local ENV management
-char **is_valid_variable(char *exec_line);
-void add_new_local(t_minishell *shell, char **exec_line);
-t_local_env *fd_md_lvar(t_local_env *head, char *key, char *value, int is_find);
+char			**is_valid_variable(char *exec_line);
+void			add_new_local(t_minishell *shell, char **exec_line);
+t_local_env		*fd_md_lvar(t_local_env *head, char *key, char *value, int is_find);
+// env controller
+void            env_controller(t_minishell *shell, char **envp);
+char			**env_dup(char **env);
+char			*get_env(t_minishell *shell, char *var);
+void			set_env(t_minishell *shell, char *var, char *value);
+void			set_new_env(t_minishell *shell, char *var, char *value);
 
 // Error management
 void	force_quit(int errno);

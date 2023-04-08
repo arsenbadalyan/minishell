@@ -61,7 +61,7 @@ command arg1 || command2 &&& command3
 command arg1 arg2 > | command3
 command arg1 |& | command2
 command arg1 |& arg2 | command3
-
+((ls ) &&ls)
 
 ## Test cases
 ### __cd__:

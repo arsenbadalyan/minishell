@@ -6,7 +6,7 @@
 /*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:38 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/01 12:26:39 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/07 23:39:43 by arsbadal         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,9 +18,10 @@ int		_pwd(void)
 
 	if (getcwd(cwd, PATH_MAX))
 	{
-		printf ("%s\n", cwd);
+		printf("%s\n", cwd);
 		return (0);
 	}
 	else
 		return (1);
+	return (1);
 }
