@@ -2,7 +2,7 @@
 #define DEFINES_H
 
 // Main
-# define SHELL_NAME "\033[32mmishell$ \033[0m"
+# define SHELL_NAME "mmishell$ "
 # define SHELL_NAME_CONSOLE "minishell"
 # define WHITE_SPACE " \t\n"
 # define HERE_DOC ".here_doc"
@@ -12,6 +12,10 @@
 # define DOUBLE_SEPARATORS "<|>&"
 # define STRICT_META "|&)"
 # define PATH_MAX 1024 
+
+// Parse Separators
+# define PARSE_SEP_SINGLE "(|)"
+# define PARSE_SEP_DOUBLE "&|"
 
 // Custom Errors
 # define ERROR_UNX "unexpected error"

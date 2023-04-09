@@ -84,10 +84,10 @@ $(OBJ)/%.o: $(SRC)/%.c $(LIB_DIR)
 clean: DELETE_OBJ_MSG
 	@make -C $(LIBFT_DIR) clean
 	@$(RM) $(OBJ)
-	@$(RM) $(RDLINE)
 fclean: clean DELETE_PROGRAM_MSG
 	@make -C $(LIBFT_DIR) fclean
 	@$(RM) $(NAME)
+	@$(RM) $(RDLINE)
 re: fclean all
 
 # Helper messages

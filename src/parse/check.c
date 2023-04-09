@@ -28,7 +28,7 @@ int check_cmd_line(char *line, int sg_quote, int db_quote)
 
 int check_before_ph(char *line, int index, char c)
 {
-	if((c == '(' && index--) || (c == ')' && index++))
+	if((((c == '(' && --index) || (c == ')' && ++index)) && index > 0 && line[index]))
 	{
 		while(1)
 		{
@@ -39,12 +39,14 @@ int check_before_ph(char *line, int index, char c)
 				else
 					++index;
 			}
-			else if(!index || (line[index] == '(' && c == '(') || ((line[index] == '&' || line[index] == '|')
+			else if(index > 0 || c == line[index] || (c == ')' && !line[index]) || ((line[index] == '&' || line[index] == '|')
 				&& (((line[index - 1] == line[index] && c == '(')
 					|| (line[index + 1] == line[index] && c == ')')))))
 				return (0);
 			else
+			{
 				return (write_exception(130, &c, NULL, 0));
+			}
 			if(index < 0 || !line[index])
 				break;
 		}
