@@ -1,4 +1,6 @@
 .vscode
-./obj
-./readline
-./minishell
+obj
+readline
+minishell
+*.o
+*.a

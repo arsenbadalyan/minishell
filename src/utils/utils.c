@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 18:13:01 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/07 23:34:52 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/09 18:25:07 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ size_t	get_2d_array_length(void **array)
 	i = 0;
 	while(array[i])
 	{
-		// printf("%s\n", array[i]);
 		i++;
 	}
 	return (i);

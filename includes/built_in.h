@@ -9,7 +9,7 @@ int		quote_check(int *sg_quote, int *db_quote, char c);
 int		_pwd(void);
 // cd
 int 	_cd(t_minishell *shell, char **cmd_line);
-char	*get_tilde(char **cmd_line, char **env);
-void	change_pwd(t_minishell *shell, char *cmd, int add);
+char	*join_tilde(t_minishell *shell, char *dir);
+int		_cd_utils(t_minishell *shell, char *cmd, char **cmd_line);
 
 #endif
