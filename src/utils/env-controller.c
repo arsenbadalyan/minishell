@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   env-controller.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 17:36:11 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/07 23:49:27 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/10 19:39:12 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void env_controller(t_minishell *shell, char **envp)
+void	env_controller(t_minishell *shell, char **envp)
 {
 	char	*shlvl;
 	char	*tmp;
@@ -47,7 +47,7 @@ char	**env_dup(char **env)
 	return (env_cpy);
 }
 
-void set_env(t_minishell *shell, char *var, char *value)
+void	set_env(t_minishell *shell, char *var, char *value)
 {
 	size_t	i;
 	char	*check;
@@ -58,6 +58,8 @@ void set_env(t_minishell *shell, char *var, char *value)
 		set_new_env(shell, var, value);
 		return ;
 	}
+	if (!value)
+		return ;
 	var = ft_strjoin (var, "=");
 	if (!var)
 		force_quit(12);
@@ -71,25 +73,24 @@ void set_env(t_minishell *shell, char *var, char *value)
 		force_quit(12);
 }
 
-void set_new_env(t_minishell *shell, char *var, char *value)
+void	set_new_env(t_minishell *shell, char *var, char *value)
 {
 	size_t	i;
 	char	**tmp;
 
+	if (!value)
+		value = "";
 	var = ft_strjoin(var, "=");
 	if (!var)
 		force_quit(12);
 	i = get_2d_array_length((void **)shell->envp);
 	tmp = shell->envp;
 	shell->envp = (char **)malloc (sizeof(char *) * (i + 2));
-	i = 0;
-	while (tmp[i])
-	{
+	i = -1;
+	while (tmp[++i])
 		shell->envp[i] = tmp[i];
-		i++;
-	}
 	shell->envp[i] = ft_strjoin(var, value);
-	if(!shell->envp[i])
+	if (!shell->envp[i])
 		force_quit(12);
 	free_single((void *)&var);
 	shell->envp[++i] = (void *)0;
@@ -104,16 +105,16 @@ char	*get_env(t_minishell *shell, char *var)
 
 	i = 0;
 	length = ft_strlen(var);
-	while(shell->envp[i])
+	while (shell->envp[i])
 	{
 		finded_line = ft_strnstr(shell->envp[i], var, length);
-		if(finded_line && *(finded_line + length) == '=')
+		if (finded_line && *(finded_line + length) == '=')
 		{
 			finded_line += length + 1;
-			break;
+			break ;
 		}
 		finded_line = NULL;
-		i++;		
+		i++;
 	}
 	return (finded_line);
 }

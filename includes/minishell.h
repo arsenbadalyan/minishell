@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Minishell.h                                        :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/07 23:20:04 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/10 19:38:10 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ int get_cmds_size(char *line, int sg_quote, int db_quote);
 // Controllers
 int controller(t_minishell *shell, char *user_input);
 int		here_doc_controller(char *cmd_line);
-int	quote_controller(char *line);
+int		quote_controller(char *line);
 
 // here_doc execution (<<)
 int		exe_here_doc(char *limiter, int clean);
@@ -62,7 +62,7 @@ int		here_doc_params(char *cmd_line, size_t index, int sg_quote, int db_quote);
 int		check_parse_error(char *cmd_line, int index);
 
 // Utils
-int check_slice(char *line, char *SINGLE, char *DOUBLE);
+int		check_slice(char *line, char *SINGLE, char *DOUBLE);
 void	*free_single(void **addr);
 void	*free_double(void ***addr);
 size_t	get_2d_array_length(void **array);
@@ -72,8 +72,8 @@ char			**is_valid_variable(char *exec_line);
 void			add_new_local(t_minishell *shell, char **exec_line);
 t_local_env		*fd_md_lvar(t_local_env *head, char *key, char *value, int is_find);
 // env controller
-void            env_controller(t_minishell *shell, char **envp);
 char			**env_dup(char **env);
+void            env_controller(t_minishell *shell, char **envp);
 char			*get_env(t_minishell *shell, char *var);
 void			set_env(t_minishell *shell, char *var, char *value);
 void			set_new_env(t_minishell *shell, char *var, char *value);
