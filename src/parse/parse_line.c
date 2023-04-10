@@ -14,39 +14,35 @@ void start_parse_cmds(char *line, int sg_quote, int db_quote)
 		quote_check(&sg_quote, &db_quote, line[xyz[0]]);
 		if((sg_quote || db_quote) && ++xyz[0])
 			continue;
-		cut_part(line, cmds, xyz);
+		if(ft_strchr(WHITE_SPACE, line[xyz[0]]))
+			++xyz[0];
+		cut_part(line, &cmds, xyz);
 	}
 	cmds[xyz[2]] = NULL;
-	// int i = 0;
-	// while(cmds[i])
-	// {
-	// 	printf("%s\n", cmds[i]);
-	// 	i++;
-	// }
 }
 
-void cut_part(char *line, char **cmds, int *xyz)
+void cut_part(char *line, char ***cmds, int *xyz)
 {
 	int slice_size;
 
 	slice_size = check_slice((line + xyz[0]), PARSE_SEP_SINGLE, PARSE_SEP_DOUBLE);
 	if(slice_size)
 	{
-		cmds[xyz[2]] = ft_substr(line, xyz[0], slice_size);
+		if(xyz[0] != xyz[1])
+			(*cmds)[xyz[2]++] = ft_substr(line, xyz[1], xyz[0] - xyz[1]);
+		(*cmds)[xyz[2]++] = ft_substr(line, xyz[0], slice_size);
 		xyz[0] += slice_size;
 		xyz[1] = xyz[0];
-		xyz[2]++;
-	}
-	while(line[xyz[0]])
-	{
-		slice_size = check_slice((line + xyz[0]), PARSE_SEP_SINGLE, PARSE_SEP_DOUBLE);
-		if(slice_size)
+		while (line[xyz[0]] && ft_strchr(WHITE_SPACE, line[xyz[0]]))
 		{
-			cmds[xyz[2] + 1] = ft_substr(line, xyz[1], xyz[0]);
-			xyz[0]
+			xyz[0]++;
+			xyz[1]++;
 		}
-		xyz[0]++;
 	}
+	else if (!line[xyz[0] + 1])
+		(*cmds)[xyz[2]++] = ft_substr(line, xyz[1], (xyz[0]++) + 1);
+	else
+		xyz[0]++;
 }
 
 int get_cmds_size(char *line, int sg_quote, int db_quote)

@@ -14,25 +14,30 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-int	here_doc_controller(char *cmd_line)
+void	here_doc_controller(t_minishell *shell, char *cmd_line)
 {
 	size_t	i;
 	int		par_err_index;
+	int		quotes[2];
 
 	i = 0;
+	quotes[0] = 0;
+	quotes[1] = 0;
 	while (cmd_line[i])
 	{
+		quote_check(&quotes[0], &quotes[1], cmd_line[i]);
+		if((quotes[0] || quotes[1]) && ++i)
+			continue;
 		if (cmd_line[i] == '<' && cmd_line[i + 1] == '<')
 		{
 			i += 2;
 			while (cmd_line[i] == ' ')
 				i++;
-			if (here_doc_params(cmd_line, i, 0, 0))
-				return (1);
+			execute_heredoc(shell, cmd_line, i);
 		}
-		i++;
+		else
+			i++;
 	}
-	return (0);
 }
 
 int quote_controller(char *line)

@@ -14,6 +14,54 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+int execute_heredoc(t_minishell *shell, char *cmd_line, size_t index)
+{
+	size_t temp_index;
+	char *limiter;
+	char *temp_limiter;
+	int quotes[2];
+
+	temp_index = index;
+	quotes[0] = 0;
+	quotes[1] = 0;
+	while (cmd_line[index])
+	{
+		quote_check(&quotes[0], &quotes[1], cmd_line[index]);
+		if ((quotes[0] || quotes[1]) && ++index)
+			continue;
+		if (ft_strchr(WHITE_SPACE, cmd_line[index]) || !(++index))
+			break;
+	}
+	limiter = ft_substr(cmd_line, temp_index, index - temp_index);
+	if (!limiter)
+		force_quit(ENOMEM);
+	temp_limiter = limiter;
+	limiter = _echo(shell, NULL, TRUE, limiter);
+	free_single((void *)&temp_limiter);
+	exe_here_doc(shell, limiter);
+	free_single((void *)&limiter);
+	return (0);
+}
+
+void exe_here_doc(t_minishell *shell, char *limiter)
+{
+	int fd;
+	char *real_name;
+	char *tmp;
+
+	tmp = ft_itoa(shell->execute->heredoc_sum++);
+	if (!tmp)
+		force_quit(ENOMEM);
+	real_name = ft_strjoin(HERE_DOC, tmp);
+	printf("%s\n", real_name);
+	free_single((void *)&tmp);
+	if (!real_name)
+		force_quit(12);
+	fd = open(real_name, O_WRONLY | O_CREAT | O_TRUNC, 0755);
+	wait_limiter(limiter, fd);
+	close(fd);
+}
+
 void	wait_limiter(char *limiter, int fd)
 {
 	char	*buf;
@@ -23,7 +71,7 @@ void	wait_limiter(char *limiter, int fd)
 		buf = readline(">");
 		if (!buf)
 			force_quit(12);
-		if (!(ft_strncmp(buf, limiter, ft_strlen(limiter) + 1)))
+		if (!ft_strcmp(buf, limiter))
 		{
 			free_single((void *)&buf);
 			return ;
@@ -35,87 +83,20 @@ void	wait_limiter(char *limiter, int fd)
 	}
 }
 
-int	here_doc_unlink(int here_doc_num)
+void remove_heredoc(int here_doc_num)
 {
 	char	*real_name;
+	char	*del_num;
 
-	while (here_doc_num != -1)
+	while (here_doc_num >= 0)
 	{
-		real_name = ft_strjoin(HERE_DOC, ft_itoa(here_doc_num));
+		del_num = ft_itoa(here_doc_num);
+		if(!del_num)
+			force_quit(12);
+		real_name = ft_strjoin(HERE_DOC, del_num);
 		if (!real_name)
 			force_quit(12);
 		unlink(real_name);
-		here_doc_num -= 1;
+		here_doc_num--;
 	}
-	return (here_doc_num);
-}
-
-int	exe_here_doc(char *limiter, int clean)
-{
-	static int	here_doc_num;
-	int			fd;
-	char		*real_name;
-	char		*tmp;
-
-	if (clean)
-		return (here_doc_unlink(here_doc_num));
-	else
-	{
-		tmp = ft_itoa(here_doc_num);
-		real_name = ft_strjoin(HERE_DOC, tmp);
-		free_single((void *)&tmp);
-		if (!real_name)
-			force_quit(12);
-		fd = open(real_name, O_WRONLY | O_CREAT | O_TRUNC, 0755);
-		wait_limiter(limiter, fd);
-		close(fd);
-		fd = open(real_name, O_RDONLY);
-		free_single((void *)&real_name);
-		here_doc_num++;
-		return (fd);
-	}
-}
-
-int	check_parse_error(char *cmd_line, int index)
-{
-	if (ft_strchr(SEPARATORS_ALL, cmd_line[index]))
-	{
-		write (1, "zsh: parse error near `", 23);
-		write (1, &cmd_line[index], 1);
-		if (ft_strchr(SEPARATORS_ALL, cmd_line[index + 1]) && cmd_line[index] == cmd_line[index + 1])
-			write(1, &cmd_line[index + 1], 1);
-		write (1, "'\n", 2);
-		return (1);
-	}
-	return (0);
-}
-
-int	here_doc_params(char *cmd_line, size_t index, int sg_quote, int db_quote)
-{
-	char	*limiter;
-	char	*tmp_limiter;
-	char	current_cmd[2];
-
-	limiter = ft_strdup("");
-	current_cmd[1] = 0;
-	if (check_parse_error(cmd_line, index))
-		return (1);
-	while (cmd_line[index])
-	{
-		quote_check(&sg_quote, &db_quote, cmd_line[index]);
-		current_cmd[0] = cmd_line[index];
-		tmp_limiter = limiter;
-		limiter = ft_strjoin(limiter, current_cmd);
-		free_single((void *)&tmp_limiter);
-		if (!ft_strchr(METASYMBOLS_ALL, cmd_line[index++])
-			&& !sg_quote && !db_quote)
-			break ;
-	}
-	tmp_limiter = limiter;
-	limiter = _echo(limiter, 1);
-	free_single((void *)&tmp_limiter);
-	printf("%s\n", limiter);
-	exe_here_doc(limiter, 0);
-	free_single((void *)&limiter);
-	return (0);
 }

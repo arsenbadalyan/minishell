@@ -11,7 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-
+#include <readline/readline.h>
+#include <readline/history.h>
 int main(int argc, char **argv, char **envp)
 {
 	t_minishell *shell;
@@ -22,7 +23,6 @@ int main(int argc, char **argv, char **envp)
 	print_header();
 	env_controller(shell, envp);
 	read_shell(shell);
-	// printf("%s\n", get_env(shell, "path"));
 	// TODO DELETE IN END V
 	// here_doc_controller("<< 'hello'\"");
 	// exe_here_doc(NULL, 1);

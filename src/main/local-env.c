@@ -16,7 +16,7 @@ char **is_valid_variable(char *exec_line)
     // free_single((void *)&exec_line);
     free_single((void *)&exc_line);
     exc_line = new_line[1];
-    new_line[1] = _echo(new_line[1], 0);
+    // new_line[1] = _echo(new_line[1], 0);
     return (new_line);
 }
 

@@ -46,20 +46,19 @@ size_t check_syntax(char *line, int index);
 
 // Line parse
 void start_parse_cmds(char *line, int sg_quote, int db_quote);
-void cut_part(char *line, char **cmds, int *xyz);
+void cut_part(char *line, char ***cmds, int *xyz);
 int get_cmds_size(char *line, int sg_quote, int db_quote);
 
 // Controllers
 int controller(t_minishell *shell, char *user_input);
-int		here_doc_controller(char *cmd_line);
+void	here_doc_controller(t_minishell *shell, char *cmd_line);
 int	quote_controller(char *line);
 
 // here_doc execution (<<)
-int		exe_here_doc(char *limiter, int clean);
+int	execute_heredoc(t_minishell *shell, char *cmd_line, size_t index);
+void exe_here_doc(t_minishell *shell, char *limiter);
 void	wait_limiter(char *limiter, int fd);
-int		here_doc_unlink(int here_doc_num);
-int		here_doc_params(char *cmd_line, size_t index, int sg_quote, int db_quote);
-int		check_parse_error(char *cmd_line, int index);
+void  remove_heredoc(int here_doc_num);
 
 // Utils
 int check_slice(char *line, char *SINGLE, char *DOUBLE);
@@ -82,5 +81,17 @@ void			set_new_env(t_minishell *shell, char *var, char *value);
 void	force_quit(int errno);
 int	write_exception(int errno, char *addn, char *addn2, int is_exit);
 char *get_custom_error(int errno);
+
+// TRUE and FALSE
+enum boolean {
+    TRUE = 1,
+    FALSE = 0
+};
+
+enum errors {
+    ENOMEM = 12,
+    EPDEN = 13,
+    ECMDNF = 127,
+};
 
 #endif

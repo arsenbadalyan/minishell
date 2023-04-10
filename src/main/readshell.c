@@ -30,7 +30,6 @@ void	read_shell(t_minishell *shell)
 			continue ;
 		add_history(user_input);
 		controller(shell, user_input);
-		free_single((void *)(&user_input));
 		// rl_on_new_line();
 		// rl_replace_line("", 0);
 		// rl_redisplay();

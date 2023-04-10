@@ -12,44 +12,110 @@
 
 #include "minishell.h"
 // TODO change function names and few things
-char *_echo(char *line, int here_doc_mode)
+char *_echo(t_minishell *shell, char **cmd_line, int hd_mode, char *hd_lim)
 {
-	size_t i;
-	size_t length;
-	char *temp_new_line;
+	char *result;
+	char *temp_res;
+	int quotes[2];
+
+	quotes[0] = 0;
+	quotes[1] = 0;
+	if(hd_mode)
+		return (modify_line(shell, hd_lim, hd_mode, quotes));
+	if(!cmd_line[1])
+		return (ft_strdup("\n"));
+	if (!cmd_line[1] && ft_strcmp(cmd_line[1], "-n") && !cmd_line[2])
+		return (ft_strdup(""));
+	result = join_lines(++cmd_line, 0, TRUE, NULL);
+	temp_res = result;
+	result = modify_line(shell, result, hd_mode, quotes);
+	free_single((void *)&temp_res);
+	return (result);
+}
+
+char *join_lines(char **cmd_line, size_t i, int has_new_line, char *temp_line)
+{
 	char *new_line;
-	
-	i = 0;
-	length = ft_strlen(line);
-	temp_new_line = modify_line(line, length, 0, 0);
-	if(!temp_new_line)
-		return (NULL);
-	new_line = ft_strdup(temp_new_line);
-	free_single((void *)&temp_new_line);
+
+	new_line = ft_strdup("");
+	if (!ft_strcmp(cmd_line[0], "-n") && ++cmd_line)
+		has_new_line = FALSE;
+	while (cmd_line[i])
+	{
+		temp_line = new_line;
+		new_line = ft_strjoin(new_line, cmd_line[i]);
+		if (!free_single((void *)&temp_line) && !new_line)
+			force_quit(ENOMEM);
+		temp_line = new_line;
+		if (cmd_line[i + 1])
+			new_line = ft_strjoin(new_line, " ");
+		else if(has_new_line)
+		{
+			new_line = ft_strjoin(new_line, "\n");
+			free_single((void *)&temp_line);
+		}
+		if(!new_line)
+			force_quit(ENOMEM);
+		i++;
+	}
 	return (new_line);
 }
 
-char *modify_line(char *line, int here_doc_mode, int sg_quote, int db_quote)
+char *modify_line(t_minishell *shell, char *line, int hd_mode, int *quotes)
 {
-	char	*new_line;
-	char	*temp_line;
-	char	current[2];
+	char *new_line;
+	char *temp_line;
+	char current[2];
 
 	new_line = ft_strdup("");
 	current[1] = '\0';
-	while(*line)
+	while (*line)
 	{
-		quote_check(&sg_quote, &db_quote, *line);
-		if(!ft_strchr("\'\"$", *line) || ((sg_quote && *line == '\"') || (db_quote && *line == '\'')))
+		quote_check(&quotes[0], &quotes[1], *line);
+		if (*line == '$' && !quotes[0] && !hd_mode && *(line + 1) && line++)
+			get_variable(shell, &line, &new_line);
+		else if (!ft_strchr("\'\"", *line) || ((quotes[0] && *line == '\"')
+			|| (quotes[1] && *line == '\'')))
 		{
 			temp_line = new_line;
 			current[0] = *line;
 			new_line = ft_strjoin(new_line, current);
 			free_single((void *)&temp_line);
+			line++;
 		}
-		line++;
+		else
+			line++;
 	}
 	return (new_line);
+}
+
+void get_variable(t_minishell *shell, char **line, char **new_line)
+{
+	char *temp_line;
+	size_t size;
+	char *var;
+
+	size = 0;
+	temp_line = *line;
+	while(**line)
+	{
+		if(ft_strchr(WHITE_SPACE, **line) || ft_strchr("\'\"", **line))
+			break;
+		size++;
+		(*line)++;
+	}
+	var = ft_substr(temp_line, 0, size);
+	if(!var)
+		force_quit(ENOMEM);
+	if(get_env(shell, var))
+	{
+		temp_line = *new_line;
+		*new_line = ft_strjoin(*new_line, get_env(shell, var));
+		if(!free_single((void *)&temp_line) && !(*new_line))
+			force_quit(ENOMEM);
+	}
+	else
+		(*line)++;
 }
 
 int quote_check(int *sg_quote, int *db_quote, char c)

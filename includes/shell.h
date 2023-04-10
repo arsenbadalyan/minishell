@@ -21,14 +21,15 @@ typedef struct s_minishell {
 	struct s_exc_line *execute;
 	struct s_status *status;
 	struct s_local_env *local_env;
+	char *user_input;
 	char **envp;
-	int exit_code;
 } t_minishell;
 
 typedef struct s_exc_line {
 	struct s_cmd *cmd_list;
 	char *cmd_line;
 	char **cmd_parts;
+	int heredoc_sum;
 } t_exc_line;
 
 typedef struct s_cmds {
@@ -39,7 +40,7 @@ typedef struct s_cmds {
 typedef struct s_status {
 	int line;
 	int part;
-	int error;
+	int exit_code;
 } t_status;
 
 typedef struct s_local_env {

@@ -2,10 +2,10 @@
 #define DEFINES_H
 
 // Main
-# define SHELL_NAME "mmishell$ "
+# define SHELL_NAME "mishell$ "
 # define SHELL_NAME_CONSOLE "minishell"
 # define WHITE_SPACE " \t\n"
-# define HERE_DOC ".here_doc"
+# define HERE_DOC "/tmp/.minishell_here_doc_"
 # define METASYMBOLS_ALL "><|&)( \t\n"
 # define SEPARATORS_ALL "(&<|>)"
 # define SINGLE_SEPARATORS "<|>"

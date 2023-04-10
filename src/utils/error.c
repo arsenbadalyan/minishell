@@ -17,9 +17,10 @@ void	force_quit(int errno)
 	char	*error;
     
     error = strerror(errno);
-	ft_putstr_fd(SHELL_NAME, 2);
+	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
+	ft_putstr_fd("\n", 2);
 	exit(errno);
 }
 
