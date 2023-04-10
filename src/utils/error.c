@@ -52,11 +52,13 @@ int	write_exception(int errno, char *addn, char *addn2, int is_exit)
 
 char *get_custom_error(int errno)
 {
-	if(errno == 127)
+	if (errno == 127)
 		return (ERROR_127);
-	else if(errno == 130)
+	else if (errno == 130)
 		return (ERROR_130);
-	if(errno == 128)
+	if (errno == 128)
 		return (ERROR_128);
+	if (errno == 129)
+		return (ERROR_129);
 	return (ERROR_UNX);
 }

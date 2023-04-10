@@ -18,13 +18,20 @@ int main(int argc, char **argv, char **envp)
 
 	if(argc > 1)
 		exit(1);		
+
 	shell = init_minishell();
-	print_header();
+	// print_header();
 	env_controller(shell, envp);
-	read_shell(shell);
+
+	// int i = 0;
+	// while (shell->envp[i])
+	// printf ("%s\n", shell->envp[i++]);
+
+	// mini_exit(shell, ft_split("exit 255a", ' '));
+	// read_shell(shell);
 	// printf("%s\n", get_env(shell, "path"));
 	// TODO DELETE IN END V
 	// here_doc_controller("<< 'hello'\"");
 	// exe_here_doc(NULL, 1);
-	return (0);
+	return (shell->exit_code);
 }

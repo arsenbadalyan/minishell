@@ -61,6 +61,5 @@ int	_cd(t_minishell *shell, char **cmd_line)
 		cmd = cmd_line[1];
 	if (access(cmd, X_OK) == -1)
 		return (write_exception(13 , "cd", cmd, 0));
-
 	return (_cd_utils(shell, cmd, cmd_line));
 }
