@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:55:39 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/10 16:57:15 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/12 11:29:47 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,5 +29,6 @@ void	mini_exit(t_minishell *shell, char **cmd);
 void	_env(t_minishell *shell, int add);
 // export
 void	_export(t_minishell *shell, char **cmd);
+void	add_without_equal(t_minishell *shell, char *var);
 
 #endif

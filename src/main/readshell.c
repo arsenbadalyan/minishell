@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:25:57 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/09 19:02:22 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/12 13:12:13 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	read_shell(t_minishell *shell)
 			continue ;
 		add_history(user_input);
 		controller(shell, user_input);
+		_cd(shell, ft_split(user_input, ' '));
 		free_single((void *)(&user_input));
 		// rl_on_new_line();
 		// rl_replace_line("", 0);

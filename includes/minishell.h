@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/10 19:38:10 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/12 11:54:00 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -75,8 +75,8 @@ t_local_env		*fd_md_lvar(t_local_env *head, char *key, char *value, int is_find)
 char			**env_dup(char **env);
 void            env_controller(t_minishell *shell, char **envp);
 char			*get_env(t_minishell *shell, char *var);
-void			set_env(t_minishell *shell, char *var, char *value);
-void			set_new_env(t_minishell *shell, char *var, char *value);
+void			set_env(t_minishell *shell, char *var, char *value, int add);
+void			set_new_env(t_minishell *shell, char *var, char *value, int add);
 
 // Error management
 void	force_quit(int errno);

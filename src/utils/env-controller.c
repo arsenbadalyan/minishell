@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 17:36:11 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/10 19:39:12 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/12 12:38:32 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,18 @@ void	env_controller(t_minishell *shell, char **envp)
 {
 	char	*shlvl;
 	char	*tmp;
+	int		lvl;
 
 	shell->envp = env_dup(envp);
 	tmp = get_env(shell, "SHLVL");
-	shlvl = ft_itoa(ft_atoi(tmp) + 1);
-	set_env(shell, "SHLVL", shlvl);
+	while (*tmp != '=')
+		tmp++;
+	tmp++;
+	lvl = ft_atoi(tmp) + 1;
+	if (lvl > 999)
+		lvl = 0;
+	shlvl = ft_itoa(lvl);
+	set_env(shell, "SHLVL", shlvl, 1);
 	free_single((void *)&shlvl);
 }
 
@@ -47,7 +54,7 @@ char	**env_dup(char **env)
 	return (env_cpy);
 }
 
-void	set_env(t_minishell *shell, char *var, char *value)
+void	set_env(t_minishell *shell, char *var, char *value, int add)
 {
 	size_t	i;
 	char	*check;
@@ -55,17 +62,17 @@ void	set_env(t_minishell *shell, char *var, char *value)
 	check = get_env(shell, var);
 	if (!check)
 	{
-		set_new_env(shell, var, value);
+		set_new_env(shell, var, value, add);
 		return ;
 	}
 	if (!value)
 		return ;
-	var = ft_strjoin (var, "=");
 	if (!var)
 		force_quit(12);
 	i = 0;
-	while (ft_strncmp(var, shell->envp[i], ft_strlen(var)))
+	while (!(ft_strnstr(shell->envp[i], check, ft_strlen(check))))
 		i++;
+	var = ft_strjoin (var, "=");
 	free(shell->envp[i]);
 	shell->envp[i] = ft_strjoin(var, value);
 	free_single((void *)&var);
@@ -73,14 +80,15 @@ void	set_env(t_minishell *shell, char *var, char *value)
 		force_quit(12);
 }
 
-void	set_new_env(t_minishell *shell, char *var, char *value)
+void	set_new_env(t_minishell *shell, char *var, char *value, int add)
 {
 	size_t	i;
 	char	**tmp;
 
 	if (!value)
 		value = "";
-	var = ft_strjoin(var, "=");
+	if (add)
+		var = ft_strjoin(var, "=");
 	if (!var)
 		force_quit(12);
 	i = get_2d_array_length((void **)shell->envp);
@@ -92,7 +100,8 @@ void	set_new_env(t_minishell *shell, char *var, char *value)
 	shell->envp[i] = ft_strjoin(var, value);
 	if (!shell->envp[i])
 		force_quit(12);
-	free_single((void *)&var);
+	if (add)
+		free_single((void *)&var);
 	shell->envp[++i] = (void *)0;
 	free(tmp);
 }
@@ -108,9 +117,10 @@ char	*get_env(t_minishell *shell, char *var)
 	while (shell->envp[i])
 	{
 		finded_line = ft_strnstr(shell->envp[i], var, length);
-		if (finded_line && *(finded_line + length) == '=')
+		if (finded_line && (*(finded_line + length) == '='
+				|| *(finded_line + length) == '\0'))
 		{
-			finded_line += length + 1;
+			// finded_line += length + 1;
 			break ;
 		}
 		finded_line = NULL;

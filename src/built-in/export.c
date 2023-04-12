@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:30 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/10 19:39:36 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/12 13:07:05 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,14 +27,15 @@ void	_export(t_minishell *shell, char **cmd)
 	{
 		value = NULL;
 		var = NULL;
-		// printf("cmd: %s\n", cmd[i]);
 		j = 0;
 		while (cmd[i][j] && cmd[i][j] != '=')
 			j++;
 		var = ft_substr(cmd[i], 0, j);
+		if (!var)
+			force_quit(12);
 		if (cmd[i][j + 1])
 			value = (cmd[i]) + j + 1;
-		// printf("var:%s\nval:%s\n", var, value);
-		set_env(shell, var, value);
+		set_env(shell, var, value, cmd[i][j + 1]);
+		free_single((void *)&var);
 	}
 }

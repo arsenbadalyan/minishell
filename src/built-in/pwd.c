@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:38 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/07 23:39:43 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/12 11:30:10 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int		_pwd(void)
+int	_pwd(void)
 {
 	char	cwd[PATH_MAX];
 
