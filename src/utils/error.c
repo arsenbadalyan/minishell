@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:54 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/07 21:10:27 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/12 15:17:13 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 void	force_quit(int errno)
 {
 	char	*error;
-    
-    error = strerror(errno);
+
+	error = strerror(errno);
 	ft_putstr_fd(SHELL_NAME, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
@@ -50,15 +50,19 @@ int	write_exception(int errno, char *addn, char *addn2, int is_exit)
 	return (errno);
 }
 
-char *get_custom_error(int errno)
+char	*get_custom_error(int errno)
 {
 	if (errno == 127)
 		return (ERROR_127);
-	else if (errno == 130)
-		return (ERROR_130);
 	if (errno == 128)
 		return (ERROR_128);
 	if (errno == 129)
 		return (ERROR_129);
+	if (errno == 130)
+		return (ERROR_130);
+	if (errno == 131)
+		return (ERROR_131);
+	if (errno == 132)
+		return (ERROR_132);
 	return (ERROR_UNX);
 }

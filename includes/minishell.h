@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/12 11:54:00 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/12 15:19:49 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,19 +38,19 @@ void print_header();
 void	read_shell(t_minishell *shell);
 
 // Parse Checkers
-int check_cmd_line(char *line, int sg_quote, int db_quote);
-int check_ph(char *line, size_t index, int *parenthesis);
-int check_before_ph(char *line, int index, char c);
-int check_meta_s(char *line, size_t *sym_counter, int *index);
-size_t check_syntax(char *line, int index);
+int		check_cmd_line(char *line, int sg_quote, int db_quote);
+int		check_ph(char *line, size_t index, int *parenthesis);
+int		check_before_ph(char *line, int index, char c);
+int		check_meta_s(char *line, size_t *sym_counter, int *index);
+size_t	check_syntax(char *line, int index);
 
 // Line parse
-void start_parse_cmds(char *line, int sg_quote, int db_quote);
-void cut_part(char *line, char **cmds, int *xyz);
-int get_cmds_size(char *line, int sg_quote, int db_quote);
+void	start_parse_cmds(char *line, int sg_quote, int db_quote);
+void	cut_part(char *line, char **cmds, int *xyz);
+int		get_cmds_size(char *line, int sg_quote, int db_quote);
 
 // Controllers
-int controller(t_minishell *shell, char *user_input);
+int		controller(t_minishell *shell, char *user_input);
 int		here_doc_controller(char *cmd_line);
 int		quote_controller(char *line);
 
@@ -66,6 +66,7 @@ int		check_slice(char *line, char *SINGLE, char *DOUBLE);
 void	*free_single(void **addr);
 void	*free_double(void ***addr);
 size_t	get_2d_array_length(void **array);
+int		check_valid(char *cmd);
 
 // Local ENV management
 char			**is_valid_variable(char *exec_line);

@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:21 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/12 13:38:03 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/12 16:58:05 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,8 +19,7 @@ char	*join_tilde(t_minishell *shell, char *dir)
 
 	while (*dir != '/')
 		dir++;
-	dir++;
-	path = ft_strjoin(get_env(shell, "HOME"), dir);
+	path = ft_strjoin(get_env(shell, "HOME") + 5, dir);
 	if (!path)
 		force_quit(12);
 	return (path);
@@ -40,8 +39,8 @@ int	_cd_utils(t_minishell *shell, char *cmd, char **cmd_line)
 	set_env(shell, "OLDPWD", cwd, 1);
 	getcwd(cwd, PATH_MAX);
 	set_env(shell, "PWD", cwd, 1);
-	// printf ("PWD:%s\n", get_env(shell, "PWD"));
-	// printf ("OLDPWD:%s \n", get_env(shell, "OLDPWD"));
+	// printf ("%s\n", get_env(shell, "PWD"));
+	// printf ("%s \n", get_env(shell, "OLDPWD"));
 	return (0);
 }
 
@@ -55,12 +54,10 @@ int	_cd(t_minishell *shell, char **cmd_line)
 	else if (cmd_line[1][0] == '~' && cmd_line[1][1])
 		cmd = join_tilde(shell, cmd_line[1]);
 	else if (cmd_line[1][0] == '-' && !cmd_line[1][1])
-	{
 		cmd = get_env(shell, "OLDPWD") + 7;
-		// printf ("%s\n", cmd);
-	}
 	else
 		cmd = cmd_line[1];
+		// printf ("%s\n", cmd);
 	stat(cmd, &file_stat);
 	if (S_ISREG(file_stat.st_mode))
 		return (write_exception(20, 0, 0, 0));

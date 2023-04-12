@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 17:36:11 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/12 12:38:32 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/12 16:28:36 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,15 @@ void	env_controller(t_minishell *shell, char **envp)
 		tmp++;
 	tmp++;
 	lvl = ft_atoi(tmp) + 1;
-	if (lvl > 999)
-		lvl = 0;
+	if (lvl > 999 || lvl < 0)
+	{
+		if (lvl > 999)
+		{
+			printf("minishell: warning: shell level (%d)", lvl);
+			printf (" too high, resetting to 1\n");
+		}
+		lvl = 1;
+	}
 	shlvl = ft_itoa(lvl);
 	set_env(shell, "SHLVL", shlvl, 1);
 	free_single((void *)&shlvl);
@@ -119,10 +126,7 @@ char	*get_env(t_minishell *shell, char *var)
 		finded_line = ft_strnstr(shell->envp[i], var, length);
 		if (finded_line && (*(finded_line + length) == '='
 				|| *(finded_line + length) == '\0'))
-		{
-			// finded_line += length + 1;
 			break ;
-		}
 		finded_line = NULL;
 		i++;
 	}

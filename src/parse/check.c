@@ -13,7 +13,7 @@ int check_cmd_line(char *line, int sg_quote, int db_quote)
 	{
 		quote_check(&sg_quote, &db_quote, line[i]);
 		if ((sg_quote || db_quote) && ++sym_counter && ++i)
-			continue;
+			continue ;
 		if (check_before_ph(line, i, line[i]) || check_ph(line, i, &ph) 
 			|| check_meta_s(line, &sym_counter, &i))
 			return (130);

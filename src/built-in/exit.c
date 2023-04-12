@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:27 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/12 11:30:37 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/12 14:37:54 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@ void	mini_exit(t_minishell *shell, char **cmd)
 {	
 	size_t	i;
 	size_t	j;
-
 
 	printf ("%s\n", "exit");
 	i = get_2d_array_length((void **)cmd);
@@ -38,5 +37,4 @@ void	mini_exit(t_minishell *shell, char **cmd)
 	if (!cmd[1])
 		shell->exit_code = 0;
 	shell->exit_code = (ft_atoi(cmd[1]) % 256);
-	// printf ("%d\n", shell->exit_code);
 }

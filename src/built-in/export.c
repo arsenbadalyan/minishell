@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:30 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/12 13:07:05 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/12 15:19:19 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,12 +19,13 @@ void	_export(t_minishell *shell, char **cmd)
 	char	*var;
 	char	*value;
 
-	i = get_2d_array_length((void **)cmd);
-	if (i < 2)
+	if (get_2d_array_length((void **)cmd) < 2)
 		return (_env(shell, 1));
 	i = 0;
 	while (cmd[++i])
 	{
+		if (check_valid(cmd[i]))
+			continue ;
 		value = NULL;
 		var = NULL;
 		j = 0;
