@@ -26,33 +26,44 @@ typedef struct s_minishell {
 } t_minishell;
 
 typedef struct s_exc_line {
-	struct s_cmd *cmd_list;
-	char *cmd_line;
-	char **cmd_parts;
+	struct s_token *cmd_list;
+	size_t clist_len;
 	int heredoc_sum;
+	char **tokens;
+	int input_fd;
+	int output_fd;
+	int skip_phs;
+	int skip_mode;
 } t_exc_line;
 
-typedef struct s_cmds {
-	char *cmd_line;
-	char **cmd;
-} t_cmds;
+typedef struct s_token {
+	size_t token_mode;
+	char *cmd;
+	char **tokens;
+	char **redirects;
+	int stdin;
+	int stdout;
+	size_t size_cmd;
+	size_t size_rdr;
+} t_token;
 
 typedef struct s_status {
-	int line;
-	int part;
 	int exit_code;
 } t_status;
-
-typedef struct s_local_env {
-	char *key;
-	char *value;
-	struct s_local_env *next;
-} t_local_env;
 
 // Initialize
 t_minishell *init_minishell();
 t_exc_line *init_exc_line();
-t_cmds **init_cmds(size_t size);
+t_token *init_tokens(size_t size);
 t_status *init_status();
+
+enum token_modes {
+	CMD,
+	PIPE,
+	OR,
+	AND,
+	PH_OPEN,
+	PH_CLOSE
+};
 
 #endif

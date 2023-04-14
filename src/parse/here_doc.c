@@ -29,7 +29,7 @@ int execute_heredoc(t_minishell *shell, char *cmd_line, size_t index)
 		quote_check(&quotes[0], &quotes[1], cmd_line[index]);
 		if ((quotes[0] || quotes[1]) && ++index)
 			continue;
-		if (ft_strchr(WHITE_SPACE, cmd_line[index]) || !(++index))
+		if ((cmd_line[index] == '&' && cmd_line[index] == cmd_line[index + 1]) || (ft_strchr(METASYMBOLS_ALL, cmd_line[index]) && cmd_line[index] != '&') || !(++index))
 			break;
 	}
 	limiter = ft_substr(cmd_line, temp_index, index - temp_index);

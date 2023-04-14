@@ -11,7 +11,7 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
-// TODO change function names and few things
+
 char *_echo(t_minishell *shell, char **cmd_line, int hd_mode, char *hd_lim)
 {
 	char *result;
@@ -129,9 +129,9 @@ int quote_check(int *sg_quote, int *db_quote, char c)
 	else
 		status = db_quote;
 	if(*status)
-		*status -= 1;
+		(*status) -= 1;
 	else
-		*status += 1;
+		(*status) += 1;
 	if(*status < 0)
 		return (0);
 	return (1);

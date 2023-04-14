@@ -18,10 +18,10 @@ void env_controller(t_minishell *shell, char **envp)
 	char	*tmp;
 
 	shell->envp = env_dup(envp);
-	tmp = get_env(shell, "SHLVL");
-	shlvl = ft_itoa(ft_atoi(tmp) + 1);
-	set_env(shell, "SHLVL", shlvl);
-	free_single((void *)&shlvl);
+	// tmp = get_env(shell, "SHLVL");
+	// shlvl = ft_itoa(ft_atoi(tmp) + 1);
+	// set_env(shell, "SHLVL", shlvl);
+	// free_single((void *)&shlvl);
 }
 
 char	**env_dup(char **env)

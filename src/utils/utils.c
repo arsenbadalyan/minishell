@@ -33,3 +33,18 @@ int check_slice(char *line, char *SINGLE, char *DOUBLE)
 		return (1);
 	return (0);
 }
+
+int get_line_type(char *line)
+{
+	if(!ft_strcmp(line, "||"))
+		return (OR);
+	if (!ft_strcmp(line, "&&"))
+		return (AND);
+	if (!ft_strcmp(line, "|"))
+		return (PIPE);
+	if (!ft_strcmp(line, "("))
+		return (PH_OPEN);
+	if (!ft_strcmp(line, ")"))
+		return (PH_CLOSE);
+	return (CMD);
+}

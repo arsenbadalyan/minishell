@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void start_parse_cmds(char *line, int sg_quote, int db_quote)
+char **start_parse_cmds(char *line, int sg_quote, int db_quote)
 {
 	int xyz[3];
 	char **cmds;
@@ -12,13 +12,18 @@ void start_parse_cmds(char *line, int sg_quote, int db_quote)
 	while(line[xyz[0]])
 	{
 		quote_check(&sg_quote, &db_quote, line[xyz[0]]);
-		if((sg_quote || db_quote) && ++xyz[0])
+		if ((sg_quote || db_quote) && ++xyz[0])
 			continue;
-		if(ft_strchr(WHITE_SPACE, line[xyz[0]]))
-			++xyz[0];
 		cut_part(line, &cmds, xyz);
 	}
 	cmds[xyz[2]] = NULL;
+	int i = 0;
+	while(cmds[i])
+	{
+		printf("%s|\n", cmds[i]);
+		i++;
+	}
+	return (cmds);
 }
 
 void cut_part(char *line, char ***cmds, int *xyz)

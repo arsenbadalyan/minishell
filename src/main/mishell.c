@@ -11,6 +11,8 @@
 /* ************************************************************************** */
 
 #include "minishell.h"
+#include <curses.h>
+#include <term.h>
 #include <readline/readline.h>
 #include <readline/history.h>
 int main(int argc, char **argv, char **envp)
@@ -23,7 +25,25 @@ int main(int argc, char **argv, char **envp)
 	print_header();
 	env_controller(shell, envp);
 	read_shell(shell);
-	// TODO DELETE IN END V
+	
+	// char *term_type = getenv("TERM");
+	// printf("%s\n", term_type);
+	// char buf[1024];
+	// tgetent(buf, term_type);
+	// printf("%s\n", );
+	// char *tt = tgetstr("cl", NULL);
+	// tputs(tt, 1, ft_putchar_fd);
+	// if (tgetent(NULL, term_type) != 1)
+	// {
+	// 	fprintf(stderr, "failed to load terminal database\n");
+	// 	return 1;
+	// }
+	
+	// char *clear = tgetstr("cl", NULL);
+	// char *move = tgoto(tgetstr("cm", NULL), 0, 0);
+	// fputs(clear, stdout);
+	// fputs(move, stdout);
+	// // TODO DELETE IN END V
 	// here_doc_controller("<< 'hello'\"");
 	// exe_here_doc(NULL, 1);
 	return (0);

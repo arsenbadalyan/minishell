@@ -12,6 +12,7 @@
 # define DOUBLE_SEPARATORS "<|>&"
 # define STRICT_META "|&)"
 # define PATH_MAX 1024 
+# define REDIRECTS "<>"
 
 // Parse Separators
 # define PARSE_SEP_SINGLE "(|)"

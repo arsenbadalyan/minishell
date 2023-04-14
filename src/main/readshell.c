@@ -13,7 +13,12 @@
 #include "minishell.h"
 #include <readline/readline.h>
 #include <readline/history.h>
-
+#include <unistd.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <sys/ioctl.h>
+#include <sys/wait.h>
 void	read_shell(t_minishell *shell)
 {
 	char	*user_input;

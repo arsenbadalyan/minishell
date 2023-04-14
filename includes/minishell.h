@@ -43,11 +43,26 @@ int check_ph(char *line, size_t index, int *parenthesis);
 int check_before_ph(char *line, int index, char c);
 int check_meta_s(char *line, size_t *sym_counter, int *index);
 size_t check_syntax(char *line, int index);
+void fill_cmd_list(t_minishell *shell);
 
 // Line parse
-void start_parse_cmds(char *line, int sg_quote, int db_quote);
+char **start_parse_cmds(char *line, int sg_quote, int db_quote);
 void cut_part(char *line, char ***cmds, int *xyz);
 int get_cmds_size(char *line, int sg_quote, int db_quote);
+
+// EXECUTION
+void execution_management(t_minishell *shell, size_t cmd_index);
+void execution_controller(t_minishell *shell, size_t cmd_index);
+size_t command_execution(t_minishell *shell, size_t *cmd_index);
+
+// Split of commands
+void cmd_split(t_minishell *shell, t_token *cmd);
+void count_split_size(t_token *token, char *str);
+void skip_word(char *str, size_t *i);
+
+// File Descriptors management
+void change_input_file(t_minishell *shell, int fd);
+void change_output_file(t_minishell *shell, int fd);
 
 // Controllers
 int controller(t_minishell *shell, char *user_input);
@@ -65,11 +80,8 @@ int check_slice(char *line, char *SINGLE, char *DOUBLE);
 void	*free_single(void **addr);
 void	*free_double(void ***addr);
 size_t	get_2d_array_length(void **array);
+int get_line_type(char *line);
 
-// Local ENV management
-char			**is_valid_variable(char *exec_line);
-void			add_new_local(t_minishell *shell, char **exec_line);
-t_local_env		*fd_md_lvar(t_local_env *head, char *key, char *value, int is_find);
 // env controller
 void            env_controller(t_minishell *shell, char **envp);
 char			**env_dup(char **env);
