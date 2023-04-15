@@ -7,17 +7,12 @@ size_t command_execution(t_minishell *shell, size_t *cmd_index)
 	while(*cmd_index < shell->execute->clist_len)
 	{
 		current_token = &shell->execute->cmd_list[*cmd_index];
-		(*cmd_index)++;
-		// mutate_token()
 		if(current_token->token_mode == CMD)
 			cmd_split(shell, current_token);
+		// else 
+		(*cmd_index)++;
 	}
 	return (0);
-}
-
-void mutate_token(t_minishell *shell, t_token *token)
-{
-
 }
 
 void pipe_command(t_minishell *shell, t_token *token)

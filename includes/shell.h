@@ -39,6 +39,7 @@ typedef struct s_exc_line {
 typedef struct s_token {
 	size_t token_mode;
 	char *cmd;
+	char *path;
 	char **tokens;
 	char **redirects;
 	int stdin;

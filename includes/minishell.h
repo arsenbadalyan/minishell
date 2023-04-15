@@ -58,7 +58,14 @@ size_t command_execution(t_minishell *shell, size_t *cmd_index);
 // Split of commands
 void cmd_split(t_minishell *shell, t_token *cmd);
 void count_split_size(t_token *token, char *str);
-void skip_word(char *str, size_t *i);
+void skip_word(char *str, size_t *i, size_t *j);
+void fill_cmd_list_token(t_minishell *shell, t_token *cmd);
+void cut_quotes(char *line, char ***cmds, size_t *xyz, size_t *quote_size);
+
+// Finding path of command
+char **find_path(t_minishell *shell);
+char *is_command_executable(char *command, char **paths);
+char *exec_join_check(char *path, char *command);
 
 // File Descriptors management
 void change_input_file(t_minishell *shell, int fd);

@@ -18,6 +18,9 @@
 # define PARSE_SEP_SINGLE "(|)"
 # define PARSE_SEP_DOUBLE "&|"
 
+// Env Constants
+# define PATH "PATH"
+
 // Custom Errors
 # define ERROR_UNX "unexpected error"
 # define ERROR_127 "command does not exit in the PATH or wrong command name"
