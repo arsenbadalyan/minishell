@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:21 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/12 16:58:05 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/15 21:13:13 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,11 +31,7 @@ int	_cd_utils(t_minishell *shell, char *cmd, char **cmd_line)
 
 	getcwd(cwd, PATH_MAX);
 	if (chdir(cmd) == -1)
-	{
-		if (get_2d_array_length((void **)cmd_line))
-			return (write_exception(128, 0, 0, 0));
-		return (write_exception(2, cmd, 0, 0));
-	}
+		return (write_exception(1, cmd, "No such file or directory", 0));
 	set_env(shell, "OLDPWD", cwd, 1);
 	getcwd(cwd, PATH_MAX);
 	set_env(shell, "PWD", cwd, 1);

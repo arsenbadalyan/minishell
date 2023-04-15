@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 18:13:01 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/12 16:33:08 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/15 21:01:46 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,11 +35,22 @@ int	check_slice(char *line, char *SINGLE, char *DOUBLE)
 
 int	check_valid(char *cmd)
 {
-	if (ft_strchr(cmd, '+') || ft_strchr(cmd, '-')
-		|| ft_strchr(cmd, '/') || ft_strchr(cmd, '*'))
+	int	i;
+
+	i = 0;
+	if (ft_strchr("0123456789!@%^&*()-+={}[]|?/><~`;:.,\\", cmd[0]))
+		return (write_exception(131, cmd, 0, 0));
+	while (cmd[i] != '=' && cmd[i])
 	{
-		write_exception(131, cmd, 0, 0);
-		return (1);
+		if (ft_strchr("!@#%^&*()-+{[]()|};:.,~`<>?/\\", cmd[i]))
+			return (write_exception(131, cmd, 0, 0));
+		i++;
+	}
+	while (cmd[i])
+	{
+		if (ft_strchr("!&|;()`><", cmd[i]))
+			return (write_exception(131, cmd, 0, 0));
+		i++;
 	}
 	return (0);
 }

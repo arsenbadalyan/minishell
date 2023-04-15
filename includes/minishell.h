@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/12 15:19:49 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/15 20:21:25 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <string.h>
+# include <dirent.h>
 
 // Custom Libs
 # include "libft.h"
@@ -32,7 +33,7 @@
 // #include <readline/history.h>
 
 // Printf Minishell header on start
-void print_header();
+void	print_header(void);
 
 // Work with readline
 void	read_shell(t_minishell *shell);
@@ -83,5 +84,11 @@ void			set_new_env(t_minishell *shell, char *var, char *value, int add);
 void	force_quit(int errno);
 int	write_exception(int errno, char *addn, char *addn2, int is_exit);
 char *get_custom_error(int errno);
+
+// Wildcard
+char	*wildcard(char *pattern);
+int		match(char *str, char *pattern);
+char	*get_suitable(char *suit, char *d_name);
+int		match_utils(char *str, char *pattern, char *star, char *tmp);
 
 #endif

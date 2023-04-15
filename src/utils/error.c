@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:54 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/12 15:17:13 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/15 21:42:29 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,16 @@ int	write_exception(int errno, char *addn, char *addn2, int is_exit)
 {
 	char	*error;
 
-	if (errno > 107)
+	if (errno > 107 || errno == 1)
 		error = get_custom_error(errno);
 	else
 		error = strerror(errno);
 	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(error, 2);
+	if (error)
+	{
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(error, 2);
+	}
 	if (addn)
 	{
 		ft_putstr_fd(": ", 2);
@@ -54,15 +57,13 @@ char	*get_custom_error(int errno)
 {
 	if (errno == 127)
 		return (ERROR_127);
-	if (errno == 128)
-		return (ERROR_128);
-	if (errno == 129)
-		return (ERROR_129);
+	if (errno == 255)
+		return (ERROR_255);
 	if (errno == 130)
 		return (ERROR_130);
 	if (errno == 131)
 		return (ERROR_131);
 	if (errno == 132)
 		return (ERROR_132);
-	return (ERROR_UNX);
+	return (NULL);
 }

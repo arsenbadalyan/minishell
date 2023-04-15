@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:56:04 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/12 15:16:24 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/15 21:17:44 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,9 @@
 // Custom Errors
 # define ERROR_UNX "unexpected error"
 # define ERROR_127 "command does not exit in the PATH or wrong command name"
-# define ERROR_128 "too many arguments"
-# define ERROR_129 "numeric argument required"
+# define ERROR_ARG "too many arguments"
+# define ERROR_255 "numeric argument required"
 # define ERROR_130 "syntax error near unexpected token"
 # define ERROR_131 "not a valid identifier"
 # define ERROR_132 "not enough arguments"
-
 #endif
