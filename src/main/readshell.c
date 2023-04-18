@@ -28,6 +28,8 @@ void	read_shell(t_minishell *shell)
 	while (1)
 	{
 		user_input = readline(SHELL_NAME);
+		if(!user_input)
+			return ;
 		input_cpy = user_input;
 		while (*input_cpy == ' ')
 			input_cpy++;

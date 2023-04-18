@@ -12,12 +12,14 @@ int controller(t_minishell *shell, char *user_input)
     shell->status->exit_code = check_cmd_line(shell->user_input, 0, 0);
     if (shell->status->exit_code)
         return (shell->status->exit_code);
+    shell->execute->heredoc_sum = 0;
     here_doc_controller(shell, shell->user_input);
     shell->execute->tokens = start_parse_cmds(shell->user_input, 0, 0);
     fill_cmd_list(shell);
     free_single((void *)&shell->user_input);
     shell->execute->skip_mode = 0;
     shell->execute->skip_phs = 0;
+    shell->execute->current_hd_state = 0;
     execution_management(shell, 0);
     return (0);
 }
@@ -39,7 +41,7 @@ void fill_cmd_list(t_minishell *shell)
         else
             temp = ft_strdup(shell->execute->tokens[i]);
         if (!temp)
-            force_quit(ENOMEM);
+            force_quit(ERNOMEM);
         shell->execute->cmd_list[i].cmd = temp;
         free_single((void *)&shell->execute->tokens[i]);
         i++;

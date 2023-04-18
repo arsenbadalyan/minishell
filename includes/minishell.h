@@ -19,6 +19,8 @@
 # include <fcntl.h>
 # include <unistd.h>
 # include <string.h>
+# include <dirent.h>
+# include <errno.h>
 
 // Custom Libs
 # include "libft.h"
@@ -54,6 +56,9 @@ int get_cmds_size(char *line, int sg_quote, int db_quote);
 void execution_management(t_minishell *shell, size_t cmd_index);
 void execution_controller(t_minishell *shell, size_t cmd_index);
 size_t command_execution(t_minishell *shell, size_t *cmd_index);
+void control_new_command_io(t_minishell *shell, t_token *token);
+void pipe_command(t_minishell *shell, t_token *token);
+void mutate_tokens(t_minishell *shell, char ***tokens);
 
 // Split of commands
 void cmd_split(t_minishell *shell, t_token *cmd);
@@ -66,10 +71,14 @@ void cut_quotes(char *line, char ***cmds, size_t *xyz, size_t *quote_size);
 char **find_path(t_minishell *shell);
 char *is_command_executable(char *command, char **paths);
 char *exec_join_check(char *path, char *command);
+char *standard_command_check(char *command);
 
 // File Descriptors management
-void change_input_file(t_minishell *shell, int fd);
-void change_output_file(t_minishell *shell, int fd);
+void file_controller(t_minishell *shell, t_token *token);
+void stdio_mutate(t_minishell *shell, t_token *token, char *redirect);
+int stdio_check(t_minishell *shell, char *redirect, size_t i, int *io);
+int check_file(char *file, int check_flags);
+char *open_here_doc_fd(t_minishell *shell, int *fd);
 
 // Controllers
 int controller(t_minishell *shell, char *user_input);
@@ -81,6 +90,7 @@ int	execute_heredoc(t_minishell *shell, char *cmd_line, size_t index);
 void exe_here_doc(t_minishell *shell, char *limiter);
 void	wait_limiter(char *limiter, int fd);
 void  remove_heredoc(int here_doc_num);
+char *concat_heredoc(t_exc_line *exec);
 
 // Utils
 int check_slice(char *line, char *SINGLE, char *DOUBLE);
@@ -97,20 +107,8 @@ void			set_env(t_minishell *shell, char *var, char *value);
 void			set_new_env(t_minishell *shell, char *var, char *value);
 
 // Error management
-void	force_quit(int errno);
-int	write_exception(int errno, char *addn, char *addn2, int is_exit);
-char *get_custom_error(int errno);
-
-// TRUE and FALSE
-enum boolean {
-    TRUE = 1,
-    FALSE = 0
-};
-
-enum errors {
-    ENOMEM = 12,
-    EPDEN = 13,
-    ECMDNF = 127,
-};
+void	force_quit(int errno_c);
+int	write_exception(int errno_c, char *addn, char *addn2, int is_exit);
+char *get_custom_error(int errno_c);
 
 #endif

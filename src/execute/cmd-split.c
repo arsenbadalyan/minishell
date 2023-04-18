@@ -12,11 +12,22 @@ void cmd_split(t_minishell *shell, t_token *cmd)
 	cmd->tokens[cmd->size_cmd - 1] = NULL;
 	cmd->redirects[cmd->size_rdr - 1] = NULL;
 	fill_cmd_list_token(shell, cmd);
+	mutate_tokens(shell, &cmd->tokens);
+	mutate_tokens(shell, &cmd->redirects);
+	file_controller(shell, cmd);
+	if(cmd->status)
+		return;
 	if (cmd->tokens[0])
 	{
 		paths = find_path(shell);
 		cmd->path = is_command_executable(cmd->tokens[0], paths);
-		printf("PATH: %s\n", cmd->path);
+		if(!cmd->path && ++cmd->status)
+			write_exception(ECMDNF, cmd->tokens[0], NULL, 0);
+		else if(!ft_strlen(cmd->path) && ++cmd->status)
+			free_single((void *)&cmd->path);
+		if(cmd->status)
+			return;
+		// printf("PATH: %s\n", cmd->path);
 	}
 	// printf("\nCOMMANDS->\n");
 	// while (cmd->tokens[i])
@@ -121,7 +132,7 @@ void cut_quotes(char *line, char ***cmds, size_t *xyz, size_t *quote_size)
 	xyz[0]++;
 	(*cmds)[xyz[2]] = ft_substr(line, xyz[1], xyz[0] - xyz[1]);
 	if (!(*cmds)[xyz[2]])
-		force_quit(ENOMEM);
+		force_quit(ERNOMEM);
 	xyz[1] = xyz[0];
 	xyz[2]++;
 	while (line[xyz[0]] && ft_strchr(WHITE_SPACE, line[xyz[0]]))

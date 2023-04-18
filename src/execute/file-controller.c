@@ -1,21 +1,107 @@
 #include "minishell.h"
 
-void change_input_file(t_minishell *shell, int fd)
+void file_controller(t_minishell *shell, t_token *token)
 {
-	int temp_fd;
+	size_t i;
+	char **redirects;
 
-	temp_fd = shell->execute->input_fd;
-	shell->execute->input_fd = fd;
-	if (temp_fd != 0)
-		close(temp_fd);
+	i = 0;
+	redirects = token->redirects;
+	while(redirects[i])
+	{
+		stdio_mutate(shell, token, redirects[i]);
+		if(token->status)
+			return;
+		i++;
+	}
 }
 
-void change_output_file(t_minishell *shell, int fd)
+void stdio_mutate(t_minishell *shell, t_token *token, char *redirect)
 {
-	int temp_fd;
+	size_t i;
+	int fd;
+	int io;
+	DIR *dir;
+	
+	i = 0;
+	io = 0;
+	while(redirect[i] && (ft_strchr(REDIRECTS, redirect[i]) || ft_strchr(WHITE_SPACE, redirect[i])))
+		i++;
+	fd = stdio_check(shell, redirect, i, &io);
+	if(fd < 0)
+	{
+		token->status = errno;
+		return;
+	}
+	if(redirect[0] == '>' && check_file(redirect + i, F_OK) != EXIST)
+	{
+		token->status = E_ISDIR;
+		return;
+	}
+	if(!io)
+		token->stdin = fd;
+	else
+		token->stdout = fd;
+}
 
-	temp_fd = shell->execute->output_fd;
-	shell->execute->output_fd = fd;
-	if(temp_fd != 1)
-		close(temp_fd);
+int stdio_check(t_minishell *shell, char *redirect, size_t i, int *io)
+{
+	char *here_doc;
+	int fd;
+
+	fd = -1;
+	here_doc = NULL;
+	if (redirect[0] == '<' && redirect[0] != redirect[1])
+		fd = open(redirect + i, O_RDONLY);
+	else if (redirect[0] == '<' && redirect[0] == redirect[1])
+		here_doc = open_here_doc_fd(shell, &fd);
+	else if (redirect[0] == '>' && redirect[0] != redirect[1] && ++(*io))
+		fd = open(redirect + i, O_WRONLY | O_CREAT | O_TRUNC, 0755);
+	else if (redirect[0] == '>' && redirect[0] == redirect[1] && ++(*io))
+		fd = open(redirect + i, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0755);
+	if (fd < 0)
+	{
+		ft_putstr_fd("minishell: ", 2);
+		if(here_doc)
+			perror(here_doc);
+		else
+			perror(redirect + i);
+		free_single((void *)&here_doc);
+	}
+	return (fd);
+}
+
+char *open_here_doc_fd(t_minishell *shell, int *fd)
+{
+	char *here_doc;
+
+	here_doc = concat_heredoc(shell->execute);
+	if (!here_doc)
+		force_quit(ERNOMEM);
+	*fd = open(here_doc, O_RDONLY);
+	return (here_doc);
+}
+
+int check_file(char *file, int check_flags)
+{
+	DIR *dir;
+
+	if(access(file, F_OK) == -1)
+	{
+		write_exception(ENOSUCHFILE, file, NULL, 0);
+		return (NOT_EXIST);
+	}
+	if(access(file, check_flags) == -1)
+	{
+		write_exception(EPDEN, file, NULL, 0);
+		return (PERMISSION_DENIED);
+	}
+	dir = opendir(file);
+	if(dir)
+	{
+		write_exception(E_ISDIR, file, NULL, 0);
+		closedir(dir);
+		return (IS_DIR);
+	}
+	return (EXIST);
 }

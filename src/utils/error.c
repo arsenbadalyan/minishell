@@ -12,26 +12,26 @@
 
 #include "minishell.h"
 
-void	force_quit(int errno)
+void	force_quit(int errno_c)
 {
 	char	*error;
     
-    error = strerror(errno);
+    error = strerror(errno_c);
 	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
 	ft_putstr_fd("\n", 2);
-	exit(errno);
+	exit(errno_c);
 }
 
-int	write_exception(int errno, char *addn, char *addn2, int is_exit)
+int	write_exception(int errno_c, char *addn, char *addn2, int is_exit)
 {
 	char	*error;
 
-	if (errno > 107)
-		error = get_custom_error(errno);
+	if (errno_c > 107)
+		error = get_custom_error(errno_c);
 	else
-		error = strerror(errno);
+		error = strerror(errno_c);
 	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
@@ -47,17 +47,17 @@ int	write_exception(int errno, char *addn, char *addn2, int is_exit)
 	}
 	ft_putstr_fd("\n", 2);
 	if (is_exit)
-		exit(errno);
-	return (errno);
+		exit(errno_c);
+	return (errno_c);
 }
 
-char *get_custom_error(int errno)
+char *get_custom_error(int errno_c)
 {
-	if(errno == 127)
+	if(errno_c == 127)
 		return (ERROR_127);
-	else if(errno == 130)
+	if(errno_c == 130)
 		return (ERROR_130);
-	if(errno == 128)
-		return (ERROR_128);
+	if (errno_c == E_ISDIR)
+		return (ERROR_126); 
 	return (ERROR_UNX);
 }

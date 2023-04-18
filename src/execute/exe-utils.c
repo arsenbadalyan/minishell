@@ -7,10 +7,10 @@ char *exec_join_check(char *path, char *command)
 
 	temp_path = ft_strjoin(path, "/");
 	if (!temp_path)
-		force_quit(ENOMEM);
+		force_quit(ERNOMEM);
 	check_path = ft_strjoin(temp_path, command);
 	if (!check_path)
-		force_quit(ENOMEM);
+		force_quit(ERNOMEM);
 	free_single((void *)&temp_path);
 	if (!access(check_path, X_OK))
 		return (check_path);
@@ -24,19 +24,9 @@ char *is_command_executable(char *command, char **paths)
 	char *check_path;
 
 	i = 0;
-	if (!access(command, X_OK))
-	{
-		check_path = ft_strdup(command);
-		if (!check_path)
-			force_quit(ENOMEM);
+	check_path = standard_command_check(command);
+	if(check_path)
 		return (check_path);
-	}
-	// if file not sush file or directore give error
-	if(ft_strchr(command, '/'))
-	{
-		printf("chkaaaaa\n");
-		return (NULL);
-	}
 	while (paths[i])
 	{
 		check_path = exec_join_check(paths[i], command);
@@ -46,6 +36,29 @@ char *is_command_executable(char *command, char **paths)
 		i++;
 	}
 	return (NULL);
+}
+
+char *standard_command_check(char *command)
+{
+	char *result;
+
+	result = NULL;
+	if (ft_strchr(command, '/'))
+	{
+		check_file(command, X_OK);
+		result = ft_strdup("");
+		if(!result)
+			force_quit(ERNOMEM);
+		return (result);
+	}
+	if (!access(command, X_OK))
+	{
+		result = ft_strdup(command);
+		if (!result)
+			force_quit(ERNOMEM);
+		return (result);
+	}
+	return (result);
 }
 
 char **find_path(t_minishell *shell)
@@ -61,7 +74,7 @@ char **find_path(t_minishell *shell)
 		// envp[i] += 5;
 		paths = ft_split(path, ':');
 		if(!paths)
-			force_quit(ENOMEM);
+			force_quit(ERNOMEM);
 		return (paths);
 	}
 	return (NULL);

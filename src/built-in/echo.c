@@ -42,10 +42,11 @@ char *join_lines(char **cmd_line, size_t i, int has_new_line, char *temp_line)
 		has_new_line = FALSE;
 	while (cmd_line[i])
 	{
+		
 		temp_line = new_line;
 		new_line = ft_strjoin(new_line, cmd_line[i]);
 		if (!free_single((void *)&temp_line) && !new_line)
-			force_quit(ENOMEM);
+			force_quit(ERNOMEM);
 		temp_line = new_line;
 		if (cmd_line[i + 1])
 			new_line = ft_strjoin(new_line, " ");
@@ -55,7 +56,7 @@ char *join_lines(char **cmd_line, size_t i, int has_new_line, char *temp_line)
 			free_single((void *)&temp_line);
 		}
 		if(!new_line)
-			force_quit(ENOMEM);
+			force_quit(ERNOMEM);
 		i++;
 	}
 	return (new_line);
@@ -106,13 +107,13 @@ void get_variable(t_minishell *shell, char **line, char **new_line)
 	}
 	var = ft_substr(temp_line, 0, size);
 	if(!var)
-		force_quit(ENOMEM);
+		force_quit(ERNOMEM);
 	if(get_env(shell, var))
 	{
 		temp_line = *new_line;
 		*new_line = ft_strjoin(*new_line, get_env(shell, var));
 		if(!free_single((void *)&temp_line) && !(*new_line))
-			force_quit(ENOMEM);
+			force_quit(ERNOMEM);
 	}
 	else
 		(*line)++;

@@ -29,9 +29,12 @@ typedef struct s_exc_line {
 	struct s_token *cmd_list;
 	size_t clist_len;
 	int heredoc_sum;
+	int current_hd_state;
 	char **tokens;
-	int input_fd;
-	int output_fd;
+	int STDIN;
+	int STDOUT;
+	int PIPE;
+	size_t command_wait_list;
 	int skip_phs;
 	int skip_mode;
 } t_exc_line;
@@ -46,6 +49,7 @@ typedef struct s_token {
 	int stdout;
 	size_t size_cmd;
 	size_t size_rdr;
+	int status;
 } t_token;
 
 typedef struct s_status {
@@ -65,6 +69,27 @@ enum token_modes {
 	AND,
 	PH_OPEN,
 	PH_CLOSE
+};
+
+enum file_state {
+	NOT_EXIST,
+	PERMISSION_DENIED,
+	IS_DIR,
+	EXIST
+};
+
+// TRUE and FALSE
+enum boolean {
+    TRUE = 1,
+    FALSE = 0
+};
+
+enum errors {
+    ENOSUCHFILE = 2,
+    ERNOMEM = 12,
+    EPDEN = 13,
+	E_ISDIR = 126,
+    ECMDNF = 127,
 };
 
 #endif

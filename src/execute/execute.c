@@ -56,7 +56,12 @@ void execution_controller(t_minishell *shell, size_t cmd_index)
 	}
 	if(current_token->token_mode == CMD)
 	{
-		new_index = command_execution(shell, &cmd_index);
-		// execution_management(shell, new_index);
+		command_execution(shell, &cmd_index);
+		execution_management(shell, cmd_index);
+	}
+	else if (current_token->token_mode == OR || current_token->token_mode == AND)
+	{
+		execution_management(shell, cmd_index + 1);
+		return;
 	}
 }

@@ -18,11 +18,11 @@ char **start_parse_cmds(char *line, int sg_quote, int db_quote)
 	}
 	cmds[xyz[2]] = NULL;
 	int i = 0;
-	while(cmds[i])
-	{
-		printf("%s|\n", cmds[i]);
-		i++;
-	}
+	// while(cmds[i])
+	// {
+	// 	printf("%s|\n", cmds[i]);
+	// 	i++;
+	// }
 	return (cmds);
 }
 
