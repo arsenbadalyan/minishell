@@ -19,13 +19,8 @@ int	main(int argc, char **argv, char **envp)
 	if (argc > 1)
 		exit(1);
 	shell = init_minishell();
-	// print_header();
+	print_header();
 	env_controller(shell, envp);
-
-	// _export(shell, ft_split("export  a+=1 a+=1 a+=12 adfa= adffasdflkj asdf=assdfa", ' '));
-	// _export(shell, ft_split("export", ' '));
-	// _unset(shell, ft_split("unset  a TMPDIR __CF_USER_TEXT_ENCODING HOME SHELL", ' '));
-	// _env(shell, 0);
 	read_shell(shell);
 	
 	// char *term_type = getenv("TERM");
@@ -49,5 +44,5 @@ int	main(int argc, char **argv, char **envp)
 	// here_doc_controller("<< 'hello'\"");
 	// exe_here_doc(NULL, 1);
 
-	return (shell->exit_code);
+	return (1);
 }

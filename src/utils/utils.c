@@ -56,29 +56,6 @@ int	check_valid(char *cmd)
 	return (0);
 }
 
-int	check_valid(char *cmd)
-{
-	int	i;
-
-	i = 0;
-	if (ft_strchr("0123456789!@%^&*()-+={}[]|?/><~`;:.,\\", cmd[0]))
-		return (write_exception(1, ERROR_VID, cmd, 0));
-	while (cmd[i] != '=' && cmd[i])
-	{
-		if (ft_strchr("!@#%^&*()-{[]()|};:.,~`<>?/\\", cmd[i])
-			|| (cmd[i] == '+' && cmd[i + 1] != '='))
-			return (write_exception(1, ERROR_VID, cmd, 0));
-		i++;
-	}
-	while (cmd[i])
-	{
-		if (ft_strchr("!&|;()`><", cmd[i]))
-			return (write_exception(1, ERROR_VID, cmd, 0));
-		i++;
-	}
-	return (0);
-}
-
 int get_line_type(char *line)
 {
 	if(!ft_strcmp(line, "||"))
