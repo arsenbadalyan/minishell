@@ -55,7 +55,7 @@ void	_export(t_minishell *shell, char **cmd)
 	i = 0;
 	while (cmd[++i])
 	{
-		if (check_valid(cmd[i]))
+		if (check_valid(shell, cmd[i]))
 			continue ;
 		j = 0;
 		while (cmd[i][j] && cmd[i][j] != '=')

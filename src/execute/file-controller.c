@@ -33,7 +33,7 @@ void stdio_mutate(t_minishell *shell, t_token *token, char *redirect)
 		token->status = errno;
 		return;
 	}
-	if(redirect[0] == '>' && check_file(redirect + i, F_OK) != EXIST)
+	if(redirect[0] == '>' && check_file(shell, redirect + i, F_OK) != EXIST)
 	{
 		token->status = E_ISDIR;
 		return;
@@ -61,11 +61,10 @@ int stdio_check(t_minishell *shell, char *redirect, size_t i, int *io)
 		fd = open(redirect + i, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0755);
 	if (fd < 0)
 	{
-		ft_putstr_fd("minishell: ", 2);
 		if(here_doc)
-			perror(here_doc);
+			print_error(shell, here_doc);
 		else
-			perror(redirect + i);
+			print_error(shell, redirect + i);
 		free_single((void *)&here_doc);
 	}
 	return (fd);
@@ -82,24 +81,24 @@ char *open_here_doc_fd(t_minishell *shell, int *fd)
 	return (here_doc);
 }
 
-int check_file(char *file, int check_flags)
+int check_file(t_minishell *shell, char *file, int check_flags)
 {
 	DIR *dir;
 
 	if(access(file, F_OK) == -1)
 	{
-		write_exception(ENOSUCHFILE, file, NULL, 0);
+		write_exception(shell, ENOSUCHFILE, 1, file);
 		return (NOT_EXIST);
 	}
 	if(access(file, check_flags) == -1)
 	{
-		write_exception(EPDEN, file, NULL, 0);
+		write_exception(shell, EPDEN, 1, file);
 		return (PERMISSION_DENIED);
 	}
 	dir = opendir(file);
 	if(dir)
 	{
-		write_exception(E_ISDIR, file, NULL, 0);
+		write_exception(shell, E_ISDIR, 1, file);
 		closedir(dir);
 		return (IS_DIR);
 	}

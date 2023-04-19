@@ -23,14 +23,14 @@ void execution_management(t_minishell *shell, size_t cmd_index)
 	{
 		pid = fork();
 		if (pid)
-			waitpid(pid, &shell->status->exit_code, 0);
+			waitpid(pid, &shell->status, 0);
 		else
 			execution_management(shell, cmd_index + 1);
 	}
 	else if (current_token->token_mode == PH_OPEN && shell->execute->skip_mode)
 		shell->execute->skip_phs++;
 	else if (current_token->token_mode == PH_CLOSE && !shell->execute->skip_phs)
-		exit(shell->status->exit_code);
+		exit(shell->status);
 	else if (current_token->token_mode == PH_CLOSE && shell->execute->skip_phs)
 		shell->execute->skip_phs--;
 	else
@@ -43,11 +43,11 @@ void execution_controller(t_minishell *shell, size_t cmd_index)
 	size_t	new_index;
 
 	current_token = &shell->execute->cmd_list[cmd_index];
-	if((!shell->status->exit_code && current_token->token_mode == OR)
-		|| (shell->status->exit_code && current_token->token_mode == AND))
+	if((!shell->status && current_token->token_mode == OR)
+		|| (shell->status && current_token->token_mode == AND))
 		shell->execute->skip_mode = TRUE;
-	else if((!shell->status->exit_code && current_token->token_mode == AND)
-		|| (shell->status->exit_code && current_token->token_mode == OR))
+	else if((!shell->status && current_token->token_mode == AND)
+		|| (shell->status && current_token->token_mode == OR))
 		shell->execute->skip_mode = FALSE;
 	if (shell->execute->skip_mode)
 	{

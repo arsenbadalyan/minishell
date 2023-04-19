@@ -6,12 +6,12 @@ int controller(t_minishell *shell, char *user_input)
     free_single((void *)&user_input);
     if (!shell->user_input)
         force_quit(12);
-    shell->status->exit_code = quote_controller(shell->user_input);
-    if (shell->status->exit_code)
-        return (shell->status->exit_code);
-    shell->status->exit_code = check_cmd_line(shell->user_input, 0, 0);
-    if (shell->status->exit_code)
-        return (shell->status->exit_code);
+    shell->status = quote_controller(shell, shell->user_input);
+    if (shell->status)
+        return (shell->status);
+    shell->status = check_cmd_line(shell, shell->user_input, 0, 0);
+    if (shell->status)
+        return (shell->status);
     shell->execute->heredoc_sum = 0;
     here_doc_controller(shell, shell->user_input);
     shell->execute->tokens = start_parse_cmds(shell->user_input, 0, 0);

@@ -19,11 +19,10 @@
 
 typedef struct s_minishell {
 	struct s_exc_line *execute;
-	struct s_status *status;
 	struct s_local_env *local_env;
 	char *user_input;
 	char **envp;
-	int exit_code;
+	int status;
 } t_minishell;
 
 typedef struct s_exc_line {
@@ -54,15 +53,10 @@ typedef struct s_token {
 	int status;
 } t_token;
 
-typedef struct s_status {
-	int exit_code;
-} t_status;
-
 // Initialize
 t_minishell *init_minishell();
 t_exc_line *init_exc_line();
 t_token *init_tokens(size_t size);
-t_status *init_status();
 
 enum token_modes {
 	CMD,

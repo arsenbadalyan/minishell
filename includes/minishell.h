@@ -41,10 +41,10 @@ void	print_header(void);
 void	read_shell(t_minishell *shell);
 
 // Parse Checkers
-int check_cmd_line(char *line, int sg_quote, int db_quote);
-int check_ph(char *line, size_t index, int *parenthesis);
-int check_before_ph(char *line, int index, char c);
-int check_meta_s(char *line, size_t *sym_counter, int *index);
+int check_cmd_line(t_minishell *shell, char *line, int sg_quote, int db_quote);
+int check_before_ph(t_minishell *shell, char *line, int index, char c);
+int check_ph(t_minishell *shell, char *line, size_t index, int *parenthesis);
+int check_meta_s(t_minishell *shell, char *line, size_t *sym_counter, int *index);
 size_t check_syntax(char *line, int index);
 void fill_cmd_list(t_minishell *shell);
 
@@ -71,21 +71,21 @@ void cut_quotes(char *line, char ***cmds, size_t *xyz, size_t *quote_size);
 
 // Finding path of command
 char **find_path(t_minishell *shell);
-char *is_command_executable(char *command, char **paths);
+char *is_command_executable(t_minishell *shell, char *command, char **paths);
 char *exec_join_check(char *path, char *command);
-char *standard_command_check(char *command);
+char *standard_command_check(t_minishell *shell, char *command);
 
 // File Descriptors management
 void file_controller(t_minishell *shell, t_token *token);
 void stdio_mutate(t_minishell *shell, t_token *token, char *redirect);
 int stdio_check(t_minishell *shell, char *redirect, size_t i, int *io);
-int check_file(char *file, int check_flags);
+int check_file(t_minishell *shell, char *file, int check_flags);
 char *open_here_doc_fd(t_minishell *shell, int *fd);
 
 // Controllers
 int controller(t_minishell *shell, char *user_input);
 void	here_doc_controller(t_minishell *shell, char *cmd_line);
-int	quote_controller(char *line);
+int	quote_controller(t_minishell *shell, char *line);
 
 // here_doc execution (<<)
 int	execute_heredoc(t_minishell *shell, char *cmd_line, size_t index);
@@ -100,7 +100,7 @@ void	*free_single(void **addr);
 void	*free_double(void ***addr);
 size_t	get_2d_array_length(void **array);
 int get_line_type(char *line);
-int		check_valid(char *cmd);
+int	check_valid(t_minishell *shell, char *cmd);
 
 // env controller
 char			**env_dup(char **env);
@@ -111,8 +111,9 @@ void			set_new_env(t_minishell *shell, char *var, char *value, int add);
 
 // Error management
 void	force_quit(int errno_c);
-int	write_exception(int errno_c, char *addn, char *addn2, int is_exit);
+int write_exception(t_minishell *shell, int errno_c, int exit_code, char *txt);
 char *get_custom_error(int errno_c);
+void print_error(t_minishell *shell, char *error_txt);
 
 // Wildcard
 char	*wildcard(char *pattern);
