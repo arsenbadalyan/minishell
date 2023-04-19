@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:54 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/15 21:42:29 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/19 12:53:50 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,11 +58,9 @@ char	*get_custom_error(int errno)
 	if (errno == 127)
 		return (ERROR_127);
 	if (errno == 255)
-		return (ERROR_255);
+		return (ERROR_NUM);
 	if (errno == 130)
 		return (ERROR_130);
-	if (errno == 131)
-		return (ERROR_131);
 	if (errno == 132)
 		return (ERROR_132);
 	return (NULL);

@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:41 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/12 16:34:43 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/19 12:54:50 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	_unset(t_minishell *shell, char **cmd)
 			continue ;
 		if (ft_strchr(cmd[i], '='))
 		{
-			write_exception(131, cmd[i], 0, 0);
+			write_exception(1, ERROR_VID, cmd[i], 0);
 			continue ;
 		}
 		if (!get_env(shell, cmd[i]))

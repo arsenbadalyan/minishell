@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:42:02 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/15 21:50:16 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/19 14:16:46 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,10 +23,9 @@ int	main(int argc, char **argv, char **envp)
 	// print_header();
 	env_controller(shell, envp);
 
-	mini_exit(shell, ft_split("exit -12030", ' '));
-
-	// _export(shell, ft_split("export  a+= a+= adfa= adffasdflkj asdf=assdfa", ' '));
-	// _export(shell, ft_split("export", ' '));
+	// _export(shell, ft_split("export  a+=1 a+=1 a+=12 adfa= adffasdflkj asdf=assdfa", ' '));
+	_export(shell, ft_split("export $?", ' '));
+	_export(shell, ft_split("export", ' '));
 	// _unset(shell, ft_split("unset  a TMPDIR __CF_USER_TEXT_ENCODING HOME SHELL", ' '));
 	// _env(shell, 0);
 	// read_shell(shell);
