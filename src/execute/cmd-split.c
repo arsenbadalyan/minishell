@@ -20,9 +20,9 @@ void cmd_split(t_minishell *shell, t_token *cmd)
 	if (cmd->tokens[0])
 	{
 		paths = find_path(shell);
-		cmd->path = is_command_executable(cmd->tokens[0], paths);
+		cmd->path = is_command_executable(shell, cmd->tokens[0], paths);
 		if(!cmd->path && ++cmd->status)
-			write_exception(ECMDNF, cmd->tokens[0], NULL, 0);
+			write_exception(shell, ECMDNF, 1, cmd->tokens[0]);
 		else if(!ft_strlen(cmd->path) && ++cmd->status)
 			free_single((void *)&cmd->path);
 		if(cmd->status)

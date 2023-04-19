@@ -18,13 +18,13 @@ char *exec_join_check(char *path, char *command)
 	return (0);
 }
 
-char *is_command_executable(char *command, char **paths)
+char *is_command_executable(t_minishell *shell, char *command, char **paths)
 {
 	size_t i;
 	char *check_path;
 
 	i = 0;
-	check_path = standard_command_check(command);
+	check_path = standard_command_check(shell, command);
 	if(check_path)
 		return (check_path);
 	while (paths[i])
@@ -38,14 +38,14 @@ char *is_command_executable(char *command, char **paths)
 	return (NULL);
 }
 
-char *standard_command_check(char *command)
+char *standard_command_check(t_minishell *shell, char *command)
 {
 	char *result;
 
 	result = NULL;
 	if (ft_strchr(command, '/'))
 	{
-		check_file(command, X_OK);
+		check_file(shell, command, X_OK);
 		result = ft_strdup("");
 		if(!result)
 			force_quit(ERNOMEM);

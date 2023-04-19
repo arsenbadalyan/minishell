@@ -24,33 +24,33 @@ void	force_quit(int errno_c)
 	exit(errno_c);
 }
 
-int	write_exception(int errno_c, char *addn, char *addn2, int is_exit)
+void print_error(t_minishell *shell, char *error_txt)
+{
+	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
+	ft_putstr_fd(": ", 2);
+	perror(error_txt);
+	shell->status = errno;
+}
+
+int write_exception(t_minishell *shell, int errno_c, int exit_code, char *txt)
 {
 	char	*error;
 
-	if (errno > 107 || errno == 1)
-		error = get_custom_error(errno);
+	if (errno_c > 107 || errno_c < 0)
+		error = get_custom_error(errno_c);
 	else
 		error = strerror(errno_c);
 	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
+	ft_putstr_fd(": ", 2);
 	if (error)
-	{
-		ft_putstr_fd(": ", 2);
 		ft_putstr_fd(error, 2);
-	}
-	if (addn)
+	if (txt)
 	{
 		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(addn, 2);
-	}
-	if (addn2)
-	{
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(addn2, 2);
+		ft_putstr_fd(txt, 2);
 	}
 	ft_putstr_fd("\n", 2);
-	if (is_exit)
-		exit(errno_c);
+	shell->status = exit_code;
 	return (errno_c);
 }
 

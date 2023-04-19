@@ -20,7 +20,6 @@ t_minishell	*init_minishell(void)
     if(!minishell)
         force_quit(12);
     minishell->execute = init_exc_line();
-    minishell->status = init_status();
     minishell->local_env = NULL;
     return (minishell);
 }
@@ -60,15 +59,4 @@ t_token *init_tokens(size_t size)
     if(!tokens)
         force_quit(12);
     return (tokens);
-}
-
-t_status	*init_status(void)
-{
-	t_status	*status;
-
-    status = (t_status *)malloc(sizeof(t_status));
-    if(!status)
-        force_quit(12);
-    status->exit_code = 0;
-    return (status);
 }

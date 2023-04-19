@@ -40,7 +40,7 @@ void	here_doc_controller(t_minishell *shell, char *cmd_line)
 	}
 }
 
-int quote_controller(char *line)
+int quote_controller(t_minishell *shell, char *line)
 {
 	size_t i;
 	int db_quote;
@@ -52,10 +52,10 @@ int quote_controller(char *line)
 	while(line[i])
 	{
 		if(!quote_check(&sg_quote, &db_quote, line[i]))
-			return (write_exception(130, "(\') or (\")", NULL, 0));
+			return (write_exception(shell, 130, 130, "(\') or (\")"));
 		i++;
 	}
 	if(db_quote || sg_quote)
-		return (write_exception(130, "(\') or (\")", NULL, 0));
+		return (write_exception(shell, 130, 130, "(\') or (\")"));
 	return (0);
 }
