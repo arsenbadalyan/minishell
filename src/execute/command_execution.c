@@ -90,14 +90,21 @@ void control_new_command_io(t_minishell *shell, t_token *token)
 		token->stdin = stdin;
 	else if(token->stdin == -1 && shell->execute->PIPE_OUT != -1)
 		token->stdin = shell->execute->PIPE_OUT;
-	dup2(token->stdin, stdin);
-	close(token->stdin);
-	token->stdin = stdin;
+	else
+	{
+		dup2(token->stdin, stdin);
+		close(token->stdin);
+		token->stdin = stdin;
+	}
+	
 	if(token->stdout == -1)
 		token->stdout = stdout;
-	dup2(token->stdout, stdout);
-	close(token->stdout);
-	token->stdout = stdout;
+	else
+	{
+		dup2(token->stdout, stdout);
+		close(token->stdout);
+		token->stdout = stdout;
+	}
 	// close(token->stdin);
 	// close(token->stdout);
 	// token->stdin = stdin;
