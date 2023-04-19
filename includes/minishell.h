@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   Minishell.h                                        :+:      :+:    :+:   */
+/*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/07 23:20:04 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/19 16:37:51 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,7 @@
 # include <unistd.h>
 # include <string.h>
 # include <dirent.h>
+# include <signal.h>
 # include <errno.h>
 
 // Custom Libs
@@ -34,7 +35,7 @@
 // #include <readline/history.h>
 
 // Printf Minishell header on start
-void print_header();
+void	print_header(void);
 
 // Work with readline
 void	read_shell(t_minishell *shell);
@@ -94,22 +95,29 @@ void  remove_heredoc(int here_doc_num);
 char *concat_heredoc(t_exc_line *exec);
 
 // Utils
-int check_slice(char *line, char *SINGLE, char *DOUBLE);
+int		check_slice(char *line, char *SINGLE, char *DOUBLE);
 void	*free_single(void **addr);
 void	*free_double(void ***addr);
 size_t	get_2d_array_length(void **array);
 int get_line_type(char *line);
+int		check_valid(char *cmd);
 
 // env controller
-void            env_controller(t_minishell *shell, char **envp);
 char			**env_dup(char **env);
+void            env_controller(t_minishell *shell, char **envp);
 char			*get_env(t_minishell *shell, char *var);
-void			set_env(t_minishell *shell, char *var, char *value);
-void			set_new_env(t_minishell *shell, char *var, char *value);
+void			set_env(t_minishell *shell, char *var, char *value, int add);
+void			set_new_env(t_minishell *shell, char *var, char *value, int add);
 
 // Error management
 void	force_quit(int errno_c);
 int	write_exception(int errno_c, char *addn, char *addn2, int is_exit);
 char *get_custom_error(int errno_c);
+
+// Wildcard
+char	*wildcard(char *pattern);
+int		match(char *str, char *pattern);
+char	*get_suitable(char *suit, char *d_name);
+int		match_utils(char *str, char *pattern, char *star, char *tmp);
 
 #endif

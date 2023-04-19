@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:54 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/07 21:10:27 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/19 12:53:50 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,13 +28,16 @@ int	write_exception(int errno_c, char *addn, char *addn2, int is_exit)
 {
 	char	*error;
 
-	if (errno_c > 107)
-		error = get_custom_error(errno_c);
+	if (errno > 107 || errno == 1)
+		error = get_custom_error(errno);
 	else
 		error = strerror(errno_c);
 	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
-	ft_putstr_fd(": ", 2);
-	ft_putstr_fd(error, 2);
+	if (error)
+	{
+		ft_putstr_fd(": ", 2);
+		ft_putstr_fd(error, 2);
+	}
 	if (addn)
 	{
 		ft_putstr_fd(": ", 2);

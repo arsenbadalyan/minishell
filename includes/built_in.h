@@ -1,5 +1,17 @@
-#ifndef BUILT_IN__H
-#define BUILT_IN__H
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   built_in.h                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/10 16:55:39 by armartir          #+#    #+#             */
+/*   Updated: 2023/04/19 14:14:16 by armartir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#ifndef BUILT_IN_H
+# define BUILT_IN_H
 
 // echo
 char *_echo(t_minishell *shell, char **cmd_line, int hd_mode, char *hd_lim);
@@ -10,7 +22,20 @@ int		quote_check(int *sg_quote, int *db_quote, char c);
 // pwd
 int		_pwd(void);
 // cd
-int 	_cd(t_minishell *shell, char **cmd_line);
-void	change_pwd(t_minishell *shell, char *cmd, int add);
+int		_cd(t_minishell *shell, char **cmd_line);
+char	*join_tilde(t_minishell *shell, char *dir);
+int		_cd_utils(t_minishell *shell, char *cmd, char **cmd_line);
+// exit
+void	mini_exit(t_minishell *shell, char **cmd);
+void	check_num(t_minishell *shell, char *str);
+// env
+void	_env(t_minishell *shell, int add);
+// export
+void	_export(t_minishell *shell, char **cmd);
+void	_export_exe(t_minishell *shell, char *var, char *val, int add);
+char	*get_value(t_minishell *shell, char *var, char *cmd);
+// unset
+int		_unset(t_minishell *shell, char **cmd_line);
+void	env_pop(t_minishell *shell, char *cmd);
 
 #endif

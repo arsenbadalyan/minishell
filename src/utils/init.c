@@ -3,18 +3,18 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:25:49 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/01 12:29:17 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/12 14:44:48 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_minishell *init_minishell()
+t_minishell	*init_minishell(void)
 {
-    t_minishell *minishell;
+	t_minishell	*minishell;
 
     minishell = (t_minishell *)malloc(sizeof(t_minishell));
     if(!minishell)
@@ -25,9 +25,9 @@ t_minishell *init_minishell()
     return (minishell);
 }
 
-t_exc_line *init_exc_line()
+t_exc_line	*init_exc_line(void)
 {
-    t_exc_line *exc_line;
+	t_exc_line	*exc_line;
 
     exc_line = (t_exc_line *)malloc(sizeof(t_exc_line));
     if(!exc_line)
@@ -62,9 +62,9 @@ t_token *init_tokens(size_t size)
     return (tokens);
 }
 
-t_status *init_status()
+t_status	*init_status(void)
 {
-    t_status *status;
+	t_status	*status;
 
     status = (t_status *)malloc(sizeof(t_status));
     if(!status)

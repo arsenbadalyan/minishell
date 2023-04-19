@@ -3,25 +3,39 @@
 /*                                                        :::      ::::::::   */
 /*   env-controller.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 17:36:11 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/09 14:00:07 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/12 16:28:36 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void env_controller(t_minishell *shell, char **envp)
+void	env_controller(t_minishell *shell, char **envp)
 {
 	char	*shlvl;
 	char	*tmp;
+	int		lvl;
 
 	shell->envp = env_dup(envp);
-	// tmp = get_env(shell, "SHLVL");
-	// shlvl = ft_itoa(ft_atoi(tmp) + 1);
-	// set_env(shell, "SHLVL", shlvl);
-	// free_single((void *)&shlvl);
+	tmp = get_env(shell, "SHLVL");
+	while (*tmp != '=')
+		tmp++;
+	tmp++;
+	lvl = ft_atoi(tmp) + 1;
+	if (lvl > 999 || lvl < 0)
+	{
+		if (lvl > 999)
+		{
+			printf("minishell: warning: shell level (%d)", lvl);
+			printf (" too high, resetting to 1\n");
+		}
+		lvl = 1;
+	}
+	shlvl = ft_itoa(lvl);
+	set_env(shell, "SHLVL", shlvl, 1);
+	free_single((void *)&shlvl);
 }
 
 char	**env_dup(char **env)
@@ -47,7 +61,7 @@ char	**env_dup(char **env)
 	return (env_cpy);
 }
 
-void set_env(t_minishell *shell, char *var, char *value)
+void	set_env(t_minishell *shell, char *var, char *value, int add)
 {
 	size_t	i;
 	char	*check;
@@ -55,15 +69,17 @@ void set_env(t_minishell *shell, char *var, char *value)
 	check = get_env(shell, var);
 	if (!check)
 	{
-		set_new_env(shell, var, value);
+		set_new_env(shell, var, value, add);
 		return ;
 	}
-	var = ft_strjoin (var, "=");
+	if (!value)
+		return ;
 	if (!var)
 		force_quit(12);
 	i = 0;
-	while (ft_strncmp(var, shell->envp[i], ft_strlen(var)))
+	while (!(ft_strnstr(shell->envp[i], check, ft_strlen(check))))
 		i++;
+	var = ft_strjoin (var, "=");
 	free(shell->envp[i]);
 	shell->envp[i] = ft_strjoin(var, value);
 	free_single((void *)&var);
@@ -71,27 +87,28 @@ void set_env(t_minishell *shell, char *var, char *value)
 		force_quit(12);
 }
 
-void set_new_env(t_minishell *shell, char *var, char *value)
+void	set_new_env(t_minishell *shell, char *var, char *value, int add)
 {
 	size_t	i;
 	char	**tmp;
 
-	var = ft_strjoin(var, "=");
+	if (!value)
+		value = "";
+	if (add)
+		var = ft_strjoin(var, "=");
 	if (!var)
 		force_quit(12);
 	i = get_2d_array_length((void **)shell->envp);
 	tmp = shell->envp;
 	shell->envp = (char **)malloc (sizeof(char *) * (i + 2));
-	i = 0;
-	while (tmp[i])
-	{
+	i = -1;
+	while (tmp[++i])
 		shell->envp[i] = tmp[i];
-		i++;
-	}
 	shell->envp[i] = ft_strjoin(var, value);
-	if(!shell->envp[i])
+	if (!shell->envp[i])
 		force_quit(12);
-	free_single((void *)&var);
+	if (add)
+		free_single((void *)&var);
 	shell->envp[++i] = (void *)0;
 	free(tmp);
 }
@@ -104,16 +121,14 @@ char	*get_env(t_minishell *shell, char *var)
 
 	i = 0;
 	length = ft_strlen(var);
-	while(shell->envp[i])
+	while (shell->envp[i])
 	{
 		finded_line = ft_strnstr(shell->envp[i], var, length);
-		if(finded_line && *(finded_line + length) == '=')
-		{
-			finded_line += length + 1;
-			break;
-		}
+		if (finded_line && (*(finded_line + length) == '='
+				|| *(finded_line + length) == '\0'))
+			break ;
 		finded_line = NULL;
-		i++;		
+		i++;
 	}
 	return (finded_line);
 }
