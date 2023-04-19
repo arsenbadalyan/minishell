@@ -57,8 +57,9 @@ void execution_management(t_minishell *shell, size_t cmd_index);
 void execution_controller(t_minishell *shell, size_t cmd_index);
 size_t command_execution(t_minishell *shell, size_t *cmd_index);
 void control_new_command_io(t_minishell *shell, t_token *token);
-void pipe_command(t_minishell *shell, t_token *token);
+void pipe_command(t_minishell *shell, t_token *token, int is_last);
 void mutate_tokens(t_minishell *shell, char ***tokens);
+int execute_token(t_minishell *shell, t_token *token);
 
 // Split of commands
 void cmd_split(t_minishell *shell, t_token *cmd);

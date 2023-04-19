@@ -22,8 +22,6 @@ t_minishell *init_minishell()
     minishell->execute = init_exc_line();
     minishell->status = init_status();
     minishell->local_env = NULL;
-    minishell->execute->STDIN = STDIN_FILENO;
-    minishell->execute->STDOUT = STDOUT_FILENO;
     return (minishell);
 }
 
@@ -35,8 +33,8 @@ t_exc_line *init_exc_line()
     if(!exc_line)
         force_quit(12);
     exc_line->cmd_list = NULL;
-    exc_line->STDIN = dup(STDIN_FILENO);
-    exc_line->STDOUT = dup(STDOUT_FILENO);
+    exc_line->STDIN = STDIN_FILENO;
+    exc_line->STDOUT = STDOUT_FILENO;
     return (exc_line);
 }
 

@@ -33,7 +33,8 @@ typedef struct s_exc_line {
 	char **tokens;
 	int STDIN;
 	int STDOUT;
-	int PIPE;
+	int PIPE_IN;
+	int PIPE_OUT;
 	size_t command_wait_list;
 	int skip_phs;
 	int skip_mode;
