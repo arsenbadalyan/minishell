@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-void start_parse_cmds(char *line, int sg_quote, int db_quote)
+char **start_parse_cmds(char *line, int sg_quote, int db_quote)
 {
 	int xyz[3];
 	char **cmds;
@@ -12,40 +12,42 @@ void start_parse_cmds(char *line, int sg_quote, int db_quote)
 	while(line[xyz[0]])
 	{
 		quote_check(&sg_quote, &db_quote, line[xyz[0]]);
-		if((sg_quote || db_quote) && ++xyz[0])
+		if ((sg_quote || db_quote) && ++xyz[0])
 			continue;
-		cut_part(line, cmds, xyz);
-		xyz[0]++;
+		cut_part(line, &cmds, xyz);
 	}
 	cmds[xyz[2]] = NULL;
-	printf("%d\n", xyz[2]);
 	int i = 0;
-	while(cmds[i])
-	{
-		printf("%s\n", cmds[i]);
-		i++;
-	}
+	// while(cmds[i])
+	// {
+	// 	printf("%s|\n", cmds[i]);
+	// 	i++;
+	// }
+	return (cmds);
 }
 
-void cut_part(char *line, char **cmds, int *xyz)
+void cut_part(char *line, char ***cmds, int *xyz)
 {
 	int slice_size;
 
-	if(!line[xyz[0] + 1])
+	slice_size = check_slice((line + xyz[0]), PARSE_SEP_SINGLE, PARSE_SEP_DOUBLE);
+	if(slice_size)
 	{
-		cmds[xyz[2]] = ft_substr(line, xyz[1], xyz[0] - xyz[1] + 1);
-		xyz[2] += 1;
-		return;
+		if(xyz[0] != xyz[1])
+			(*cmds)[xyz[2]++] = ft_substr(line, xyz[1], xyz[0] - xyz[1]);
+		(*cmds)[xyz[2]++] = ft_substr(line, xyz[0], slice_size);
+		xyz[0] += slice_size;
+		xyz[1] = xyz[0];
+		while (line[xyz[0]] && ft_strchr(WHITE_SPACE, line[xyz[0]]))
+		{
+			xyz[0]++;
+			xyz[1]++;
+		}
 	}
-	slice_size = check_slice(line, SINGLE_SEPARATORS, DOUBLE_SEPARATORS);
-	if (!slice_size)
-		return ;
-	cmds[xyz[2]] = ft_substr(line, xyz[1], xyz[0] - xyz[1]);
-	xyz[1] = xyz[0];
-	xyz[0] += slice_size;
-	cmds[xyz[2] + 1] = ft_substr(line, xyz[1], xyz[0] - xyz[1]);
-	xyz[1] = xyz[0];
-	xyz[2] += 2;
+	else if (!line[xyz[0] + 1])
+		(*cmds)[xyz[2]++] = ft_substr(line, xyz[1], (xyz[0]++) + 1);
+	else
+		xyz[0]++;
 }
 
 int get_cmds_size(char *line, int sg_quote, int db_quote)
@@ -53,20 +55,23 @@ int get_cmds_size(char *line, int sg_quote, int db_quote)
 	size_t i;
 	size_t size;
 	int slice_size;
+	int temp_slice_size;
 
-	size = 1;
+	size = 0;
 	i = 0;
+	slice_size = 0;
 	while (line[i])
 	{
 		quote_check(&sg_quote, &db_quote, line[i]);
-		if ((sg_quote || db_quote) && i++)
+		if ((sg_quote || db_quote || ft_strchr(WHITE_SPACE, line[i])) && ++i)
 			continue;
-		slice_size = check_slice(line, SINGLE_SEPARATORS, DOUBLE_SEPARATORS);
-		if(slice_size)
-		{
+		temp_slice_size = slice_size;
+		slice_size = check_slice((line + i), PARSE_SEP_SINGLE, PARSE_SEP_DOUBLE);
+		if(temp_slice_size && !slice_size)
 			size++;
+		if(slice_size && size++)
 			i += slice_size;
-		} else
+		else
 			i++;
 	}
 	return (size);

@@ -3,28 +3,51 @@
 /*                                                        :::      ::::::::   */
 /*   mishell.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:42:02 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/07 23:51:10 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/19 17:07:50 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int main(int argc, char **argv, char **envp)
+int	main(int argc, char **argv, char **envp)
 {
-	t_minishell *shell;
+	t_minishell	*shell;
 
-	if(argc > 1)
-		exit(1);		
+	if (argc > 1)
+		exit(1);
 	shell = init_minishell();
-	print_header();
+	// print_header();
 	env_controller(shell, envp);
+
+	// _export(shell, ft_split("export  a+=1 a+=1 a+=12 adfa= adffasdflkj asdf=assdfa", ' '));
+	// _export(shell, ft_split("export", ' '));
+	// _unset(shell, ft_split("unset  a TMPDIR __CF_USER_TEXT_ENCODING HOME SHELL", ' '));
+	// _env(shell, 0);
 	read_shell(shell);
-	// printf("%s\n", get_env(shell, "path"));
-	// TODO DELETE IN END V
+	
+	// char *term_type = getenv("TERM");
+	// printf("%s\n", term_type);
+	// char buf[1024];
+	// tgetent(buf, term_type);
+	// printf("%s\n", );
+	// char *tt = tgetstr("cl", NULL);
+	// tputs(tt, 1, ft_putchar_fd);
+	// if (tgetent(NULL, term_type) != 1)
+	// {
+	// 	fprintf(stderr, "failed to load terminal database\n");
+	// 	return 1;
+	// }
+	
+	// char *clear = tgetstr("cl", NULL);
+	// char *move = tgoto(tgetstr("cm", NULL), 0, 0);
+	// fputs(clear, stdout);
+	// fputs(move, stdout);
+	// // TODO DELETE IN END V
 	// here_doc_controller("<< 'hello'\"");
 	// exe_here_doc(NULL, 1);
-	return (0);
+
+	return (shell->exit_code);
 }

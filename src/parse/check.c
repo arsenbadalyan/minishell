@@ -2,8 +2,8 @@
 
 int check_cmd_line(char *line, int sg_quote, int db_quote)
 {
-	int i;
 	size_t sym_counter;
+	int i;
 	int ph;
 
 	i = 0;
@@ -13,7 +13,7 @@ int check_cmd_line(char *line, int sg_quote, int db_quote)
 	{
 		quote_check(&sg_quote, &db_quote, line[i]);
 		if ((sg_quote || db_quote) && ++sym_counter && ++i)
-			continue;
+			continue ;
 		if (check_before_ph(line, i, line[i]) || check_ph(line, i, &ph) 
 			|| check_meta_s(line, &sym_counter, &i))
 			return (130);
@@ -28,7 +28,7 @@ int check_cmd_line(char *line, int sg_quote, int db_quote)
 
 int check_before_ph(char *line, int index, char c)
 {
-	if((c == '(' && index--) || (c == ')' && index++))
+	if((((c == '(' && --index) || (c == ')' && ++index)) && index > 0 && line[index]))
 	{
 		while(1)
 		{
@@ -39,7 +39,8 @@ int check_before_ph(char *line, int index, char c)
 				else
 					++index;
 			}
-			else if(!index || (line[index] == '(' && c == '(') || ((line[index] == '&' || line[index] == '|')
+			else if(index < 0 || c == line[index] || (c == ')' && !line[index])
+				|| ((line[index] == '&' || line[index] == '|')
 				&& (((line[index - 1] == line[index] && c == '(')
 					|| (line[index + 1] == line[index] && c == ')')))))
 				return (0);
