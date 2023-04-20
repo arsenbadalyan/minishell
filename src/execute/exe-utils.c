@@ -43,7 +43,7 @@ char *standard_command_check(t_minishell *shell, char *command)
 	char *result;
 
 	result = NULL;
-	if (ft_strchr(command, '/'))
+	if (ft_strchr(command, '/') && access(command, X_OK))
 	{
 		check_file(shell, command, X_OK);
 		result = ft_strdup("");

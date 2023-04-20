@@ -30,7 +30,10 @@ void	read_shell(t_minishell *shell)
 		user_input = readline(SHELL_NAME);
 		// printf("%s\n", user_input);
 		if(!user_input)
-			return ;
+		{
+			// sleep(100);
+			return;
+		}
 		input_cpy = user_input;
 		while (*input_cpy == ' ')
 			input_cpy++;

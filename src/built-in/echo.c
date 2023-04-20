@@ -95,12 +95,13 @@ void get_variable(t_minishell *shell, char **line, char **new_line)
 	char *temp_line;
 	size_t size;
 	char *var;
+	char *env;
 
 	size = 0;
 	temp_line = *line;
 	while(**line)
 	{
-		if(ft_strchr(WHITE_SPACE, **line) || ft_strchr("\'\"", **line))
+		if(ft_strchr(ECHO_BRAKEPOINT, **line))
 			break;
 		size++;
 		(*line)++;
