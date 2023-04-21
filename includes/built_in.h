@@ -20,7 +20,7 @@ char *modify_line(t_minishell *shell, char *line, int hd_mode, int *quotes);
 void get_variable(t_minishell *shell, char **line, char **new_line);
 int		quote_check(int *sg_quote, int *db_quote, char c);
 // pwd
-int		_pwd(void);
+int	_pwd(t_token *token);
 // cd
 int		_cd(t_minishell *shell, char **cmd_line);
 char	*join_tilde(t_minishell *shell, char *dir);

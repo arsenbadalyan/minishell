@@ -43,4 +43,14 @@
 # define ERROR_130 "syntax error near unexpected token"
 # define ERROR_VID "not a valid identifier"
 # define ERROR_132 "not enough arguments"
+
+// Built-in program names
+# define BUILT_IN_ECHO "echo"
+# define BUILT_IN_CD "cd"
+# define BUILT_IN_PWD "pwd"
+# define BUILT_IN_EXPORT "export"
+# define BUILT_IN_UNSET "unset"
+# define BUILT_IN_ENV "env"
+# define BUILT_IN_EXIT "exit"
+
 #endif

@@ -45,7 +45,7 @@ void	mini_exit(t_minishell *shell, char **cmd)
 	if (!cmd[1])
 	{
 		shell->status = 0;
-		exit (shell->status);
+		exit(shell->status);
 	}
 	check_num(shell, cmd[1]);
 	shell->status = (ft_atoi(cmd[1]) % 256);

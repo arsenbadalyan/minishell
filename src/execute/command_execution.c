@@ -3,18 +3,23 @@
 size_t command_execution(t_minishell *shell, size_t *cmd_index)
 {
 	t_token *current_token;
+	t_token *token_list;
 	int last_stdin;
 	int last_stdout;
-
+	
+	token_list = shell->execute->cmd_list;
 	shell->execute->PIPE_IN = -1;
 	shell->execute->PIPE_OUT = -1;
 	shell->execute->command_wait_list = 0;
+	shell->execute->is_single_cmd = FALSE;
+	if(token_list[*cmd_index + 1].token_mode != PIPE)
+		shell->execute->is_single_cmd = TRUE;
 	// printf("OPENED: %d - %d\n", shell->execute->STDIN, shell->execute->STDOUT);
 	shell->execute->STDIN = dup(STDIN_FILENO);
 	shell->execute->STDOUT = dup(STDOUT_FILENO);
 	while(*cmd_index < shell->execute->clist_len)
 	{
-		current_token = &shell->execute->cmd_list[*cmd_index];
+		current_token = &token_list[*cmd_index];
 		if(current_token->token_mode != CMD && current_token->token_mode != PIPE)
 		{
 			close(last_stdin);
@@ -25,8 +30,8 @@ size_t command_execution(t_minishell *shell, size_t *cmd_index)
 		{
 			cmd_split(shell, current_token);
 			control_new_command_io(shell, current_token);
-			if(current_token->path)
-				pipe_command(shell, current_token, shell->execute->cmd_list[*cmd_index + 1].token_mode != PIPE);
+			if(current_token->path || current_token->is_built_in != -1)
+				pipe_command(shell, current_token, token_list[*cmd_index + 1].token_mode != PIPE);
 			shell->execute->command_wait_list += 1;
 			// printf("%d - %d\n", current_token->stdin, current_token->stdout);
 			last_stdin = current_token->stdin;
@@ -40,7 +45,6 @@ size_t command_execution(t_minishell *shell, size_t *cmd_index)
 	}
 	while(shell->execute->command_wait_list--)
 		wait(NULL);
-	// printf("start");
 	if (dup2(shell->execute->STDIN, STDIN_FILENO) == -1)
 		perror("RETURN STDIN");
 	if (dup2(shell->execute->STDOUT, STDOUT_FILENO) == -1)
@@ -96,24 +100,15 @@ void control_new_command_io(t_minishell *shell, t_token *token)
 		perror("STDIN");
 	else if(shell->execute->STDOUT == -1)	
 		perror("STDOUT");
-	// printf("%d - %d\n", shell->execute->STDIN, shell->execute->STDOUT);
 	// if(token->status)
 	// {
 	// 	fd = open("/dev/null", O_RDONLY);
 	// 	shell->execute->PIPE_IN = fd;
 	// }
 	if(token->stdin == -1 && shell->execute->PIPE_OUT == -1)
-	{
 		token->stdin = stdin;
-		// printf("WATCH - %d\n", stdin);
-	}
 	else if(token->stdin == -1 && shell->execute->PIPE_OUT != -1)
-	{
-		// if (dup2(shell->execute->PIPE_OUT, STDIN_FILENO) == -1)
-		// 	perror("STDIN DUP2");
-		// close(shell->execute->PIPE_OUT);
 		token->stdin = shell->execute->PIPE_OUT;
-	}
 	else
 	{
 		if(dup2(token->stdin, stdin) == -1)
@@ -121,11 +116,8 @@ void control_new_command_io(t_minishell *shell, t_token *token)
 		close(token->stdin);
 		token->stdin = stdin;
 	}
-	
 	if(token->stdout == -1)
-	{
 		token->stdout = stdout;
-	}
 	else
 	{
 		if(dup2(token->stdout, stdout) == -1)
@@ -133,10 +125,6 @@ void control_new_command_io(t_minishell *shell, t_token *token)
 		close(token->stdout);
 		token->stdout = stdout;
 	}
-	// close(token->stdin);
-	// close(token->stdout);
-	// token->stdin = stdin;
-	// token->stdout = stdout;
 }
 
 void pipe_command(t_minishell *shell, t_token *token, int is_last)
@@ -144,13 +132,17 @@ void pipe_command(t_minishell *shell, t_token *token, int is_last)
 	pid_t pid;
 	int pipe_fd[2];
 
+	if (shell->execute->is_single_cmd && (token->is_built_in == BIN_CD || token->is_built_in == BIN_EXPORT || token->is_built_in == BIN_EXIT || token->is_built_in == BIN_UNSET))
+	{
+		execute_token(shell, token);
+		return;
+	}
 	if(is_last)
 	{
+		
 		pid = fork();
 		if(!pid)
 			exit(execute_token(shell, token));
-		else
-			wait(NULL);
 		return;
 	}
 	pipe(pipe_fd);
@@ -158,17 +150,8 @@ void pipe_command(t_minishell *shell, t_token *token, int is_last)
 	if(pid)
 	{
 		close(pipe_fd[1]);
-		// wait(NULL);
-		// int temp = dup(shell->execute->STDIN);
-		// dup2(pipe_fd[0], token->stdin);
-		// shell->execute->STDIN = temp;
-		// close(token->stdin);
 		token->stdin = dup2(pipe_fd[0], token->stdin);
 		shell->execute->PIPE_OUT = token->stdin;
-		// token->stdin = pipe_fd[0];
-		// shell->execute->PIPE_OUT = pipe_fd[0];
-		// printf("PIPE OUT: %d\n", shell->execute->PIPE_OUT);
-		// printf("%d\n", shell->execute->PIPE_OUT);
 		close(pipe_fd[0]);
 		
 	}
@@ -178,22 +161,7 @@ void pipe_command(t_minishell *shell, t_token *token, int is_last)
 		if (dup2(pipe_fd[1], token->stdout) == -1)
 			perror("PIPE FORK");
 		close(pipe_fd[1]);
-		// size_t i = 0;
-		// while(token->tokens[i])
-		// {
-		// 	printf("CMD: |%s|\n", token->tokens[i]);
-		// 	i++;
-		// }
-		exit(execute_token(shell, token));
 	}
-	// if(!pid)
-	// 	exit(execute_token(shell, token));
-}
-
-int execute_token(t_minishell *shell, t_token *token)
-{
-	int exit_status;
-
-	exit_status = execve(token->path, token->tokens, shell->envp);
-	return (exit_status);
+	if(!pid)
+		exit(execute_token(shell, token));
 }

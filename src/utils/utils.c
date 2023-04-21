@@ -70,3 +70,16 @@ int get_line_type(char *line)
 		return (PH_CLOSE);
 	return (CMD);
 }
+
+void to_lowercase(char *program)
+{
+	size_t i;
+
+	i = 0;
+	while(program[i])
+	{
+		if(ft_isalpha(program[i]) && program[i] >= 65 && program[i] <= 91)
+			program[i] += 32;
+		i++;
+	}
+}

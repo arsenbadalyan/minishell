@@ -38,6 +38,7 @@ typedef struct s_exc_line {
 	size_t command_wait_list;
 	int skip_phs;
 	int skip_mode;
+	int is_single_cmd;
 } t_exc_line;
 
 typedef struct s_token {
@@ -51,6 +52,7 @@ typedef struct s_token {
 	size_t size_cmd;
 	size_t size_rdr;
 	int status;
+	int is_built_in;
 } t_token;
 
 // Initialize
@@ -86,6 +88,16 @@ enum errors {
     EPDEN = 13,
 	E_ISDIR = 126,
     ECMDNF = 127,
+};
+
+enum builtin {
+	BIN_ECHO,
+	BIN_CD,
+	BIN_PWD,
+	BIN_EXPORT,
+	BIN_UNSET,
+	BIN_ENV,
+	BIN_EXIT
 };
 
 #endif

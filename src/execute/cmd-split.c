@@ -19,6 +19,10 @@ void cmd_split(t_minishell *shell, t_token *cmd)
 		return;
 	if (cmd->tokens[0])
 	{
+		to_lowercase(cmd->tokens[0]);
+		check_builtin(cmd, cmd->tokens[0]);
+		if(cmd->is_built_in != -1)
+			return;
 		paths = find_path(shell);
 		cmd->path = is_command_executable(shell, cmd->tokens[0], paths);
 		if(!cmd->path && ++cmd->status)
@@ -56,7 +60,7 @@ void fill_cmd_list_token(t_minishell *shell, t_token *cmd)
 		quote_check(&quotes[0], &quotes[1], cmd->cmd[xyz[0]]);
 		if((quotes[0] || quotes[1]) && ++xyz[0] && ++xyz[4])
 			continue;
-		if(xyz[4])
+		if (xyz[4] && ft_strchr(WHITE_SPACE, cmd->cmd[xyz[0]]))
 			cut_quotes(cmd->cmd, &cmd->tokens, xyz, &xyz[4]);
 		temp = cmd->cmd[xyz[0]];
 		if(!temp)
@@ -69,6 +73,7 @@ void fill_cmd_list_token(t_minishell *shell, t_token *cmd)
 		xyz[1] = xyz[0];
 	}
 }
+
 
 void count_split_size(t_token *token, char *str)
 {

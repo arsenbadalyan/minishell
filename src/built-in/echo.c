@@ -109,15 +109,14 @@ void get_variable(t_minishell *shell, char **line, char **new_line)
 	var = ft_substr(temp_line, 0, size);
 	if(!var)
 		force_quit(ERNOMEM);
-	if(get_env(shell, var))
+	env = get_env(shell, var);
+	if(env)
 	{
 		temp_line = *new_line;
-		*new_line = ft_strjoin(*new_line, get_env(shell, var));
+		*new_line = ft_strjoin(*new_line, env + ft_strlen(var) + 1);
 		if(!free_single((void *)&temp_line) && !(*new_line))
 			force_quit(ERNOMEM);
 	}
-	else
-		(*line)++;
 }
 
 int quote_check(int *sg_quote, int *db_quote, char c)

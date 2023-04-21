@@ -53,6 +53,7 @@ t_token *init_tokens(size_t size)
         tokens[size].size_cmd = 1;
         tokens[size].size_rdr = 1;
         tokens[size].status = 0;
+        tokens[size].is_built_in = -1;
         if(size == 0)
             break;
     }
