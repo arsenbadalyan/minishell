@@ -21,7 +21,9 @@ int	main(int argc, char **argv, char **envp)
 	shell = init_minishell();
 	// print_header();
 	env_controller(shell, envp);
-	read_shell(shell);
+	// read_shell(shell);
+
+	_export(shell, ft_split("export 1a=", ' '));
 	
 	// char *term_type = getenv("TERM");
 	// printf("%s\n", term_type);
