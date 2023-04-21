@@ -113,7 +113,7 @@ void			set_new_env(t_minishell *shell, char *var, char *value, int add);
 void	force_quit(int errno_c);
 int write_exception(t_minishell *shell, int errno_c, int exit_code, char *txt);
 char *get_custom_error(int errno_c);
-void print_error(t_minishell *shell, char *error_txt);
+int print_error(t_minishell *shell, char *error_txt);
 
 // Wildcard
 char	*wildcard(char *pattern);

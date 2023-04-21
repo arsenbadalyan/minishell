@@ -39,18 +39,18 @@ int	check_valid(t_minishell *shell, char *cmd)
 
 	i = 0;
 	if (ft_strchr("0123456789!@%^&*()-+={}[]|?/><~`;:.,\\", cmd[0]))
-		return (write_exception(shell, 1, 1, ERROR_VID));
+		return (write_exception(shell, 256, 1, cmd));
 	while (cmd[i] != '=' && cmd[i])
 	{
 		if (ft_strchr("!@#%^&*()-{[]()|};:.,~`<>?/\\", cmd[i])
 			|| (cmd[i] == '+' && cmd[i + 1] != '='))
-			return (write_exception(shell, 1, 1, ERROR_VID));
+			return (write_exception(shell, 256, 1, cmd));
 		i++;
 	}
 	while (cmd[i])
 	{
 		if (ft_strchr("!&|;()`><", cmd[i]))
-			return (write_exception(shell, 1, 1, ERROR_VID));
+			return (write_exception(shell, 256, 1, cmd));
 		i++;
 	}
 	return (0);

@@ -25,11 +25,11 @@ void	check_num(t_minishell *shell, char *str)
 		str++;
 	if ((ft_strcmp(str, "9223372036854775808") > 0 && *dup == '-')
 		|| (ft_strcmp(str, "9223372036854775807") > 0 && *dup != '-'))
-		exit(write_exception(shell, 255, 255, dup));
+		exit(write_exception(shell, 256, 255, dup));
 	while (*str)
 	{
 		if (!ft_isdigit(*str))
-			exit(write_exception(shell, 255, 255, dup));
+			exit(write_exception(shell, 256, 255, dup));
 		str++;
 	}
 }
@@ -51,7 +51,7 @@ void	mini_exit(t_minishell *shell, char **cmd)
 	shell->status = (ft_atoi(cmd[1]) % 256);
 	if (i > 2)
 	{
-		write_exception(shell, 1, 1, "exit");
+		write_exception(shell, 257, 1, "exit");
 		shell->status = 1;
 		return ;
 	}

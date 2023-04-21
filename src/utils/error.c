@@ -24,12 +24,13 @@ void	force_quit(int errno_c)
 	exit(errno_c);
 }
 
-void print_error(t_minishell *shell, char *error_txt)
+int print_error(t_minishell *shell, char *error_txt)
 {
 	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
 	ft_putstr_fd(": ", 2);
 	perror(error_txt);
 	shell->status = errno;
+	return (errno);
 }
 
 int write_exception(t_minishell *shell, int errno_c, int exit_code, char *txt)
@@ -61,6 +62,10 @@ char *get_custom_error(int errno_c)
 	if(errno_c == 130)
 		return (ERROR_130);
 	if (errno_c == E_ISDIR)
-		return (ERROR_126); 
+		return (ERROR_126);
+	if (errno_c == 256)
+		return (ERROR_VID);
+	if (errno_c == 257)
+		return (ERROR_ARG);
 	return (ERROR_UNX);
 }
