@@ -42,15 +42,15 @@ int	_unset(t_minishell *shell, char **cmd)
 	size_t	i;
 
 	i = 0;
-	if (get_2d_array_length((void **)cmd) < 2)
-		return (write_exception(shell, 132, 132, "unset"));
+	// if (get_2d_array_length((void **)cmd) < 2)
+	// 	return (write_exception(shell, 132, 132, "unset"));
 	while (cmd[++i])
 	{
-		if (check_valid(shell, cmd[i]))
+		if (check_valid_export(shell, cmd[i]))
 			continue ;
 		if (ft_strchr(cmd[i], '='))
 		{
-			write_exception(shell, 1, 1, ERROR_VID);
+			write_exception(shell, 256, 1, ERROR_VID);
 			continue ;
 		}
 		if (!get_env(shell, cmd[i]))

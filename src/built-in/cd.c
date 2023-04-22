@@ -31,7 +31,7 @@ int	_cd_utils(t_minishell *shell, char *cmd, char **cmd_line)
 
 	getcwd(cwd, PATH_MAX);
 	if (chdir(cmd) == -1)
-		return (write_exception(shell, 1, 1, cmd));
+		return (print_error(shell, "chdir"));
 	set_env(shell, "OLDPWD", cwd, 1);
 	getcwd(cwd, PATH_MAX);
 	set_env(shell, "PWD", cwd, 1);
@@ -56,8 +56,8 @@ int	_cd(t_minishell *shell, char **cmd_line)
 		// printf ("%s\n", cmd);
 	stat(cmd, &file_stat);
 	if (S_ISREG(file_stat.st_mode))
-		return (write_exception(shell, 20, 20, 0));
+		return (write_exception(shell, ENOTDIR, 20, 0));
 	if (access(cmd, X_OK) == -1)
-		return (write_exception(shell, 13, 20, 0));
+		return (write_exception(shell, EPDEN, 20, 0));
 	return (_cd_utils(shell, cmd, cmd_line));
 }

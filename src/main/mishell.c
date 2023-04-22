@@ -27,6 +27,7 @@ int	main(int argc, char **argv, char **envp)
 	// printf("%s\n", modify_line(shell, "\"$?\"", 0, quotes));
 	// printf("%s\n", modify_line(shell, "\"$jansdn$HOME\"", 0, quotes));
 	// printf("%s\n", modify_line(shell, "\"as$HOME>fa$HOMEsf$HOME?af$HOME*$?$HOME $HOME#asf$HOME'asf\"", 0, quotes));
+ 
 	// char *term_type = getenv("TERM");
 	// printf("%s\n", term_type);
 	// char buf[1024];
