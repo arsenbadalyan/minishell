@@ -40,7 +40,7 @@ GREEN  = \033[32m
 YELLOW = \033[33m
 BLUE   = \033[34m
 
-all: readline $(NAME)
+all: $(NAME)
 	@echo > /dev/null
 
 bonus: all
@@ -84,10 +84,10 @@ $(OBJ)/%.o: $(SRC)/%.c $(LIB_DIR)
 clean: DELETE_OBJ_MSG
 	@make -C $(LIBFT_DIR) clean
 	@$(RM) $(OBJ)
-	@$(RM) $(RDLINE)
 fclean: clean DELETE_PROGRAM_MSG
 	@make -C $(LIBFT_DIR) fclean
 	@$(RM) $(NAME)
+	@$(RM) $(RDLINE)
 re: fclean all
 
 # Helper messages

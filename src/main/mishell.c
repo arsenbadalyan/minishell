@@ -19,18 +19,34 @@ int	main(int argc, char **argv, char **envp)
 	if (argc > 1)
 		exit(1);
 	shell = init_minishell();
-	// print_header();
+	print_header();
 	env_controller(shell, envp);
-
-	// _export(shell, ft_split("export  a+=1 a+=1 a+=12 adfa= adffasdflkj asdf=assdfa", ' '));
-	// _export(shell, ft_split("export", ' '));
-	// _unset(shell, ft_split("unset  a TMPDIR __CF_USER_TEXT_ENCODING HOME SHELL", ' '));
-	// _env(shell, 0);
 	read_shell(shell);
-	// printf("%s\n", get_env(shell, "path"));
-	// TODO DELETE IN END V
+	// int *quotes;
+	// ft_bzero((void *)quotes, 8);
+	// printf("%s\n", modify_line(shell, "\"$?\"", 0, quotes));
+	// printf("%s\n", modify_line(shell, "\"$jansdn$HOME\"", 0, quotes));
+	// printf("%s\n", modify_line(shell, "\"as$HOME>fa$HOMEsf$HOME?af$HOME*$?$HOME $HOME#asf$HOME'asf\"", 0, quotes));
+	// char *term_type = getenv("TERM");
+	// printf("%s\n", term_type);
+	// char buf[1024];
+	// tgetent(buf, term_type);
+	// printf("%s\n", );
+	// char *tt = tgetstr("cl", NULL);
+	// tputs(tt, 1, ft_putchar_fd);
+	// if (tgetent(NULL, term_type) != 1)
+	// {
+	// 	fprintf(stderr, "failed to load terminal database\n");
+	// 	return 1;
+	// }
+
+	// char *clear = tgetstr("cl", NULL);
+	// char *move = tgoto(tgetstr("cm", NULL), 0, 0);
+	// fputs(clear, stdout);
+	// fputs(move, stdout);
+	// // TODO DELETE IN END V
 	// here_doc_controller("<< 'hello'\"");
 	// exe_here_doc(NULL, 1);
 
-	return (shell->exit_code);
+	return (1);
 }

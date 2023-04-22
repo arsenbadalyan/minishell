@@ -12,13 +12,14 @@
 
 #include "minishell.h"
 
-int	_pwd(void)
+int	_pwd(t_token *token)
 {
 	char	cwd[PATH_MAX];
 
 	if (getcwd(cwd, PATH_MAX))
 	{
-		printf("%s\n", cwd);
+		ft_putstr_fd(cwd, token->stdout);
+		ft_putstr_fd("\n", token->stdout);
 		return (0);
 	}
 	else

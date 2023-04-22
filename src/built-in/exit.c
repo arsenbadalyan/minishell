@@ -25,17 +25,11 @@ void	check_num(t_minishell *shell, char *str)
 		str++;
 	if ((ft_strcmp(str, "9223372036854775808") > 0 && *dup == '-')
 		|| (ft_strcmp(str, "9223372036854775807") > 0 && *dup != '-'))
-	{
-		shell->exit_code = write_exception(255, dup, 0, 0);
-		exit(shell->exit_code);
-	}
+		exit(write_exception(shell, 255, 255, dup));
 	while (*str)
 	{
 		if (!ft_isdigit(*str))
-		{
-			shell->exit_code = write_exception(255, dup, 0, 0);
-			exit(shell->exit_code);
-		}
+			exit(write_exception(shell, 255, 255, dup));
 		str++;
 	}
 }
@@ -46,20 +40,19 @@ void	mini_exit(t_minishell *shell, char **cmd)
 	long long	num;
 	char		exit_code;
 
-	printf ("%s\n", "exit");
 	i = get_2d_array_length((void **)cmd);
 	if (!cmd[1])
 	{
-		shell->exit_code = 0;
-		exit (shell->exit_code);
+		shell->status = 0;
+		exit(shell->status);
 	}
 	check_num(shell, cmd[1]);
-	shell->exit_code = (ft_atoi(cmd[1]) % 256);
+	shell->status = (ft_atoi(cmd[1]) % 256);
 	if (i > 2)
 	{
-		write_exception(1, "exit", ERROR_ARG, 0);
-		shell->exit_code = 1;
+		write_exception(shell, 1, 1, "exit");
+		shell->status = 1;
 		return ;
 	}
-	exit(shell->exit_code);
+	exit(shell->status);
 }

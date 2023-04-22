@@ -13,7 +13,12 @@
 #include "minishell.h"
 #include <readline/readline.h>
 #include <readline/history.h>
-
+#include <unistd.h>
+#include <stdio.h>
+#include <fcntl.h>
+#include <termios.h>
+#include <sys/ioctl.h>
+#include <sys/wait.h>
 void	read_shell(t_minishell *shell)
 {
 	char	*user_input;
@@ -23,6 +28,12 @@ void	read_shell(t_minishell *shell)
 	while (1)
 	{
 		user_input = readline(SHELL_NAME);
+		// printf("%s\n", user_input);
+		if(!user_input)
+		{
+			// sleep(100);
+			return;
+		}
 		input_cpy = user_input;
 		while (*input_cpy == ' ')
 			input_cpy++;
@@ -30,8 +41,6 @@ void	read_shell(t_minishell *shell)
 			continue ;
 		add_history(user_input);
 		controller(shell, user_input);
-		// _cd(shell, ft_split(user_input, ' '));
-		free_single((void *)(&user_input));
 		// rl_on_new_line();
 		// rl_replace_line("", 0);
 		// rl_redisplay();

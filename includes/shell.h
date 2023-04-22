@@ -19,39 +19,85 @@
 
 typedef struct s_minishell {
 	struct s_exc_line *execute;
-	struct s_status *status;
 	struct s_local_env *local_env;
+	char *user_input;
 	char **envp;
-	int exit_code;
+	int status;
 } t_minishell;
 
 typedef struct s_exc_line {
-	struct s_cmd *cmd_list;
-	char *cmd_line;
-	char **cmd_parts;
+	struct s_token *cmd_list;
+	size_t clist_len;
+	int heredoc_sum;
+	int current_hd_state;
+	char **tokens;
+	int STDIN;
+	int STDOUT;
+	int PIPE_IN;
+	int RDR_OUT;
+	size_t command_wait_list;
+	int skip_phs;
+	int skip_mode;
+	int is_single_cmd;
 } t_exc_line;
 
-typedef struct s_cmds {
-	char *cmd_line;
-	char **cmd;
-} t_cmds;
-
-typedef struct s_status {
-	int line;
-	int part;
-	int error;
-} t_status;
-
-typedef struct s_local_env {
-	char *key;
-	char *value;
-	struct s_local_env *next;
-} t_local_env;
+typedef struct s_token {
+	size_t token_mode;
+	char *cmd;
+	char *path;
+	char **tokens;
+	char **redirects;
+	int stdin;
+	int stdout;
+	size_t size_cmd;
+	size_t size_rdr;
+	int status;
+	int is_built_in;
+} t_token;
 
 // Initialize
 t_minishell *init_minishell();
 t_exc_line *init_exc_line();
-t_cmds **init_cmds(size_t size);
-t_status *init_status();
+t_token *init_tokens(size_t size);
+
+enum token_modes {
+	CMD,
+	PIPE,
+	OR,
+	AND,
+	PH_OPEN,
+	PH_CLOSE
+};
+
+enum file_state {
+	NOT_EXIST,
+	PERMISSION_DENIED,
+	IS_DIR,
+	EXIST
+};
+
+// TRUE and FALSE
+enum boolean {
+    TRUE = 1,
+    FALSE = 0
+};
+
+enum errors {
+    ENOSUCHFILE = 2,
+    ERNOMEM = 12,
+    EPDEN = 13,
+	E_ISDIR = 126,
+    ECMDNF = 127,
+};
+
+enum builtin {
+	BIN_ECHO,
+	BIN_CD,
+	BIN_PWD,
+	BIN_EXPORT,
+	BIN_UNSET,
+	BIN_ENV,
+	BIN_EXIT
+};
 
 #endif

@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-int check_cmd_line(char *line, int sg_quote, int db_quote)
+int check_cmd_line(t_minishell *shell, char *line, int sg_quote, int db_quote)
 {
-	int i;
 	size_t sym_counter;
+	int i;
 	int ph;
 
 	i = 0;
@@ -14,21 +14,21 @@ int check_cmd_line(char *line, int sg_quote, int db_quote)
 		quote_check(&sg_quote, &db_quote, line[i]);
 		if ((sg_quote || db_quote) && ++sym_counter && ++i)
 			continue ;
-		if (check_before_ph(line, i, line[i]) || check_ph(line, i, &ph) 
-			|| check_meta_s(line, &sym_counter, &i))
+		if (check_before_ph(shell, line, i, line[i]) || check_ph(shell, line, i, &ph) 
+			|| check_meta_s(shell, line, &sym_counter, &i))
 			return (130);
 		if (!ft_strchr(METASYMBOLS_ALL, line[i]))
 			sym_counter++;
 		i++;
 	}
-	if ((ph && write_exception(130, ")", NULL, 0)))
+	if ((ph && write_exception(shell, 130, 130, ")")))
 		return (130);
 	return (0);
 }
 
-int check_before_ph(char *line, int index, char c)
+int check_before_ph(t_minishell *shell, char *line, int index, char c)
 {
-	if((c == '(' && index--) || (c == ')' && index++))
+	if((((c == '(' && --index) || (c == ')' && ++index)) && index > 0 && line[index]))
 	{
 		while(1)
 		{
@@ -39,12 +39,13 @@ int check_before_ph(char *line, int index, char c)
 				else
 					++index;
 			}
-			else if(!index || (line[index] == '(' && c == '(') || ((line[index] == '&' || line[index] == '|')
+			else if(index < 0 || c == line[index] || (c == ')' && !line[index])
+				|| ((line[index] == '&' || line[index] == '|')
 				&& (((line[index - 1] == line[index] && c == '(')
 					|| (line[index + 1] == line[index] && c == ')')))))
 				return (0);
 			else
-				return (write_exception(130, &c, NULL, 0));
+				return (write_exception(shell, 130, 130, &c));
 			if(index < 0 || !line[index])
 				break;
 		}
@@ -52,7 +53,7 @@ int check_before_ph(char *line, int index, char c)
 	return (0);
 }
 
-int check_ph(char *line, size_t index, int *parenthesis)
+int check_ph(t_minishell *shell, char *line, size_t index, int *parenthesis)
 {
 	size_t is_empty;
 
@@ -65,21 +66,21 @@ int check_ph(char *line, size_t index, int *parenthesis)
 			if (!ft_strchr(METASYMBOLS_ALL, line[index]))
 				is_empty++;
 			if (line[index] == ')' && !is_empty)
-					return (write_exception(130, ")", NULL, 0));
+					return (write_exception(shell, 130, 130, ")"));
 			else if (line[index] == ')')
 				return (0);
 			index++;
 		}
-		return (write_exception(130, "(", NULL, 0));
+		return (write_exception(shell, 130, 130, "("));
 	}
 	else if (line[index] == ')')
 		*parenthesis -= 1;
 	if (*parenthesis < 0)
-		return (write_exception(130, ")", NULL, 0));
+		return (write_exception(shell, 130, 130, ")"));
 	return (0);
 }
 
-int check_meta_s(char *line, size_t *sym_counter, int *index)
+int check_meta_s(t_minishell *shell, char *line, size_t *sym_counter, int *index)
 {
 	char last_meta[3];
 	int slice_size;
@@ -92,13 +93,13 @@ int check_meta_s(char *line, size_t *sym_counter, int *index)
 			&& ft_strchr(STRICT_META, *(line + (*index))))
 		{
 			ft_memcpy(last_meta, (line + (*index)), (size_t)slice_size);
-			return (write_exception(130, last_meta, NULL, 0));
+			return (write_exception(shell, 130, 130, last_meta));
 		}
 		ft_memcpy(last_meta, (line + (*index)), (size_t)slice_size);
 		*index += slice_size;
 		*sym_counter = 0;
 		if (!check_syntax(line, *index))
-			return (write_exception(130, last_meta, NULL, 0));
+			return (write_exception(shell, 130, 130, last_meta));
 		*index -= 1;
 	}
 	return (0);

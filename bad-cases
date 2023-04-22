@@ -1,4 +1,5 @@
 ## Parse Check Cases
+((((    ls -la > ls    &&    ls)    || ((ls -la) || (ls) ) ) ) ) && ((ls))
 (
 )
 ()()
@@ -62,6 +63,8 @@ command arg1 arg2 > | command3
 command arg1 |& | command2
 command arg1 |& arg2 | command3
 ((ls ) &&ls)
+export ii=l---------------------- && "$ii"s
+
 
 ## Test cases
 ### __cd__:

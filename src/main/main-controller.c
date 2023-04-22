@@ -2,12 +2,49 @@
 
 int controller(t_minishell *shell, char *user_input)
 {
-    shell->exit_code = quote_controller(user_input);
-    if(shell->exit_code)
-        return (shell->exit_code);
-    shell->exit_code = check_cmd_line(user_input, 0, 0);
-    if (shell->exit_code)
-        return (shell->exit_code);
-    // start_parse_cmds(user_input, 0, 0);
+    shell->user_input = ft_strtrim(user_input, WHITE_SPACE);
+    free_single((void *)&user_input);
+    if (!shell->user_input)
+        force_quit(12);
+    shell->status = quote_controller(shell, shell->user_input);
+    if (shell->status)
+        return (shell->status);
+    shell->status = check_cmd_line(shell, shell->user_input, 0, 0);
+    if (shell->status)
+        return (shell->status);
+    shell->execute->heredoc_sum = 0;
+    here_doc_controller(shell, shell->user_input);
+    shell->execute->tokens = start_parse_cmds(shell->user_input, 0, 0);
+    fill_cmd_list(shell);
+    free_single((void *)&shell->user_input);
+    shell->execute->skip_mode = 0;
+    shell->execute->skip_phs = 0;
+    shell->execute->current_hd_state = 0;
+    execution_management(shell, 0);
     return (0);
+}
+
+void fill_cmd_list(t_minishell *shell)
+{
+    char *temp;
+    size_t i;
+
+    i = 0;
+    shell->execute->clist_len = get_2d_array_length((void **)shell->execute->tokens);
+    shell->execute->cmd_list = init_tokens(shell->execute->clist_len);
+    while (i < shell->execute->clist_len)
+    {
+        temp = shell->execute->tokens[i];
+        shell->execute->cmd_list[i].token_mode = get_line_type(temp);
+        if (shell->execute->cmd_list[i].token_mode == CMD)
+            temp = ft_strtrim(temp, WHITE_SPACE);
+        else
+            temp = ft_strdup(shell->execute->tokens[i]);
+        if (!temp)
+            force_quit(ERNOMEM);
+        shell->execute->cmd_list[i].cmd = temp;
+        free_single((void *)&shell->execute->tokens[i]);
+        i++;
+    }
+    free(shell->execute->tokens);
 }

@@ -33,25 +33,59 @@ int	check_slice(char *line, char *SINGLE, char *DOUBLE)
 	return (0);
 }
 
-int	check_valid(char *cmd)
+int	check_valid(t_minishell *shell, char *cmd)
 {
 	int	i;
 
 	i = 0;
 	if (ft_strchr("0123456789!@%^&*()-+={}[]|?/><~`;:.,\\", cmd[0]))
-		return (write_exception(1, ERROR_VID, cmd, 0));
+		return (write_exception(shell, 1, 1, ERROR_VID));
 	while (cmd[i] != '=' && cmd[i])
 	{
 		if (ft_strchr("!@#%^&*()-{[]()|};:.,~`<>?/\\", cmd[i])
 			|| (cmd[i] == '+' && cmd[i + 1] != '='))
-			return (write_exception(1, ERROR_VID, cmd, 0));
+			return (write_exception(shell, 1, 1, ERROR_VID));
 		i++;
 	}
 	while (cmd[i])
 	{
 		if (ft_strchr("!&|;()`><", cmd[i]))
-			return (write_exception(1, ERROR_VID, cmd, 0));
+			return (write_exception(shell, 1, 1, ERROR_VID));
 		i++;
 	}
 	return (0);
+}
+
+int get_line_type(char *line)
+{
+	if(!ft_strcmp(line, "||"))
+		return (OR);
+	if (!ft_strcmp(line, "&&"))
+		return (AND);
+	if (!ft_strcmp(line, "|"))
+		return (PIPE);
+	if (!ft_strcmp(line, "("))
+		return (PH_OPEN);
+	if (!ft_strcmp(line, ")"))
+		return (PH_CLOSE);
+	return (CMD);
+}
+
+int quote_check(int *sg_quote, int *db_quote, char c)
+{
+	int *status;
+
+	if (!ft_strchr("\'\"", c) || (*sg_quote && c == '\"') || (*db_quote && c == '\''))
+		return (1);
+	if (c == '\'')
+		status = sg_quote;
+	else
+		status = db_quote;
+	if (*status)
+		(*status) -= 1;
+	else
+		(*status) += 1;
+	if (*status < 0)
+		return (0);
+	return (1);
 }

@@ -12,56 +12,55 @@
 
 #include "minishell.h"
 
-void	force_quit(int errno)
+void	force_quit(int errno_c)
 {
 	char	*error;
-
-	error = strerror(errno);
-	ft_putstr_fd(SHELL_NAME, 2);
+    
+    error = strerror(errno_c);
+	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
-	exit(errno);
+	ft_putstr_fd("\n", 2);
+	exit(errno_c);
 }
 
-int	write_exception(int errno, char *addn, char *addn2, int is_exit)
+void print_error(t_minishell *shell, char *error_txt)
+{
+	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
+	ft_putstr_fd(": ", 2);
+	perror(error_txt);
+	shell->status = errno;
+}
+
+int write_exception(t_minishell *shell, int errno_c, int exit_code, char *txt)
 {
 	char	*error;
 
-	if (errno > 107 || errno == 1)
-		error = get_custom_error(errno);
+	if (errno_c > 107 || errno_c < 0)
+		error = get_custom_error(errno_c);
 	else
-		error = strerror(errno);
+		error = strerror(errno_c);
 	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
+	ft_putstr_fd(": ", 2);
 	if (error)
-	{
-		ft_putstr_fd(": ", 2);
 		ft_putstr_fd(error, 2);
-	}
-	if (addn)
+	if (txt)
 	{
 		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(addn, 2);
-	}
-	if (addn2)
-	{
-		ft_putstr_fd(": ", 2);
-		ft_putstr_fd(addn2, 2);
+		ft_putstr_fd(txt, 2);
 	}
 	ft_putstr_fd("\n", 2);
-	if (is_exit)
-		exit(errno);
-	return (errno);
+	shell->status = exit_code;
+	return (errno_c);
 }
 
-char	*get_custom_error(int errno)
+char *get_custom_error(int errno_c)
 {
-	if (errno == 127)
+	if(errno_c == 127)
 		return (ERROR_127);
-	if (errno == 255)
-		return (ERROR_NUM);
-	if (errno == 130)
+	if(errno_c == 130)
 		return (ERROR_130);
-	if (errno == 132)
-		return (ERROR_132);
-	return (NULL);
+	if (errno_c == E_ISDIR)
+		return (ERROR_126); 
+	return (ERROR_UNX);
 }
