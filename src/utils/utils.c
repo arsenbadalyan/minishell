@@ -70,3 +70,22 @@ int get_line_type(char *line)
 		return (PH_CLOSE);
 	return (CMD);
 }
+
+int quote_check(int *sg_quote, int *db_quote, char c)
+{
+	int *status;
+
+	if (!ft_strchr("\'\"", c) || (*sg_quote && c == '\"') || (*db_quote && c == '\''))
+		return (1);
+	if (c == '\'')
+		status = sg_quote;
+	else
+		status = db_quote;
+	if (*status)
+		(*status) -= 1;
+	else
+		(*status) += 1;
+	if (*status < 0)
+		return (0);
+	return (1);
+}

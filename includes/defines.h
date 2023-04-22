@@ -18,6 +18,7 @@
 # define SHELL_NAME_CONSOLE "minishell"
 # define WHITE_SPACE " \t\n"
 # define HERE_DOC "/tmp/.minishell_here_doc_"
+# define ECHO_BRAKEPOINT "@#%^$*}]{+=? \n\t.,-[|/>'<;:~\\\""
 # define METASYMBOLS_ALL "><|&)( \t\n"
 # define SEPARATORS_ALL "(&<|>)"
 # define SINGLE_SEPARATORS "<|>"
@@ -42,4 +43,14 @@
 # define ERROR_130 "syntax error near unexpected token"
 # define ERROR_VID "not a valid identifier"
 # define ERROR_132 "not enough arguments"
+
+// Built-in program names
+# define BUILT_IN_ECHO "echo"
+# define BUILT_IN_CD "cd"
+# define BUILT_IN_PWD "pwd"
+# define BUILT_IN_EXPORT "export"
+# define BUILT_IN_UNSET "unset"
+# define BUILT_IN_ENV "env"
+# define BUILT_IN_EXIT "exit"
+
 #endif

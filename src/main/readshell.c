@@ -62,10 +62,7 @@ void	read_shell(t_minishell *shell)
 		user_input = readline(SHELL_NAME);
 		// printf("User_input: %s\n", user_input);
 		if(!user_input)
-		{
-			write (1, "exit\n", 5);
-			return ;
-		}
+			return;
 		input_cpy = user_input;
 		while (*input_cpy == ' ')
 			input_cpy++;

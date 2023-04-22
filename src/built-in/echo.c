@@ -75,8 +75,8 @@ char *modify_line(t_minishell *shell, char *line, int hd_mode, int *quotes)
 		quote_check(&quotes[0], &quotes[1], *line);
 		if (*line == '$' && !quotes[0] && !hd_mode && *(line + 1) && line++)
 			get_variable(shell, &line, &new_line);
-		else if (!ft_strchr("\'\"", *line) || ((quotes[0] && *line == '\"')
-			|| (quotes[1] && *line == '\'')))
+		else if (!ft_strchr("\'\"", (*line)) || ((quotes[0] && (*line) == '\"')
+			|| (quotes[1] && (*line) == '\'')))
 		{
 			temp_line = new_line;
 			current[0] = *line;
@@ -95,12 +95,13 @@ void get_variable(t_minishell *shell, char **line, char **new_line)
 	char *temp_line;
 	size_t size;
 	char *var;
+	char *env;
 
 	size = 0;
 	temp_line = *line;
 	while(**line)
 	{
-		if(ft_strchr(WHITE_SPACE, **line) || ft_strchr("\'\"", **line))
+		if (ft_strchr(ECHO_BRAKEPOINT, **line) && ((**line) == '?' && (*line) != temp_line || (**line) != '?'))
 			break;
 		size++;
 		(*line)++;
@@ -108,32 +109,31 @@ void get_variable(t_minishell *shell, char **line, char **new_line)
 	var = ft_substr(temp_line, 0, size);
 	if(!var)
 		force_quit(ERNOMEM);
-	if(get_env(shell, var))
-	{
-		temp_line = *new_line;
-		*new_line = ft_strjoin(*new_line, get_env(shell, var));
-		if(!free_single((void *)&temp_line) && !(*new_line))
-			force_quit(ERNOMEM);
-	}
-	else
-		(*line)++;
+	get_env_for_echo(shell, var, new_line);
+	free_single((void *)&var);
 }
 
-int quote_check(int *sg_quote, int *db_quote, char c)
+void get_env_for_echo(t_minishell *shell, char *var, char **new_line)
 {
-	int *status;
+	char *env;
+	char *temp_line;
 
-	if(!ft_strchr("\'\"", c) || (*sg_quote && c == '\"') || (*db_quote && c == '\''))
-		return (1);
-	if(c == '\'')
-		status = sg_quote;
-	else
-		status = db_quote;
-	if(*status)
-		(*status) -= 1;
-	else
-		(*status) += 1;
-	if(*status < 0)
-		return (0);
-	return (1);
+	if(!ft_strcmp(var, "?"))
+	{
+		env = ft_itoa(shell->status);
+		temp_line = *new_line;
+		*new_line = ft_strjoin(*new_line, env);
+		if (!free_single((void *)&temp_line) && !free_single((void *)&env) && !(*new_line))
+			force_quit(ERNOMEM);
+		return;
+	}
+	env = get_env(shell, var);
+	if (env)
+	{
+		temp_line = *new_line;
+		*new_line = ft_strjoin(*new_line, env + ft_strlen(var) + 1);
+		if (!free_single((void *)&temp_line) && !(*new_line))
+			force_quit(ERNOMEM);
+	}
+	
 }

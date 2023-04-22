@@ -60,7 +60,11 @@ size_t command_execution(t_minishell *shell, size_t *cmd_index);
 void control_new_command_io(t_minishell *shell, t_token *token);
 void pipe_command(t_minishell *shell, t_token *token, int is_last);
 void mutate_tokens(t_minishell *shell, char ***tokens);
+
+// BUILT-IN EXECUTION
 int execute_token(t_minishell *shell, t_token *token);
+void check_builtin(t_token *token, char *program_name);
+int execute_builtin(t_minishell *shell, t_token *token);
 
 // Split of commands
 void cmd_split(t_minishell *shell, t_token *cmd);
@@ -101,6 +105,7 @@ void	*free_single(void **addr);
 void	*free_double(void ***addr);
 size_t	get_2d_array_length(void **array);
 int get_line_type(char *line);
+int quote_check(int *sg_quote, int *db_quote, char c);
 int	check_valid_export(t_minishell *shell, char *cmd);
 int	check_variable(char *buff);
 

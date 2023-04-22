@@ -19,12 +19,15 @@ int	main(int argc, char **argv, char **envp)
 	if (argc > 1)
 		exit(1);
 	shell = init_minishell();
-	// print_header();
+	print_header();
 	env_controller(shell, envp);
-	// read_shell(shell);
-
-	_export(shell, ft_split("export 1a=", ' '));
-	
+	read_shell(shell);
+	// int *quotes;
+	// ft_bzero((void *)quotes, 8);
+	// printf("%s\n", modify_line(shell, "\"$?\"", 0, quotes));
+	// printf("%s\n", modify_line(shell, "\"$jansdn$HOME\"", 0, quotes));
+	// printf("%s\n", modify_line(shell, "\"as$HOME>fa$HOMEsf$HOME?af$HOME*$?$HOME $HOME#asf$HOME'asf\"", 0, quotes));
+ 
 	// char *term_type = getenv("TERM");
 	// printf("%s\n", term_type);
 	// char buf[1024];
@@ -37,7 +40,7 @@ int	main(int argc, char **argv, char **envp)
 	// 	fprintf(stderr, "failed to load terminal database\n");
 	// 	return 1;
 	// }
-	
+
 	// char *clear = tgetstr("cl", NULL);
 	// char *move = tgoto(tgetstr("cm", NULL), 0, 0);
 	// fputs(clear, stdout);
