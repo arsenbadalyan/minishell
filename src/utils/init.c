@@ -34,6 +34,8 @@ t_exc_line	*init_exc_line(void)
     exc_line->cmd_list = NULL;
     exc_line->STDIN = STDIN_FILENO;
     exc_line->STDOUT = STDOUT_FILENO;
+    exc_line->HEREDOC_IN = 0;
+    exc_line->HEREDOC_OUT = 0;
     return (exc_line);
 }
 

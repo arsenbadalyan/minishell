@@ -22,6 +22,8 @@ int	main(int argc, char **argv, char **envp)
 	print_header();
 	env_controller(shell, envp);
 	read_shell(shell);
+	// printf ("HEREDOC:%d", get_heredoc_count(shell));
+
 	// int *quotes;
 	// ft_bzero((void *)quotes, 8);
 	// printf("%s\n", modify_line(shell, "\"$?\"", 0, quotes));

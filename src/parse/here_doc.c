@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 18:17:22 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/02 21:52:36 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/23 03:11:58 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,24 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-int execute_heredoc(t_minishell *shell, char *cmd_line, size_t index)
+int	execute_heredoc(t_minishell *shell, char *cmd_line, size_t index)
 {
-	size_t temp_index;
-	char *limiter;
-	char *temp_limiter;
-	int quotes[2];
+	size_t	temp_index;
+	char	*limiter;
+	char	*temp_limiter;
+	int		quotes[2];
 
 	temp_index = index;
-	quotes[0] = 0;
-	quotes[1] = 0;
+	ft_bzero((void *)quotes, sizeof(int) * 2);
 	while (cmd_line[index])
 	{
 		quote_check(&quotes[0], &quotes[1], cmd_line[index]);
 		if ((quotes[0] || quotes[1]) && ++index)
-			continue;
+			continue ;
 		if ((cmd_line[index] == '&' && cmd_line[index] == cmd_line[index + 1])
-			|| (ft_strchr(METASYMBOLS_ALL, cmd_line[index]) && cmd_line[index] != '&')
-			|| !(++index))
-			break;
+			|| (ft_strchr(METASYMBOLS_ALL, cmd_line[index])
+				&& cmd_line[index] != '&') || !(++index))
+			break ;
 	}
 	limiter = ft_substr(cmd_line, temp_index, index - temp_index);
 	if (!limiter)
@@ -41,17 +40,18 @@ int execute_heredoc(t_minishell *shell, char *cmd_line, size_t index)
 	limiter = _echo(shell, NULL, TRUE, limiter);
 	free_single((void *)&temp_limiter);
 	exe_here_doc(shell, limiter);
-	free_single((void *)&limiter);
 	return (0);
 }
 
-void exe_here_doc(t_minishell *shell, char *limiter)
+void	exe_here_doc(t_minishell *shell, char *limiter)
 {
-	int fd;
-	char *real_name;
-	char *tmp;
+	int		fd;
+	char	*real_name;
+	char	*tmp;
 
-	tmp = ft_itoa(shell->execute->heredoc_sum++);
+	shell->execute->HEREDOC_IN = get_heredoc_count(shell);
+	shell->execute->HEREDOC_OUT = shell->execute->HEREDOC_IN;
+	tmp = ft_itoa(shell->execute->HEREDOC_OUT++);
 	if (!tmp)
 		force_quit(ERNOMEM);
 	real_name = ft_strjoin(HERE_DOC, tmp);
@@ -61,6 +61,7 @@ void exe_here_doc(t_minishell *shell, char *limiter)
 	fd = open(real_name, O_WRONLY | O_CREAT | O_TRUNC, 0755);
 	free_single((void *)&real_name);
 	wait_limiter(shell, limiter, fd);
+	free_single((void *)&limiter);
 	close(fd);
 }
 
@@ -75,7 +76,7 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 	{
 		buf = readline(">");
 		if (!buf)
-			force_quit(12);
+			return ;
 		tmp = ft_strdup(buf);
 		if (!tmp)
 			force_quit(ERNOMEM);
@@ -91,7 +92,7 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 	}
 }
 
-void remove_heredoc(int here_doc_num)
+void	remove_heredoc(int here_doc_num)
 {
 	char	*real_name;
 	char	*del_num;
@@ -99,7 +100,7 @@ void remove_heredoc(int here_doc_num)
 	while (here_doc_num >= 0)
 	{
 		del_num = ft_itoa(here_doc_num);
-		if(!del_num)
+		if (!del_num)
 			force_quit(12);
 		real_name = ft_strjoin(HERE_DOC, del_num);
 		if (!real_name)
@@ -109,18 +110,18 @@ void remove_heredoc(int here_doc_num)
 	}
 }
 
-char *concat_heredoc(t_exc_line *exec)
+char	*concat_heredoc(t_exc_line *exec)
 {
-	int current_state;
-	char *str_cur_state;
-	char *concat;
+	int		current_state;
+	char	*str_cur_state;
+	char	*concat;
 
-	current_state = exec->current_hd_state;
+	current_state = exec->HEREDOC_OUT - 1;
 	str_cur_state = ft_itoa(current_state);
-	if(!str_cur_state)
+	if (!str_cur_state)
 		force_quit(ERNOMEM);
 	concat = ft_strjoin(HERE_DOC, str_cur_state);
-	if(!free_single((void *)&str_cur_state) && !concat)
+	if (!free_single((void *)&str_cur_state) && !concat)
 		force_quit(ERNOMEM);
 	return (concat);
 }

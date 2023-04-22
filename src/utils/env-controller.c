@@ -20,17 +20,16 @@ void	env_controller(t_minishell *shell, char **envp)
 
 	shell->envp = env_dup(envp);
 	tmp = get_env(shell, "SHLVL");
-	while (*tmp != '=')
+	while (tmp && *tmp != '=')
 		tmp++;
-	tmp++;
-	lvl = ft_atoi(tmp) + 1;
+	if (!tmp)
+		lvl = 1;
+	else
+		lvl = ft_atoi(++tmp) + 1;
 	if (lvl > 999 || lvl < 0)
 	{
 		if (lvl > 999)
-		{
-			printf("minishell: warning: shell level (%d)", lvl);
-			printf (" too high, resetting to 1\n");
-		}
+			printf(SHLMSG, lvl);
 		lvl = 1;
 	}
 	shlvl = ft_itoa(lvl);

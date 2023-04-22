@@ -28,11 +28,11 @@ typedef struct s_minishell {
 typedef struct s_exc_line {
 	struct s_token *cmd_list;
 	size_t clist_len;
-	int heredoc_sum;
-	int current_hd_state;
 	char **tokens;
 	int STDIN;
 	int STDOUT;
+	int	HEREDOC_IN;
+	int	HEREDOC_OUT;
 	int PIPE_IN;
 	int RDR_OUT;
 	size_t command_wait_list;
