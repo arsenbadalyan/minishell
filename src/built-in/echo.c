@@ -101,7 +101,7 @@ void get_variable(t_minishell *shell, char **line, char **new_line)
 	temp_line = *line;
 	while(**line)
 	{
-		if (ft_strchr(ECHO_BRAKEPOINT, **line) && ((**line) == '?' && (*line) != temp_line || (**line) != '?'))
+		if (ft_strchr(ECHO_BRAKEPOINT, **line) && (((**line) == '?' && (*line) != temp_line) || (**line) != '?'))
 			break;
 		size++;
 		(*line)++;

@@ -30,6 +30,11 @@ int	_cd_utils(t_minishell *shell, char *cmd, char **cmd_line)
 	char	cwd[PATH_MAX];
 
 	getcwd(cwd, PATH_MAX);
+	if (cmd_line[1][0] == '-')
+	{
+		write(1, cmd, ft_strlen(cmd));
+		write(1, "\n", 1);
+	}
 	if (chdir(cmd) == -1)
 		return (print_error(shell, "chdir"));
 	set_env(shell, "OLDPWD", cwd, 1);

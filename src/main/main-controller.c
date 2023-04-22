@@ -10,16 +10,16 @@ int controller(t_minishell *shell, char *user_input)
     if (shell->status)
         return (shell->status);
     shell->status = check_cmd_line(shell, shell->user_input, 0, 0);
+    signal(SIGINT, sigint_handler_in_process);
+    signal(SIGQUIT, sigquit_handler_in_process);
     if (shell->status)
         return (shell->status);
-    shell->execute->heredoc_sum = 0;
     here_doc_controller(shell, shell->user_input);
     shell->execute->tokens = start_parse_cmds(shell->user_input, 0, 0);
     fill_cmd_list(shell);
     free_single((void *)&shell->user_input);
     shell->execute->skip_mode = 0;
     shell->execute->skip_phs = 0;
-    shell->execute->current_hd_state = 0;
     execution_management(shell, 0);
     return (0);
 }

@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/19 16:37:51 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/23 03:12:16 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,9 @@
 # include <dirent.h>
 # include <signal.h>
 # include <errno.h>
+# include <termios.h>
+# include <sys/ioctl.h>
+# include <sys/wait.h>
 
 // Custom Libs
 # include "libft.h"
@@ -31,8 +34,8 @@
 # include "built_in.h"
 
 // Readline
-// #include <readline/readline.h>
-// #include <readline/history.h>
+# include <readline/readline.h>
+# include <readline/history.h>
 
 // Printf Minishell header on start
 void	print_header(void);
@@ -105,6 +108,7 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd);
 void  remove_heredoc(int here_doc_num);
 char *concat_heredoc(t_exc_line *exec);
 void	write_variable(t_minishell *shell, char *tmp, int fd);
+int		get_heredoc_count(t_minishell *shell);
 
 // Utils
 int		check_slice(char *line, char *SINGLE, char *DOUBLE);
@@ -140,5 +144,7 @@ int		match_utils(char *str, char *pattern, char *star, char *tmp);
 // Signals
 void	signal_handler(int action);
 void	sigint_handler(int sig_num);
+void	sigint_handler_in_process(int sig);
+void	sigquit_handler_in_process(int sig);
 
 #endif
