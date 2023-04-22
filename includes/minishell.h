@@ -90,9 +90,10 @@ int	quote_controller(t_minishell *shell, char *line);
 // here_doc execution (<<)
 int	execute_heredoc(t_minishell *shell, char *cmd_line, size_t index);
 void exe_here_doc(t_minishell *shell, char *limiter);
-void	wait_limiter(char *limiter, int fd);
+void	wait_limiter(t_minishell *shell, char *limiter, int fd);
 void  remove_heredoc(int here_doc_num);
 char *concat_heredoc(t_exc_line *exec);
+void	write_variable(t_minishell *shell, char *tmp, int fd);
 
 // Utils
 int		check_slice(char *line, char *SINGLE, char *DOUBLE);
@@ -100,7 +101,8 @@ void	*free_single(void **addr);
 void	*free_double(void ***addr);
 size_t	get_2d_array_length(void **array);
 int get_line_type(char *line);
-int	check_valid(t_minishell *shell, char *cmd);
+int	check_valid_export(t_minishell *shell, char *cmd);
+int	check_variable(char *buff);
 
 // env controller
 char			**env_dup(char **env);
@@ -120,5 +122,9 @@ char	*wildcard(char *pattern);
 int		match(char *str, char *pattern);
 char	*get_suitable(char *suit, char *d_name);
 int		match_utils(char *str, char *pattern, char *star, char *tmp);
+
+// Signals
+void	signal_handler(int action);
+void	sigint_handler(int sig_num);
 
 #endif

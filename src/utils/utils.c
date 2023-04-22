@@ -33,7 +33,7 @@ int	check_slice(char *line, char *SINGLE, char *DOUBLE)
 	return (0);
 }
 
-int	check_valid(t_minishell *shell, char *cmd)
+int	check_valid_export(t_minishell *shell, char *cmd)
 {
 	int	i;
 

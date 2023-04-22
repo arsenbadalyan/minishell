@@ -29,7 +29,9 @@ int execute_heredoc(t_minishell *shell, char *cmd_line, size_t index)
 		quote_check(&quotes[0], &quotes[1], cmd_line[index]);
 		if ((quotes[0] || quotes[1]) && ++index)
 			continue;
-		if ((cmd_line[index] == '&' && cmd_line[index] == cmd_line[index + 1]) || (ft_strchr(METASYMBOLS_ALL, cmd_line[index]) && cmd_line[index] != '&') || !(++index))
+		if ((cmd_line[index] == '&' && cmd_line[index] == cmd_line[index + 1])
+			|| (ft_strchr(METASYMBOLS_ALL, cmd_line[index]) && cmd_line[index] != '&')
+			|| !(++index))
 			break;
 	}
 	limiter = ft_substr(cmd_line, temp_index, index - temp_index);
@@ -53,32 +55,38 @@ void exe_here_doc(t_minishell *shell, char *limiter)
 	if (!tmp)
 		force_quit(ERNOMEM);
 	real_name = ft_strjoin(HERE_DOC, tmp);
-	// printf("%s\n", real_name);
 	free_single((void *)&tmp);
 	if (!real_name)
-		force_quit(12);
+		force_quit(ERNOMEM);
 	fd = open(real_name, O_WRONLY | O_CREAT | O_TRUNC, 0755);
-	wait_limiter(limiter, fd);
+	free_single((void *)&real_name);
+	wait_limiter(shell, limiter, fd);
 	close(fd);
 }
 
-void	wait_limiter(char *limiter, int fd)
+void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 {
 	char	*buf;
+	char	*tmp;
+	int		i;
 
+	i = 0;
 	while (1)
 	{
 		buf = readline(">");
 		if (!buf)
 			force_quit(12);
+		tmp = ft_strdup(buf);
+		if (!tmp)
+			force_quit(ERNOMEM);
 		if (!ft_strcmp(buf, limiter))
 		{
 			free_single((void *)&buf);
 			return ;
 		}
-		else
-			write(fd, buf, ft_strlen(buf));
+		write_variable(shell, tmp, fd);
 		free_single((void *)&buf);
+		free_single((void *)&tmp);
 		write(fd, "\n", 1);
 	}
 }
