@@ -65,3 +65,36 @@ void execution_controller(t_minishell *shell, size_t cmd_index)
 		return;
 	}
 }
+
+void mutate_tokens(t_minishell *shell, char ***tokens)
+{
+	size_t i;
+	char *temp;
+	int quotes[2];
+
+	i = 0;
+	while ((*tokens)[i])
+	{
+		temp = (*tokens)[i];
+		(*tokens)[i] = ft_strtrim((*tokens)[i], WHITE_SPACE);
+		if (!free_single((void *)&temp) && !(*tokens)[i])
+			force_quit(ERNOMEM);
+		temp = (*tokens)[i];
+		ft_bzero((void *)quotes, sizeof(int) * 2);
+		if (ft_strlen((*tokens)[i]) > 2 && (*tokens)[i][0] == '<' && (*tokens)[i][1] == '<')
+			(*tokens)[i] = modify_line(shell, (*tokens)[i], 1, quotes);
+		else
+			(*tokens)[i] = modify_line(shell, (*tokens)[i], 0, quotes);
+		if (!free_single((void *)&temp) && !(*tokens)[i])
+			force_quit(ERNOMEM);
+		if(i == 0 && !ft_strcmp((*tokens)[i], BUILT_IN_ECHO))
+			return;
+		i++;
+	}
+	// i = 0;
+	// while ((*tokens)[i])
+	// {
+	// 	printf("|%s|\n", (*tokens)[i]);
+	// 	i++;
+	// }
+}

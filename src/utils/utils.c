@@ -71,15 +71,21 @@ int get_line_type(char *line)
 	return (CMD);
 }
 
-void to_lowercase(char *program)
+int quote_check(int *sg_quote, int *db_quote, char c)
 {
-	size_t i;
+	int *status;
 
-	i = 0;
-	while(program[i])
-	{
-		if(ft_isalpha(program[i]) && program[i] >= 65 && program[i] <= 91)
-			program[i] += 32;
-		i++;
-	}
+	if (!ft_strchr("\'\"", c) || (*sg_quote && c == '\"') || (*db_quote && c == '\''))
+		return (1);
+	if (c == '\'')
+		status = sg_quote;
+	else
+		status = db_quote;
+	if (*status)
+		(*status) -= 1;
+	else
+		(*status) += 1;
+	if (*status < 0)
+		return (0);
+	return (1);
 }

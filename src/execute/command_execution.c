@@ -9,12 +9,10 @@ size_t command_execution(t_minishell *shell, size_t *cmd_index)
 	
 	token_list = shell->execute->cmd_list;
 	shell->execute->PIPE_IN = -1;
-	shell->execute->PIPE_OUT = -1;
 	shell->execute->command_wait_list = 0;
 	shell->execute->is_single_cmd = FALSE;
 	if(token_list[*cmd_index + 1].token_mode != PIPE)
 		shell->execute->is_single_cmd = TRUE;
-	// printf("OPENED: %d - %d\n", shell->execute->STDIN, shell->execute->STDOUT);
 	shell->execute->STDIN = dup(STDIN_FILENO);
 	shell->execute->STDOUT = dup(STDOUT_FILENO);
 	while(*cmd_index < shell->execute->clist_len)
@@ -28,102 +26,65 @@ size_t command_execution(t_minishell *shell, size_t *cmd_index)
 		}
 		if(current_token->token_mode == CMD)
 		{
+			shell->execute->RDR_OUT = FALSE;
 			cmd_split(shell, current_token);
 			control_new_command_io(shell, current_token);
 			if(current_token->path || current_token->is_built_in != -1)
 				pipe_command(shell, current_token, token_list[*cmd_index + 1].token_mode != PIPE);
 			shell->execute->command_wait_list += 1;
-			// printf("%d - %d\n", current_token->stdin, current_token->stdout);
 			last_stdin = current_token->stdin;
 			last_stdout = current_token->stdout;
-			// close(last_stdout);
-			// printf("STDIN: %d - STDOUT: %d\n", current_token->stdin, current_token->stdout);
-			// printf("STATUS: %d\n", current_token->status);
+			int copy = dup(shell->execute->STDOUT);
+			dup2(shell->execute->STDOUT, STDOUT_FILENO);
+			close(shell->execute->STDOUT);
+			shell->execute->STDOUT = copy;
 		}
-		// else 
 		(*cmd_index)++;
 	}
 	while(shell->execute->command_wait_list--)
 		wait(NULL);
 	if (dup2(shell->execute->STDIN, STDIN_FILENO) == -1)
-		perror("RETURN STDIN");
+		print_error(shell, "stdin");
 	if (dup2(shell->execute->STDOUT, STDOUT_FILENO) == -1)
-		perror("RETURN STDOUT");
+		print_error(shell, "stdout");
 	close(shell->execute->STDIN);
 	close(shell->execute->STDOUT);
 	shell->execute->STDIN = STDIN_FILENO;
 	shell->execute->STDOUT = STDOUT_FILENO;
-	// printf("CLOSED: %d - %d\n", shell->execute->STDIN, shell->execute->STDOUT);
 	return (0);
-}
-
-void mutate_tokens(t_minishell *shell, char ***tokens)
-{
-	size_t	i;
-	char *temp;
-	int quotes[2];
-
-	i = 0;
-	while((*tokens)[i])
-	{
-		temp = (*tokens)[i];
-		(*tokens)[i] = ft_strtrim((*tokens)[i], WHITE_SPACE);
-		if(!free_single((void *)&temp) && !(*tokens)[i])
-			force_quit(ERNOMEM);
-		temp = (*tokens)[i];
-		ft_bzero((void *)quotes, sizeof(int) * 2);
-		if(ft_strlen((*tokens)[i]) > 2 && (*tokens)[i][0] == '<' && (*tokens)[i][1])
-			(*tokens)[i] = modify_line(shell, (*tokens)[i], 1, quotes);
-		else
-			(*tokens)[i] = modify_line(shell, (*tokens)[i], 0, quotes);
-		if (!free_single((void *)&temp) && !(*tokens)[i])
-			force_quit(ERNOMEM);
-		i++;
-	}
-	// i = 0;
-	// while ((*tokens)[i])
-	// {
-	// 	printf("|%s|\n", (*tokens)[i]);
-	// 	i++;
-	// }
 }
 
 void control_new_command_io(t_minishell *shell, t_token *token)
 {
-	int fd;
-	int stdin;
-	int stdout;
+	int fd_in;
+	int fd_out;
 
-	stdin = STDIN_FILENO;
-	stdout = STDOUT_FILENO;
-	if(shell->execute->STDIN == -1)
-		perror("STDIN");
-	else if(shell->execute->STDOUT == -1)	
-		perror("STDOUT");
-	// if(token->status)
-	// {
-	// 	fd = open("/dev/null", O_RDONLY);
-	// 	shell->execute->PIPE_IN = fd;
-	// }
-	if(token->stdin == -1 && shell->execute->PIPE_OUT == -1)
-		token->stdin = stdin;
-	else if(token->stdin == -1 && shell->execute->PIPE_OUT != -1)
-		token->stdin = shell->execute->PIPE_OUT;
-	else
+	if(token->status)
 	{
-		if(dup2(token->stdin, stdin) == -1)
-			perror("STDIN DUP2");
-		close(token->stdin);
-		token->stdin = stdin;
+		fd_in = open("/dev/null", O_RDONLY);
+		shell->execute->PIPE_IN = -1;
+		token->stdin = fd_in;
 	}
-	if(token->stdout == -1)
-		token->stdout = stdout;
+	if(token->stdin == -1 && shell->execute->PIPE_IN == -1)
+		token->stdin = STDIN_FILENO;
+	else if(token->stdin == -1 && shell->execute->PIPE_IN != -1)
+		token->stdin = shell->execute->PIPE_IN;
 	else
 	{
-		if(dup2(token->stdout, stdout) == -1)
-			perror("STDOUT DUP2");
+		if(dup2(token->stdin, STDIN_FILENO) == -1)
+			print_error(shell, "stdin");
+		close(token->stdin);
+		token->stdin = STDIN_FILENO;
+	}
+	if (token->stdout == -1)
+		token->stdout = STDOUT_FILENO;
+	else
+	{
+		shell->execute->RDR_OUT = TRUE;
+		if (dup2(token->stdout, STDOUT_FILENO) == -1)
+			print_error(shell, "stdout");
 		close(token->stdout);
-		token->stdout = stdout;
+		token->stdout = STDOUT_FILENO;
 	}
 }
 
@@ -151,16 +112,21 @@ void pipe_command(t_minishell *shell, t_token *token, int is_last)
 	{
 		close(pipe_fd[1]);
 		token->stdin = dup2(pipe_fd[0], token->stdin);
-		shell->execute->PIPE_OUT = token->stdin;
+		if (token->stdin == -1)
+			print_error(shell, "stdin");
+		shell->execute->PIPE_IN = token->stdin;
 		close(pipe_fd[0]);
-		
 	}
 	else
 	{
 		close(pipe_fd[0]);
-		if (dup2(pipe_fd[1], token->stdout) == -1)
-			perror("PIPE FORK");
+		if(!shell->execute->RDR_OUT)
+		{
+			if (dup2(pipe_fd[1], token->stdout) == -1)
+				print_error(shell, "stdout");
+		}
 		close(pipe_fd[1]);
+		// close(token->stdout);
 	}
 	if(!pid)
 		exit(execute_token(shell, token));

@@ -18,7 +18,7 @@ char *_echo(t_minishell *shell, char **cmd_line, int hd_mode, char *hd_lim);
 char *join_lines(char **cmd_line, size_t i, int has_new_line, char *temp_line);
 char *modify_line(t_minishell *shell, char *line, int hd_mode, int *quotes);
 void get_variable(t_minishell *shell, char **line, char **new_line);
-int		quote_check(int *sg_quote, int *db_quote, char c);
+void get_env_for_echo(t_minishell *shell, char *var, char **new_line);
 // pwd
 int	_pwd(t_token *token);
 // cd

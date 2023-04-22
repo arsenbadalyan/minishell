@@ -44,6 +44,7 @@ char	*ft_strtrim(const char *s1, const char *set)
 	{
 		end--;
 	}
+	
 	str = ft_substr(s1, (unsigned int)start, (end - start + 1));
 	if (!str)
 		return (NULL);

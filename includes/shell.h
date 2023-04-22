@@ -34,7 +34,7 @@ typedef struct s_exc_line {
 	int STDIN;
 	int STDOUT;
 	int PIPE_IN;
-	int PIPE_OUT;
+	int RDR_OUT;
 	size_t command_wait_list;
 	int skip_phs;
 	int skip_mode;

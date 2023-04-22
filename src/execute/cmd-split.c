@@ -5,21 +5,18 @@ void cmd_split(t_minishell *shell, t_token *cmd)
 	char **paths;
 
 	count_split_size(cmd, cmd->cmd);
-	// printf("SPLIT -> %s\n", cmd->cmd);
-	// printf("COMMAND_SIZE: %lu - RDR_SIZE: %lu\n", cmd->size_cmd, cmd->size_rdr);
 	cmd->tokens = (char **)malloc(sizeof(char *) * cmd->size_cmd);
 	cmd->redirects = (char **)malloc(sizeof(char *) * cmd->size_rdr);
 	cmd->tokens[cmd->size_cmd - 1] = NULL;
 	cmd->redirects[cmd->size_rdr - 1] = NULL;
 	fill_cmd_list_token(shell, cmd);
-	mutate_tokens(shell, &cmd->tokens);
 	mutate_tokens(shell, &cmd->redirects);
 	file_controller(shell, cmd);
 	if(cmd->status)
 		return;
 	if (cmd->tokens[0])
 	{
-		to_lowercase(cmd->tokens[0]);
+		mutate_tokens(shell, &cmd->tokens);
 		check_builtin(cmd, cmd->tokens[0]);
 		if(cmd->is_built_in != -1)
 			return;
@@ -89,8 +86,10 @@ void count_split_size(t_token *token, char *str)
 		quote_check(&quotes[0], &quotes[1], str[i]);
 		if ((quotes[0] || quotes[1] || is_last_quote) && ++i && ++is_last_quote)
 		{
-			if(!quotes[0] && !quotes[1] && ++token->size_cmd)
+			if (!quotes[0] && !quotes[1])
 				is_last_quote = 0;
+			if (ft_strchr(WHITE_SPACE, str[i]))
+				++token->size_cmd;
 			continue;
 		}
 		if (ft_strchr(REDIRECTS, str[i]) && ++token->size_rdr)

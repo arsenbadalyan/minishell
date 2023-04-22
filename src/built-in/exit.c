@@ -40,7 +40,6 @@ void	mini_exit(t_minishell *shell, char **cmd)
 	long long	num;
 	char		exit_code;
 
-	printf ("%s\n", "exit");
 	i = get_2d_array_length((void **)cmd);
 	if (!cmd[1])
 	{

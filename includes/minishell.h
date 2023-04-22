@@ -105,7 +105,7 @@ void	*free_double(void ***addr);
 size_t	get_2d_array_length(void **array);
 int get_line_type(char *line);
 int	check_valid(t_minishell *shell, char *cmd);
-void to_lowercase(char *program);
+int quote_check(int *sg_quote, int *db_quote, char c);
 
 // env controller
 char			**env_dup(char **env);
