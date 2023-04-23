@@ -23,16 +23,19 @@ char	*get_value(t_minishell *shell, char *var, char *cmd)
 			is_plus = 1;
 	if (*cmd == '=')
 		cmd++;
-	else
-		return (ft_strdup(""));
+	if (!*cmd)
+		return (ft_strdup("\"\""));
 	value = get_env(shell, var);
 	if (!value)
 		return (ft_strdup(cmd));
 	while (*value && *value != '=')
 		value++;
-	if (*value == '=' && *(value + 1))
-		if (is_plus && *cmd)
-			return (ft_strjoin(++value, cmd));
+	if (*value == '=' && *(value + 1) && is_plus && *cmd)
+	{
+		if (*(value + 1) == '\"' && *(value + 2) == '\"')
+			return (ft_strdup(cmd));	
+		return (ft_strjoin(++value, cmd));
+	}
 	return (ft_strdup(cmd));
 }
 
@@ -41,6 +44,20 @@ void	_export_exe(t_minishell *shell, char *var, char *val, int add)
 	set_env(shell, var, val, add);
 	free_single((void *)&var);
 	free_single((void *)&val);
+}
+
+int	check_equal(char *cmd)
+{
+	int	i;
+
+	i = 0;
+	while (cmd[i])
+	{
+		if (cmd[i] == '=')
+			return (1);
+		i++;
+	}
+	return (0);
 }
 
 void	_export(t_minishell *shell, char **cmd)
@@ -66,8 +83,9 @@ void	_export(t_minishell *shell, char **cmd)
 		if (!var)
 			force_quit(12);
 		value = get_value(shell, var, cmd[i]);
+		printf ("%s\n",value);
 		if (!value)
 			force_quit(12);
-		_export_exe(shell, var, value, cmd[i][j + 1]);
+		_export_exe(shell, var, value, check_equal(cmd[i]));
 	}
 }

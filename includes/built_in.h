@@ -30,10 +30,12 @@ void	mini_exit(t_minishell *shell, char **cmd);
 void	check_num(t_minishell *shell, char *str);
 // env
 void	_env(t_minishell *shell, int add);
+void	print_env(char *env);
 // export
 void	_export(t_minishell *shell, char **cmd);
 void	_export_exe(t_minishell *shell, char *var, char *val, int add);
 char	*get_value(t_minishell *shell, char *var, char *cmd);
+int		check_equal(char *cmd);
 // unset
 int		_unset(t_minishell *shell, char **cmd_line);
 void	env_pop(t_minishell *shell, char *cmd);
