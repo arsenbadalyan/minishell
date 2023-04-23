@@ -12,6 +12,19 @@
 
 #include "minishell.h"
 
+void	print_env(char *env)
+{
+	int	i;
+
+	i = 0;
+	while (env[i])
+	{
+		if (env[i] != '"')
+			write (1, &env[i], 1);
+		i++;
+	}
+	write (1, "\n", 1);
+}
 void	_env(t_minishell *shell, int add)
 {
 	size_t	i;
@@ -28,8 +41,8 @@ void	_env(t_minishell *shell, int add)
 		}
 		else
 			tmp = ft_strchr(shell->envp[i], '=');
-		if (tmp && *tmp && *(tmp + 1))
-			printf ("%s\n", shell->envp[i]);
+		if (tmp && *tmp)
+			print_env(shell->envp[i]);
 		i++;
 	}
 }
