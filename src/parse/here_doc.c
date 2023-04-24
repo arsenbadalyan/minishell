@@ -74,8 +74,8 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 	while (1)
 	{
 		buf = readline(">");
-		if (!buf)
-			force_quit(12);
+		// if (!buf)
+		// 	force_quit(12);
 		tmp = ft_strdup(buf);
 		if (!tmp)
 			force_quit(ERNOMEM);

@@ -51,47 +51,51 @@ int	match(char *str, char *pattern)
 	return (match_utils(str, pattern, star, tmp));
 }
 
-char	*get_suitable(char *suit, char *d_name)
+void modify_wildcard_array(char ***wildcards, char *dirname)
 {
-	char	*tmp;
-	char	*tmp_1;
+	size_t size;
+	char **new_arr;
 
-	if (!suit)
-		return (ft_strdup(d_name));
-	tmp = ft_strjoin(suit, " ");
-	if (!tmp)
-		force_quit(12);
-	tmp_1 = ft_strjoin(tmp, d_name);
-	if (!tmp_1)
-		force_quit(12);
-	free_single((void *)&tmp);
-	return (tmp_1);
+	size = 0;
+	while((*wildcards)[size])
+		size++;
+	new_arr = (char **)malloc(sizeof(char *) * (size + 1));
+	if(!new_arr)
+		force_quit(ENOMEM);
+	new_arr[size] = NULL;
+	new_arr[size - 1] = ft_strdup(dirname);
+	if(!new_arr[size - 1])
+		force_quit(ENOMEM);
+	size = 0;
+	while((*wildcards)[size])
+	{
+		new_arr[size] = (*wildcards)[size];
+		size++;
+	}
+	*wildcards = new_arr;
 }
 
-char	*wildcard(char *pattern)
+char	**wildcard(char *pattern)
 {
 	DIR				*dir;
 	struct dirent	*entry;
-	char			*suitable;
-	char			*tmp;
+	char			**wildcards;
+	char 			*dirname;
 
 	dir = opendir(".");
 	entry = readdir(dir);
-	suitable = 0;
+	wildcards = NULL;
 	while (entry != NULL)
 	{
 		if (match(entry->d_name, pattern))
 		{
-			tmp = get_suitable(suitable, entry->d_name);
-			if (!tmp)
-				force_quit(12);
-			if (suitable)
-				free_single((void *)&suitable);
-			suitable = ft_strdup(tmp);
-			free_single((void *)&tmp);
+			dirname = ft_strdup(entry->d_name);
+			if(!dirname)
+				force_quit(ENOMEM);
+			wildcards = push_to_double_array(wildcards, dirname);
 		}
 		entry = readdir(dir);
 	}
 	closedir(dir);
-	return (suitable);
+	return (wildcards);
 }

@@ -59,7 +59,14 @@ void execution_controller(t_minishell *shell, size_t cmd_index);
 size_t command_execution(t_minishell *shell, size_t *cmd_index);
 void control_new_command_io(t_minishell *shell, t_token *token);
 void pipe_command(t_minishell *shell, t_token *token, int is_last);
-void mutate_tokens(t_minishell *shell, char ***tokens);
+void mutate_tokens(t_minishell *shell, t_token *token, char ***tokens);
+char **mutate_wildcards(t_minishell *shell, char **new_tokens, char *mdf_token);
+
+// Redirect mutation
+void mutate_redirects(t_minishell *shell, t_token *token, char ***redirects);
+int redirect_manipulation(t_minishell *shell, t_token *token, char **redirect);
+size_t get_redirect_type(char **redirect, int *type);
+int open_redirect_wildcards(t_minishell *shell, t_token *token, char **redirect, int skip);
 
 // BUILT-IN EXECUTION
 int execute_token(t_minishell *shell, t_token *token);
@@ -80,9 +87,9 @@ char *exec_join_check(char *path, char *command);
 char *standard_command_check(t_minishell *shell, char *command);
 
 // File Descriptors management
-void file_controller(t_minishell *shell, t_token *token);
-void stdio_mutate(t_minishell *shell, t_token *token, char *redirect);
-int stdio_check(t_minishell *shell, char *redirect, size_t i, int *io);
+void file_controller(t_minishell *shell, t_token *token, int type, int fd);
+int stdio_mutate(t_minishell *shell, t_token *token, char *redirect, int type);
+int stdio_check(t_minishell *shell, char *redirect, size_t i, int type);
 int check_file(t_minishell *shell, char *file, int check_flags);
 char *open_here_doc_fd(t_minishell *shell, int *fd);
 
@@ -108,6 +115,8 @@ int get_line_type(char *line);
 int quote_check(int *sg_quote, int *db_quote, char c);
 int	check_valid_export(t_minishell *shell, char *cmd);
 int	check_variable(char *buff);
+char **push_to_double_array(char **arr, char *new_line);
+char **concat_double_arrays(char **arr_1, char **arr_2);
 
 // env controller
 char			**env_dup(char **env);
@@ -123,9 +132,9 @@ char *get_custom_error(int errno_c);
 int print_error(t_minishell *shell, char *error_txt);
 
 // Wildcard
-char	*wildcard(char *pattern);
+char	**wildcard(char *pattern);
 int		match(char *str, char *pattern);
-char	*get_suitable(char *suit, char *d_name);
+void modify_wildcard_array(char ***wildcards, char *dirname);
 int		match_utils(char *str, char *pattern, char *star, char *tmp);
 
 // Signals

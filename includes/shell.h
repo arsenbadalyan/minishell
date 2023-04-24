@@ -47,6 +47,7 @@ typedef struct s_token {
 	char *path;
 	char **tokens;
 	char **redirects;
+	char **wildcards;
 	int stdin;
 	int stdout;
 	size_t size_cmd;
@@ -88,6 +89,7 @@ enum errors {
     EPDEN = 13,
 	E_ISDIR = 126,
     ECMDNF = 127,
+	EAMBGRDR = 299
 };
 
 enum builtin {
@@ -98,6 +100,13 @@ enum builtin {
 	BIN_UNSET,
 	BIN_ENV,
 	BIN_EXIT
+};
+
+enum e_redirects {
+	RDR_HERE_DOC,
+	RDR_INPUT,
+	RDR_OUTPUT,
+	RDR_APPEND
 };
 
 #endif
