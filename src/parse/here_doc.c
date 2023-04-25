@@ -63,46 +63,42 @@ void	exe_here_doc(t_minishell *shell, char *limiter)
 	close(fd);
 }
 
-void	here_doc_process(t_minishell *shell, char *limiter, int fd)
-{
-	pid_t	pid;
-
-	pid = fork();
-	if (pid == 0)
-	{
-		wait_limiter(shell, limiter, fd);
-	}
-	else
-		waitpid(pid, &shell->status, 0);
-}
-
+// TODO: norminette; few here_doc error
 void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 {
 	char	*buf;
 	char	*tmp;
 	int		i;
+	pid_t	pid;
 
 	i = 0;
-	while (1)
+	pid = fork();
+	if (pid == 0)
 	{
 		signal(SIGINT, SIG_DFL);
 		signal(SIGQUIT, SIG_IGN);
-		buf = readline(">");
-		if (!buf)
-			return ;
-		tmp = ft_strdup(buf);
-		if (!tmp)
-			force_quit(ERNOMEM);
-		if (!ft_strcmp(buf, limiter))
+		while (1)
 		{
+			buf = readline(">");
+			if (!buf)
+				exit(0);
+			tmp = ft_strdup(buf);
+			if (!tmp)
+				force_quit(ERNOMEM);
+			if (!ft_strcmp(buf, limiter))
+			{
+				free_single((void *)&buf);
+				exit(0) ;
+			}
+			write_variable(shell, tmp, fd);
 			free_single((void *)&buf);
-			return ;
+			free_single((void *)&tmp);
+			write(fd, "\n", 1);
 		}
-		write_variable(shell, tmp, fd);
-		free_single((void *)&buf);
-		free_single((void *)&tmp);
-		write(fd, "\n", 1);
+		exit(0);
 	}
+	else
+		waitpid(pid, &shell->status, 0);
 }
 
 char	*concat_heredoc(t_exc_line *exec)

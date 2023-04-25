@@ -66,6 +66,8 @@ void	remove_heredoc(t_exc_line *execute)
 		real_name = ft_strjoin(HERE_DOC, del_num);
 		if (!real_name)
 			force_quit(12);
+		if (access(real_name, X_OK) == -1)
+			break ;
 		unlink(real_name);
 		execute->HEREDOC_OUT--;
 		free_single((void *)&real_name);
