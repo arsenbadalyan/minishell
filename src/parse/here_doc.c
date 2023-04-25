@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 18:17:22 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/23 03:11:58 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/25 14:23:50 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,8 +49,6 @@ void	exe_here_doc(t_minishell *shell, char *limiter)
 	char	*real_name;
 	char	*tmp;
 
-	shell->execute->HEREDOC_IN = get_heredoc_count(shell);
-	shell->execute->HEREDOC_OUT = shell->execute->HEREDOC_IN;
 	tmp = ft_itoa(shell->execute->HEREDOC_OUT++);
 	if (!tmp)
 		force_quit(ERNOMEM);
@@ -65,6 +63,19 @@ void	exe_here_doc(t_minishell *shell, char *limiter)
 	close(fd);
 }
 
+void	here_doc_process(t_minishell *shell, char *limiter, int fd)
+{
+	pid_t	pid;
+
+	pid = fork();
+	if (pid == 0)
+	{
+		wait_limiter(shell, limiter, fd);
+	}
+	else
+		waitpid(pid, &shell->status, 0);
+}
+
 void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 {
 	char	*buf;
@@ -74,6 +85,8 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 	i = 0;
 	while (1)
 	{
+		signal(SIGINT, SIG_DFL);
+		signal(SIGQUIT, SIG_IGN);
 		buf = readline(">");
 		if (!buf)
 			return ;
@@ -89,24 +102,6 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 		free_single((void *)&buf);
 		free_single((void *)&tmp);
 		write(fd, "\n", 1);
-	}
-}
-
-void	remove_heredoc(int here_doc_num)
-{
-	char	*real_name;
-	char	*del_num;
-
-	while (here_doc_num >= 0)
-	{
-		del_num = ft_itoa(here_doc_num);
-		if (!del_num)
-			force_quit(12);
-		real_name = ft_strjoin(HERE_DOC, del_num);
-		if (!real_name)
-			force_quit(12);
-		unlink(real_name);
-		here_doc_num--;
 	}
 }
 

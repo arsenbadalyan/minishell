@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:56:04 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/19 12:53:38 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/25 13:58:47 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@
 # define SINGLE_SEPARATORS "<|>"
 # define DOUBLE_SEPARATORS "<|>&"
 # define STRICT_META "|&)"
-// # define PATH_MAX 1024 
+# define PATH_MAX 1024 
 # define REDIRECTS "<>"
 # define SHLMSG "minishell: warning: shell level (%d) too high, resetting to 1\n"
 
@@ -44,6 +44,7 @@
 # define ERROR_130 "syntax error near unexpected token"
 # define ERROR_VID "not a valid identifier"
 # define ERROR_132 "not enough arguments"
+# define ERROR_OLDPWD "cd: OLDPWD not set"
 
 // Built-in program names
 # define BUILT_IN_ECHO "echo"

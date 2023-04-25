@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 17:42:02 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/19 17:07:50 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/25 14:08:11 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,5 +51,5 @@ int	main(int argc, char **argv, char **envp)
 	// here_doc_controller("<< 'hello'\"");
 	// exe_here_doc(NULL, 1);
 
-	return (1);
+	return (shell->status);
 }

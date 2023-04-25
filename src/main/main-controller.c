@@ -10,11 +10,11 @@ int controller(t_minishell *shell, char *user_input)
     if (shell->status)
         return (shell->status);
     shell->status = check_cmd_line(shell, shell->user_input, 0, 0);
-    signal(SIGINT, sigint_handler_in_process);
-    signal(SIGQUIT, sigquit_handler_in_process);
     if (shell->status)
         return (shell->status);
     here_doc_controller(shell, shell->user_input);
+    signal(SIGINT, sigint_handler_in_process);
+    signal(SIGQUIT, sigquit_handler_in_process);
     shell->execute->tokens = start_parse_cmds(shell->user_input, 0, 0);
     fill_cmd_list(shell);
     free_single((void *)&shell->user_input);

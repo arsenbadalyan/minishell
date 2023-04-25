@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/23 03:12:16 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/25 14:13:20 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,7 +98,7 @@ int	quote_controller(t_minishell *shell, char *line);
 int	execute_heredoc(t_minishell *shell, char *cmd_line, size_t index);
 void exe_here_doc(t_minishell *shell, char *limiter);
 void	wait_limiter(t_minishell *shell, char *limiter, int fd);
-void  remove_heredoc(int here_doc_num);
+void	remove_heredoc(t_exc_line *execute);
 char *concat_heredoc(t_exc_line *exec);
 void	write_variable(t_minishell *shell, char *tmp, int fd);
 int		get_heredoc_count(t_minishell *shell);

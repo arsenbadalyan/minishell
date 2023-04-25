@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:41 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/19 12:54:50 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/25 13:43:13 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,15 +42,13 @@ int	_unset(t_minishell *shell, char **cmd)
 	size_t	i;
 
 	i = 0;
-	// if (get_2d_array_length((void **)cmd) < 2)
-	// 	return (write_exception(shell, 132, 132, "unset"));
 	while (cmd[++i])
 	{
 		if (check_valid_export(shell, cmd[i]))
 			continue ;
 		if (ft_strchr(cmd[i], '='))
 		{
-			write_exception(shell, 256, 1, ERROR_VID);
+			write_exception(shell, 256, 1, cmd[i]);
 			continue ;
 		}
 		if (!get_env(shell, cmd[i]))

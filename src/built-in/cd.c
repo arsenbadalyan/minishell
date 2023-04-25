@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:21 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/15 21:13:13 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/25 14:05:13 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,7 @@ int	_cd_utils(t_minishell *shell, char *cmd, char **cmd_line)
 	char	cwd[PATH_MAX];
 
 	getcwd(cwd, PATH_MAX);
-	if (cmd_line[1][0] == '-')
+	if (cmd_line[1] && cmd_line[1][0] == '-')
 	{
 		write(1, cmd, ft_strlen(cmd));
 		write(1, "\n", 1);
@@ -55,7 +55,11 @@ int	_cd(t_minishell *shell, char **cmd_line)
 	else if (cmd_line[1][0] == '~' && cmd_line[1][1])
 		cmd = join_tilde(shell, cmd_line[1]);
 	else if (cmd_line[1][0] == '-' && !cmd_line[1][1])
+	{
+		if (!ft_strchr(get_env(shell, "OLDPWD"), '='))
+			return (write_exception(shell, 258, 1, 0));
 		cmd = get_env(shell, "OLDPWD") + 7;
+	}
 	else
 		cmd = cmd_line[1];
 		// printf ("%s\n", cmd);

@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 17:36:11 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/12 16:28:36 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/25 14:02:01 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,10 @@ void	env_controller(t_minishell *shell, char **envp)
 
 	shell->envp = env_dup(envp);
 	tmp = get_env(shell, "SHLVL");
+	if (!(get_env(shell, "PWD")))
+		set_env(shell, "PWD", 0, 0);
+	if (!(get_env(shell, "OLDPWD")))
+		set_env(shell, "OLDPWD", 0, 0);
 	while (tmp && *tmp != '=')
 		tmp++;
 	if (!tmp)
@@ -78,10 +82,12 @@ void	set_env(t_minishell *shell, char *var, char *value, int add)
 	i = 0;
 	while (!(ft_strnstr(shell->envp[i], check, ft_strlen(check))))
 		i++;
-	var = ft_strjoin (var, "=");
+	if (add)
+		var = ft_strjoin (var, "=");
 	free(shell->envp[i]);
 	shell->envp[i] = ft_strjoin(var, value);
-	free_single((void *)&var);
+	if (add)
+		free_single((void *)&var);
 	if (!shell->envp[i])
 		force_quit(12);
 }
