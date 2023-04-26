@@ -17,7 +17,7 @@ char **start_parse_cmds(char *line, int sg_quote, int db_quote)
 		cut_part(line, &cmds, xyz);
 	}
 	cmds[xyz[2]] = NULL;
-	int i = 0;
+	// int i = 0;
 	// while(cmds[i])
 	// {
 	// 	printf("%s|\n", cmds[i]);

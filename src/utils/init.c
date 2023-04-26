@@ -20,7 +20,6 @@ t_minishell	*init_minishell(void)
     if(!minishell)
         force_quit(12);
     minishell->execute = init_exc_line();
-    minishell->local_env = NULL;
     return (minishell);
 }
 
@@ -32,10 +31,13 @@ t_exc_line	*init_exc_line(void)
     if(!exc_line)
         force_quit(12);
     exc_line->cmd_list = NULL;
+    exc_line->clist_len = 0;
     exc_line->STDIN = STDIN_FILENO;
     exc_line->STDOUT = STDOUT_FILENO;
     exc_line->HEREDOC_IN = 0;
     exc_line->HEREDOC_OUT = 0;
+    exc_line->HEREDOC_CUR = 0;
+    exc_line->HEREDOC_SKIP = 0;
     return (exc_line);
 }
 
@@ -51,7 +53,9 @@ t_token *init_tokens(size_t size)
         tokens[size].stdin = -1;
         tokens[size].stdout = -1;
         tokens[size].cmd = NULL;
+        tokens[size].path = NULL;
         tokens[size].tokens = NULL;
+        tokens[size].redirects = NULL;
         tokens[size].size_cmd = 1;
         tokens[size].size_rdr = 1;
         tokens[size].status = 0;

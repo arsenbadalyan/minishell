@@ -58,8 +58,9 @@ int get_cmds_size(char *line, int sg_quote, int db_quote);
 
 // EXECUTION
 void execution_management(t_minishell *shell, size_t cmd_index);
-void execution_controller(t_minishell *shell, size_t cmd_index);
+void execution_controller(t_minishell *shell, size_t *cmd_index);
 size_t command_execution(t_minishell *shell, size_t *cmd_index);
+void commands_skip_execution(t_minishell *shell, size_t *cmd_index);
 void control_new_command_io(t_minishell *shell, t_token *token);
 void pipe_command(t_minishell *shell, t_token *token, int is_last);
 void mutate_tokens(t_minishell *shell, t_token *token, char ***tokens);
@@ -105,15 +106,18 @@ int	quote_controller(t_minishell *shell, char *line);
 int	execute_heredoc(t_minishell *shell, char *cmd_line, size_t index);
 void exe_here_doc(t_minishell *shell, char *limiter);
 void	wait_limiter(t_minishell *shell, char *limiter, int fd);
-void  remove_heredoc(int here_doc_num);
+void remove_heredoc(t_minishell *shell);
 char *concat_heredoc(t_exc_line *exec);
 void	write_variable(t_minishell *shell, char *tmp, int fd);
 int		get_heredoc_count(t_minishell *shell);
 
+// Memory free functions
+void *free_single(void **addr);
+void *free_double(void ***addr);
+void *free_token(t_minishell *shell, t_token *token);
+
 // Utils
 int		check_slice(char *line, char *SINGLE, char *DOUBLE);
-void	*free_single(void **addr);
-void	*free_double(void ***addr);
 size_t	get_2d_array_length(void **array);
 int get_line_type(char *line);
 int quote_check(int *sg_quote, int *db_quote, char c);

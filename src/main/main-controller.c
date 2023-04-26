@@ -7,12 +7,12 @@ int controller(t_minishell *shell, char *user_input)
     if (!shell->user_input)
         force_quit(12);
     shell->status = quote_controller(shell, shell->user_input);
-    if (shell->status)
+    if (shell->status && !free_single((void *)&shell->user_input))
         return (shell->status);
     shell->status = check_cmd_line(shell, shell->user_input, 0, 0);
     signal(SIGINT, sigint_handler_in_process);
     signal(SIGQUIT, sigquit_handler_in_process);
-    if (shell->status)
+    if (shell->status && !free_single((void *)&shell->user_input))
         return (shell->status);
     here_doc_controller(shell, shell->user_input);
     shell->execute->tokens = start_parse_cmds(shell->user_input, 0, 0);
@@ -20,7 +20,10 @@ int controller(t_minishell *shell, char *user_input)
     free_single((void *)&shell->user_input);
     shell->execute->skip_mode = 0;
     shell->execute->skip_phs = 0;
+    shell->execute->sub_shell_mode = 0;
     execution_management(shell, 0);
+    printf("%d\n", shell->status);
+    // free_single((void *)shell->execute->cmd_list);
     return (0);
 }
 
@@ -46,5 +49,5 @@ void fill_cmd_list(t_minishell *shell)
         free_single((void *)&shell->execute->tokens[i]);
         i++;
     }
-    free(shell->execute->tokens);
+    free_double((void *)&shell->execute->tokens);
 }

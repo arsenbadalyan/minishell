@@ -11,7 +11,7 @@ void cmd_split(t_minishell *shell, t_token *cmd)
 	cmd->redirects[cmd->size_rdr - 1] = NULL;
 	fill_cmd_list_token(shell, cmd);
 	mutate_redirects(shell, cmd, &cmd->redirects);
-	if(cmd->status)
+	if(shell->status)
 		return;
 	if (cmd->tokens[0])
 	{
@@ -21,26 +21,14 @@ void cmd_split(t_minishell *shell, t_token *cmd)
 			return;
 		paths = find_path(shell);
 		cmd->path = is_command_executable(shell, cmd->tokens[0], paths);
-		if(!cmd->path && ++cmd->status)
+		free_double((void *)&paths);
+		if(!cmd->path && ++shell->status)
 			write_exception(shell, ECMDNF, ECMDNF, cmd->tokens[0]);
-		else if(!ft_strlen(cmd->path) && ++cmd->status)
+		else if(!ft_strlen(cmd->path) && ++shell->status)
 			free_single((void *)&cmd->path);
-		if(cmd->status)
+		if(shell->status)
 			return;
-		// printf("PATH: %s\n", cmd->path);
 	}
-	// printf("\nCOMMANDS->\n");
-	// while (cmd->tokens[i])
-	// {
-	// 	printf("%s\n", cmd->tokens[i]);
-	// 	i++;
-	// }
-	// printf("\nREDIRECTS->\n");
-	// while (cmd->redirects[j])
-	// {
-	// 	printf("%s\n", cmd->redirects[j]);
-	// 	j++;
-	// }
 }
 
 void fill_cmd_list_token(t_minishell *shell, t_token *cmd)

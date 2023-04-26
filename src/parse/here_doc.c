@@ -49,8 +49,6 @@ void	exe_here_doc(t_minishell *shell, char *limiter)
 	char	*real_name;
 	char	*tmp;
 
-	shell->execute->HEREDOC_IN = get_heredoc_count(shell);
-	shell->execute->HEREDOC_OUT = shell->execute->HEREDOC_IN;
 	tmp = ft_itoa(shell->execute->HEREDOC_OUT++);
 	if (!tmp)
 		force_quit(ERNOMEM);
@@ -92,21 +90,24 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 	}
 }
 
-void	remove_heredoc(int here_doc_num)
+void	remove_heredoc(t_minishell *shell)
 {
 	char	*real_name;
 	char	*del_num;
 
-	while (here_doc_num >= 0)
+	while (shell->execute->HEREDOC_OUT > shell->execute->HEREDOC_IN)
 	{
-		del_num = ft_itoa(here_doc_num);
+		shell->execute->HEREDOC_OUT--;
+		del_num = ft_itoa(shell->execute->HEREDOC_OUT);
 		if (!del_num)
-			force_quit(12);
+			force_quit(ENOMEM);
 		real_name = ft_strjoin(HERE_DOC, del_num);
+		free_single((void *)&del_num);
 		if (!real_name)
-			force_quit(12);
+			force_quit(ENOMEM);
+		printf("%s\n", real_name);
 		unlink(real_name);
-		here_doc_num--;
+		free_single((void *)&real_name);
 	}
 }
 

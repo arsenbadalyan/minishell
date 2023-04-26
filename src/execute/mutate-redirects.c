@@ -20,7 +20,6 @@ void mutate_redirects(t_minishell *shell, t_token *token, char ***redirects)
 				close(token->stdin);
 			if(token->stdout != -1)
 				close(token->stdout);
-			token->status = shell->status;
 			return;
 		}
 		i++;

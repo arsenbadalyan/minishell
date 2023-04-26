@@ -19,16 +19,15 @@ void	read_shell(t_minishell *shell)
 	struct termios	conf;
 
 	user_input = NULL;
+	shell->execute->HEREDOC_IN = get_heredoc_count(shell);
+	shell->execute->HEREDOC_OUT = shell->execute->HEREDOC_IN;
+	shell->execute->HEREDOC_IN = 0;
 	while (1)
 	{
-		// printf("PID:%d\n",getpid());
-		// tcgetattr(shell->execute->STDIN, &conf);
 		rl_catch_signals = 0;
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
-		// tcsetattr(shell->execute->STDIN, TCSANOW, &conf);
 		user_input = readline(SHELL_NAME);
-		// printf("User_input: %s\n", user_input);
 		if (!user_input)
 			return ;
 		input_cpy = user_input;
@@ -38,5 +37,6 @@ void	read_shell(t_minishell *shell)
 			continue ;
 		add_history(user_input);
 		controller(shell, user_input);
+		remove_heredoc(shell);
 	}
 }

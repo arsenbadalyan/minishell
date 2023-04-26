@@ -28,12 +28,12 @@ int stdio_mutate(t_minishell *shell, t_token *token, char *redirect, int type)
 	fd = stdio_check(shell, redirect, i, type);
 	if(fd < 0)
 	{
-		token->status = errno;
+		shell->status = errno;
 		return (1);
 	}
 	if(redirect[0] == '>' && check_file(shell, redirect + i, F_OK) != EXIST)
 	{
-		token->status = E_ISDIR;
+		shell->status = E_ISDIR;
 		return (1);
 	}
 	file_controller(shell, token, type, fd);

@@ -12,13 +12,18 @@
 
 #include "minishell.h"
 
+int cmd_index = 0;
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	*shell;
 
+	shell = NULL;
 	if (argc > 1)
 		exit(1);
 	shell = init_minishell();
+	if(!shell)
+		return (0);
 	print_header();
 	env_controller(shell, envp);
 	read_shell(shell);

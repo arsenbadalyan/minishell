@@ -24,7 +24,7 @@
 # define SINGLE_SEPARATORS "<|>"
 # define DOUBLE_SEPARATORS "<|>&"
 # define STRICT_META "|&)"
-// # define PATH_MAX 1024 
+# define PATH_MAX 1024 
 # define REDIRECTS "<>"
 # define SHLMSG "minishell: warning: shell level (%d) too high, resetting to 1\n"
 
