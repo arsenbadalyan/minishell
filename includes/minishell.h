@@ -25,6 +25,8 @@
 # include <termios.h>
 # include <sys/ioctl.h>
 # include <sys/wait.h>
+# include <termios.h>
+# include <curses.h>
 
 // Custom Libs
 # include "libft.h"
@@ -93,9 +95,9 @@ char *standard_command_check(t_minishell *shell, char *command);
 // File Descriptors management
 void file_controller(t_minishell *shell, t_token *token, int type, int fd);
 int stdio_mutate(t_minishell *shell, t_token *token, char *redirect, int type);
-int stdio_check(t_minishell *shell, char *redirect, size_t i, int type);
+int stdio_check(t_minishell *shell, t_token *token, char *redirect, int type);
 int check_file(t_minishell *shell, char *file, int check_flags);
-char *open_here_doc_fd(t_minishell *shell, int *fd);
+char *open_here_doc_fd(t_minishell *shell, t_token *token, int *fd);
 
 // Controllers
 int controller(t_minishell *shell, char *user_input);
@@ -107,7 +109,7 @@ int	execute_heredoc(t_minishell *shell, char *cmd_line, size_t index);
 void exe_here_doc(t_minishell *shell, char *limiter);
 void	wait_limiter(t_minishell *shell, char *limiter, int fd);
 void remove_heredoc(t_minishell *shell);
-char *concat_heredoc(t_exc_line *exec);
+char *concat_heredoc(t_exc_line *exec, t_token *token);
 void	write_variable(t_minishell *shell, char *tmp, int fd);
 int		get_heredoc_count(t_minishell *shell);
 
@@ -122,9 +124,9 @@ size_t	get_2d_array_length(void **array);
 int get_line_type(char *line);
 int quote_check(int *sg_quote, int *db_quote, char c);
 int	check_valid_export(t_minishell *shell, char *cmd);
-int	check_variable(char *buff);
 char **push_to_double_array(char **arr, char *new_line);
 char **concat_double_arrays(char **arr_1, char **arr_2);
+size_t get_heredoc_sum(t_minishell *shell, char *str);
 
 // env controller
 char			**env_dup(char **env);

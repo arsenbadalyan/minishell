@@ -54,6 +54,7 @@ typedef struct s_token {
 	int stdout;
 	size_t size_cmd;
 	size_t size_rdr;
+	size_t heredoc_sum;
 	int status;
 	int is_built_in;
 } t_token;
@@ -80,10 +81,10 @@ enum e_file_state {
 };
 
 // TRUE and FALSE
-enum e_boolean {
-    TRUE = 1,
-    FALSE = 0
-};
+// enum e_boolean {
+//     TRUE = 1,
+//     FALSE = 0
+// };
 
 enum e_errors {
     ENOSUCHFILE = 2,

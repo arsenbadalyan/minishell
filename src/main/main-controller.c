@@ -45,7 +45,9 @@ void fill_cmd_list(t_minishell *shell)
             temp = ft_strdup(shell->execute->tokens[i]);
         if (!temp)
             force_quit(ERNOMEM);
+        shell->execute->cmd_list[i].heredoc_sum = get_heredoc_sum(shell, temp);
         shell->execute->cmd_list[i].cmd = temp;
+        // printf("LINE: %s\n HERE_DOC: %lu\n", temp, shell->execute->cmd_list[i].heredoc_sum);
         free_single((void *)&shell->execute->tokens[i]);
         i++;
     }

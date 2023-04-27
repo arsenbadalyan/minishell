@@ -21,7 +21,6 @@ void	read_shell(t_minishell *shell)
 	user_input = NULL;
 	shell->execute->HEREDOC_IN = get_heredoc_count(shell);
 	shell->execute->HEREDOC_OUT = shell->execute->HEREDOC_IN;
-	shell->execute->HEREDOC_IN = 0;
 	while (1)
 	{
 		rl_catch_signals = 0;
@@ -36,6 +35,7 @@ void	read_shell(t_minishell *shell)
 		if (!ft_strlen(input_cpy) && !free_single((void *)(&user_input)))
 			continue ;
 		add_history(user_input);
+		shell->execute->HEREDOC_SKIP = shell->execute->HEREDOC_IN;
 		controller(shell, user_input);
 		remove_heredoc(shell);
 	}

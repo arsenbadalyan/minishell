@@ -12,23 +12,20 @@
 
 #include "minishell.h"
 
-char *_echo(t_minishell *shell, char **cmd_line, int hd_mode, char *hd_lim)
+char *_echo(t_minishell *shell, char **cmd_line)
 {
 	char *result;
 	char *temp_res;
 	int quotes[2];
 
-	quotes[0] = 0;
-	quotes[1] = 0;
-	if(hd_mode)
-		return (modify_line(shell, hd_lim, hd_mode, quotes));
+	ft_bzero((void *)quotes, sizeof(int) * 2);
 	if(!cmd_line[1])
 		return (ft_strdup("\n"));
 	if (!cmd_line[1] && ft_strcmp(cmd_line[1], "-n") && !cmd_line[2])
 		return (ft_strdup(""));
 	result = join_lines(++cmd_line, 0, TRUE, NULL);
 	temp_res = result;
-	result = modify_line(shell, result, hd_mode, quotes);
+	result = modify_line(shell, result, FALSE, quotes);
 	free_single((void *)&temp_res);
 	return (result);
 }
@@ -38,7 +35,7 @@ char *join_lines(char **cmd_line, size_t i, int has_new_line, char *temp_line)
 	char *new_line;
 
 	new_line = ft_strdup("");
-	if (!ft_strcmp(cmd_line[0], "-n") && ++cmd_line)
+	while (*cmd_line && !ft_strcmp(*cmd_line, "-n") && ++cmd_line)
 		has_new_line = FALSE;
 	while (cmd_line[i])
 	{

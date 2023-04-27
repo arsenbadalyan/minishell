@@ -35,7 +35,7 @@ int execute_builtin(t_minishell *shell, t_token *token)
 
 	if(token->is_built_in == BIN_ECHO)
 	{
-		result = _echo(shell, token->tokens, 0, NULL);
+		result = _echo(shell, token->tokens);
 		ft_putstr_fd(result, token->stdout);
 		free_single((void *)&result);
 	}

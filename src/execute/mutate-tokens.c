@@ -9,6 +9,7 @@ void mutate_tokens(t_minishell *shell, t_token *token, char ***tokens)
 
     i = 0;
     new_tokens = NULL;
+    // TODO: disable line modify for echo
     while ((*tokens)[i])
     {
         temp = (*tokens)[i];
@@ -17,9 +18,6 @@ void mutate_tokens(t_minishell *shell, t_token *token, char ***tokens)
             force_quit(ERNOMEM);
         temp = (*tokens)[i];
         ft_bzero((void *)quotes, sizeof(int) * 2);
-        // if (ft_strlen((*tokens)[i]) > 2 && (*tokens)[i][0] == '<' && (*tokens)[i][1] == '<')
-        //     (*tokens)[i] = modify_line(shell, (*tokens)[i], 1, quotes);
-        // else
         (*tokens)[i] = modify_line(shell, (*tokens)[i], 0, quotes);
         if (!free_single((void *)&temp) && !(*tokens)[i])
             force_quit(ERNOMEM);
@@ -28,7 +26,7 @@ void mutate_tokens(t_minishell *shell, t_token *token, char ***tokens)
         else
             new_tokens = push_to_double_array(new_tokens, (*tokens)[i]);
         // if(i == 0 && !ft_strcmp((*tokens)[i], BUILT_IN_ECHO))
-        // 	return;
+        //     return;
         i++;
     }
 

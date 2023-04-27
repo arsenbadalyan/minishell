@@ -18,20 +18,18 @@ void file_controller(t_minishell *shell, t_token *token, int type, int fd)
 
 int stdio_mutate(t_minishell *shell, t_token *token, char *redirect, int type)
 {
-	size_t i;
 	int fd;
 	int io;
 	DIR *dir;
-	
-	i = 0;
+
 	io = 0;
-	fd = stdio_check(shell, redirect, i, type);
+	fd = stdio_check(shell, token, redirect, type);
 	if(fd < 0)
 	{
 		shell->status = errno;
 		return (1);
 	}
-	if(redirect[0] == '>' && check_file(shell, redirect + i, F_OK) != EXIST)
+	if(redirect[0] == '>' && check_file(shell, redirect, F_OK) != EXIST)
 	{
 		shell->status = E_ISDIR;
 		return (1);
@@ -40,7 +38,7 @@ int stdio_mutate(t_minishell *shell, t_token *token, char *redirect, int type)
 	return (1);
 }
 
-int stdio_check(t_minishell *shell, char *redirect, size_t i, int type)
+int stdio_check(t_minishell *shell, t_token *token, char *redirect, int type)
 {
 	char *here_doc;
 	int fd;
@@ -48,29 +46,29 @@ int stdio_check(t_minishell *shell, char *redirect, size_t i, int type)
 	fd = -1;
 	here_doc = NULL;
 	if (type == RDR_INPUT)
-		fd = open(redirect + i, O_RDONLY);
+		fd = open(redirect, O_RDONLY);
 	else if (type == RDR_HERE_DOC)
-		here_doc = open_here_doc_fd(shell, &fd);
+		here_doc = open_here_doc_fd(shell, token, &fd);
 	else if (type == RDR_OUTPUT)
-		fd = open(redirect + i, O_WRONLY | O_CREAT | O_TRUNC, 0755);
+		fd = open(redirect, O_WRONLY | O_CREAT | O_TRUNC, 0755);
 	else if (type == RDR_APPEND)
-		fd = open(redirect + i, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0755);
+		fd = open(redirect, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0755);
 	if (fd < 0)
 	{
 		if(here_doc)
 			print_error(shell, here_doc);
 		else
-			print_error(shell, redirect + i);
-		free_single((void *)&here_doc);
+			print_error(shell, redirect);
 	}
+	free_single((void *)&here_doc);
 	return (fd);
 }
 
-char *open_here_doc_fd(t_minishell *shell, int *fd)
+char *open_here_doc_fd(t_minishell *shell, t_token *token, int *fd)
 {
 	char *here_doc;
 
-	here_doc = concat_heredoc(shell->execute);
+	here_doc = concat_heredoc(shell->execute, token);
 	if (!here_doc)
 		force_quit(ERNOMEM);
 	*fd = open(here_doc, O_RDONLY);

@@ -37,7 +37,8 @@ int	execute_heredoc(t_minishell *shell, char *cmd_line, size_t index)
 	if (!limiter)
 		force_quit(ERNOMEM);
 	temp_limiter = limiter;
-	limiter = _echo(shell, NULL, TRUE, limiter);
+	ft_bzero((void *)quotes, sizeof(int) * 2);
+	limiter = modify_line(shell, limiter, TRUE, quotes);
 	free_single((void *)&temp_limiter);
 	exe_here_doc(shell, limiter);
 	return (0);
@@ -105,19 +106,19 @@ void	remove_heredoc(t_minishell *shell)
 		free_single((void *)&del_num);
 		if (!real_name)
 			force_quit(ENOMEM);
-		printf("%s\n", real_name);
 		unlink(real_name);
 		free_single((void *)&real_name);
 	}
 }
 
-char	*concat_heredoc(t_exc_line *exec)
+char	*concat_heredoc(t_exc_line *exec, t_token *token)
 {
 	int		current_state;
 	char	*str_cur_state;
 	char	*concat;
 
-	current_state = exec->HEREDOC_OUT - 1;
+	current_state = token->heredoc_sum;
+	token->heredoc_sum++;
 	str_cur_state = ft_itoa(current_state);
 	if (!str_cur_state)
 		force_quit(ERNOMEM);

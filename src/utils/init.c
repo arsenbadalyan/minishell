@@ -50,6 +50,7 @@ t_token *init_tokens(size_t size)
     tokens = (t_token *)malloc(sizeof(t_token) * size);
     while(--size >= 0)
     {
+        tokens[size].heredoc_sum = 0;
         tokens[size].stdin = -1;
         tokens[size].stdout = -1;
         tokens[size].cmd = NULL;
