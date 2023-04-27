@@ -1,3 +1,6 @@
+##Bonus part execution cases
+(ls || (ls -la && ls || ls)) && ls
+
 ## Parse Check Cases
 ((((    ls -la > ls    &&    ls)    || ((ls -la) || (ls) ) ) ) ) && ((ls))
 (

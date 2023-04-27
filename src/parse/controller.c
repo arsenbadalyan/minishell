@@ -14,10 +14,9 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void	here_doc_controller(t_minishell *shell, char *cmd_line)
+void	here_doc_controller(t_minishell *shell, char *cmd_line, int *out)
 {
 	size_t	i;
-	int		par_err_index;
 	int		quotes[2];
 
 	i = 0;
@@ -38,6 +37,10 @@ void	here_doc_controller(t_minishell *shell, char *cmd_line)
 		else
 			i++;
 	}
+	write(out[1], ft_itoa(shell->execute->HEREDOC_OUT), ft_strlen(ft_itoa(shell->execute->HEREDOC_OUT)));
+	close(out[0]);
+	close(out[1]);
+	exit (0);
 }
 
 int quote_controller(t_minishell *shell, char *line)

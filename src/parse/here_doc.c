@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 18:17:22 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/25 14:23:50 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/23 03:11:58 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,42 +63,38 @@ void	exe_here_doc(t_minishell *shell, char *limiter)
 	close(fd);
 }
 
-// TODO: norminette; few here_doc error
+// TODO: norminette
 void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 {
 	char	*buf;
 	char	*tmp;
 	int		i;
-	pid_t	pid;
 
 	i = 0;
-	pid = fork();
-	if (pid == 0)
+	signal(SIGINT, SIG_DFL);
+	signal(SIGQUIT, SIG_IGN);
+	while (1)
 	{
-		signal(SIGINT, SIG_DFL);
-		signal(SIGQUIT, SIG_IGN);
-		while (1)
+		buf = readline(">");
+		if (!buf)
+			return ;
+		tmp = ft_strdup(buf);
+		if (!tmp)
+			force_quit(ERNOMEM);
+		if (!ft_strcmp(buf, limiter))
 		{
-			buf = readline(">");
-			if (!buf)
-				exit(0);
-			tmp = ft_strdup(buf);
-			if (!tmp)
-				force_quit(ERNOMEM);
-			if (!ft_strcmp(buf, limiter))
-			{
-				free_single((void *)&buf);
-				exit(0) ;
-			}
-			write_variable(shell, tmp, fd);
 			free_single((void *)&buf);
-			free_single((void *)&tmp);
-			write(fd, "\n", 1);
+			return ;
 		}
-		exit(0);
+		write_variable(shell, tmp, fd);
+		free_single((void *)&buf);
+		free_single((void *)&tmp);
+		write(fd, "\n", 1);
 	}
-	else
-		waitpid(pid, &shell->status, 0);
+	write_variable(shell, tmp, fd);
+	free_single((void *)&buf);
+	free_single((void *)&tmp);
+	write(fd, "\n", 1);
 }
 
 char	*concat_heredoc(t_exc_line *exec)
@@ -107,7 +103,10 @@ char	*concat_heredoc(t_exc_line *exec)
 	char	*str_cur_state;
 	char	*concat;
 
-	current_state = exec->HEREDOC_OUT - 1;
+	// if (exec->HEREDOC_OUT != 0)
+		current_state = exec->HEREDOC_OUT - 1;
+	// else
+	// 	current_state = 0;
 	str_cur_state = ft_itoa(current_state);
 	if (!str_cur_state)
 		force_quit(ERNOMEM);

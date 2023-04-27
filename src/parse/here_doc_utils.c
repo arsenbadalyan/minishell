@@ -53,23 +53,26 @@ void	write_variable(t_minishell *shell, char *tmp, int fd)
 	}
 }
 
-void	remove_heredoc(t_exc_line *execute)
+
+void	remove_heredoc(t_minishell *shell)
 {
 	char	*real_name;
 	char	*del_num;
 
-	while (execute->HEREDOC_OUT > execute->HEREDOC_IN)
+	while (shell->execute->HEREDOC_OUT > shell->execute->HEREDOC_IN)
 	{
-		del_num = ft_itoa(execute->HEREDOC_OUT - 1);
+		// printf ("IN: %d\n", shell->execute->HEREDOC_IN);
+		// printf ("OUT: %d\n", shell->execute->HEREDOC_OUT);
+		shell->execute->HEREDOC_OUT--;
+		del_num = ft_itoa(shell->execute->HEREDOC_OUT);
 		if (!del_num)
-			force_quit(12);
+			force_quit(ENOMEM);
 		real_name = ft_strjoin(HERE_DOC, del_num);
+		free_single((void *)&del_num);
 		if (!real_name)
-			force_quit(12);
-		if (access(real_name, X_OK) == -1)
-			break ;
+			force_quit(ENOMEM);
+		printf("%s\n", real_name);
 		unlink(real_name);
-		execute->HEREDOC_OUT--;
 		free_single((void *)&real_name);
 	}
 }

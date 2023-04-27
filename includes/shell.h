@@ -33,11 +33,14 @@ typedef struct s_exc_line {
 	int STDOUT;
 	int	HEREDOC_IN;
 	int	HEREDOC_OUT;
+	int HEREDOC_CUR;
+	int HEREDOC_SKIP;
 	int PIPE_IN;
 	int RDR_OUT;
 	size_t command_wait_list;
 	int skip_phs;
 	int skip_mode;
+	int sub_shell_mode;
 	int is_single_cmd;
 } t_exc_line;
 
@@ -60,7 +63,7 @@ t_minishell *init_minishell();
 t_exc_line *init_exc_line();
 t_token *init_tokens(size_t size);
 
-enum token_modes {
+enum e_token_modes {
 	CMD,
 	PIPE,
 	OR,
@@ -69,7 +72,7 @@ enum token_modes {
 	PH_CLOSE
 };
 
-enum file_state {
+enum e_file_state {
 	NOT_EXIST,
 	PERMISSION_DENIED,
 	IS_DIR,
@@ -77,20 +80,21 @@ enum file_state {
 };
 
 // TRUE and FALSE
-enum boolean {
+enum e_boolean {
     TRUE = 1,
     FALSE = 0
 };
 
-enum errors {
+enum e_errors {
     ENOSUCHFILE = 2,
     ERNOMEM = 12,
     EPDEN = 13,
 	E_ISDIR = 126,
     ECMDNF = 127,
+	EAMBGRDR = 299
 };
 
-enum builtin {
+enum e_builtin {
 	BIN_ECHO,
 	BIN_CD,
 	BIN_PWD,
@@ -98,6 +102,13 @@ enum builtin {
 	BIN_UNSET,
 	BIN_ENV,
 	BIN_EXIT
+};
+
+enum e_redirects {
+	RDR_HERE_DOC,
+	RDR_INPUT,
+	RDR_OUTPUT,
+	RDR_APPEND
 };
 
 #endif

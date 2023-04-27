@@ -45,6 +45,7 @@
 # define ERROR_VID "not a valid identifier"
 # define ERROR_132 "not enough arguments"
 # define ERROR_OLDPWD "cd: OLDPWD not set"
+# define ERROR_299 "ambiguous redirect"
 
 // Built-in program names
 # define BUILT_IN_ECHO "echo"

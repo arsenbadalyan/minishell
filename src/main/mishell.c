@@ -16,9 +16,12 @@ int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	*shell;
 
+	shell = NULL;
 	if (argc > 1)
 		exit(1);
 	shell = init_minishell();
+	if(!shell)
+		return (1);
 	print_header();
 	env_controller(shell, envp);
 	read_shell(shell);
@@ -53,3 +56,4 @@ int	main(int argc, char **argv, char **envp)
 
 	return (shell->status);
 }
+

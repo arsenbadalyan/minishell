@@ -69,5 +69,7 @@ char	*get_custom_error(int errno_c)
 		return (ERROR_ARG);
 	if (errno_c == 258)
 		return (ERROR_OLDPWD);
+	if (errno_c == EAMBGRDR)
+		return (ERROR_299);
 	return (ERROR_UNX);
 }
