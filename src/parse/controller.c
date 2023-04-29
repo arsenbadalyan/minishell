@@ -17,10 +17,11 @@
 void	here_doc_controller(t_minishell *shell, char *cmd_line)
 {
 	size_t	i;
-	int		par_err_index;
 	int		quotes[2];
 
 	i = 0;
+	signal(SIGINT, exit);
+	signal(SIGQUIT, SIG_IGN);
 	quotes[0] = 0;
 	quotes[1] = 0;
 	while (cmd_line[i])
@@ -38,6 +39,7 @@ void	here_doc_controller(t_minishell *shell, char *cmd_line)
 		else
 			i++;
 	}
+	exit (0);
 }
 
 int quote_controller(t_minishell *shell, char *line)

@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:30 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/19 14:13:40 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/25 13:43:34 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ char	*get_value(t_minishell *shell, char *var, char *cmd)
 			is_plus = 1;
 	if (*cmd == '=')
 		cmd++;
-	if (!*cmd)
+	if (!*cmd && *(cmd - 1) == '=')
 		return (ft_strdup("\"\""));
 	value = get_env(shell, var);
 	if (!value)
@@ -33,7 +33,7 @@ char	*get_value(t_minishell *shell, char *var, char *cmd)
 	if (*value == '=' && *(value + 1) && is_plus && *cmd)
 	{
 		if (*(value + 1) == '\"' && *(value + 2) == '\"')
-			return (ft_strdup(cmd));	
+			return (ft_strdup(cmd));
 		return (ft_strjoin(++value, cmd));
 	}
 	return (ft_strdup(cmd));
@@ -83,7 +83,7 @@ void	_export(t_minishell *shell, char **cmd)
 		if (!var)
 			force_quit(12);
 		value = get_value(shell, var, cmd[i]);
-		printf ("%s\n",value);
+		// printf ("%s\n",value);
 		if (!value)
 			force_quit(12);
 		_export_exe(shell, var, value, check_equal(cmd[i]));

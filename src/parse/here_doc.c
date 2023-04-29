@@ -64,6 +64,7 @@ void	exe_here_doc(t_minishell *shell, char *limiter)
 	close(fd);
 }
 
+// TODO: norminette
 void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 {
 	char	*buf;
@@ -71,6 +72,8 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 	int		i;
 
 	i = 0;
+	// signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		buf = readline(">");
@@ -89,26 +92,10 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 		free_single((void *)&tmp);
 		write(fd, "\n", 1);
 	}
-}
-
-void	remove_heredoc(t_minishell *shell)
-{
-	char	*real_name;
-	char	*del_num;
-
-	while (shell->execute->HEREDOC_OUT > shell->execute->HEREDOC_IN)
-	{
-		shell->execute->HEREDOC_OUT--;
-		del_num = ft_itoa(shell->execute->HEREDOC_OUT);
-		if (!del_num)
-			force_quit(ENOMEM);
-		real_name = ft_strjoin(HERE_DOC, del_num);
-		free_single((void *)&del_num);
-		if (!real_name)
-			force_quit(ENOMEM);
-		unlink(real_name);
-		free_single((void *)&real_name);
-	}
+	write_variable(shell, tmp, fd);
+	free_single((void *)&buf);
+	free_single((void *)&tmp);
+	write(fd, "\n", 1);
 }
 
 char	*concat_heredoc(t_exc_line *exec, t_token *token)
@@ -117,8 +104,7 @@ char	*concat_heredoc(t_exc_line *exec, t_token *token)
 	char	*str_cur_state;
 	char	*concat;
 
-	current_state = token->heredoc_sum;
-	token->heredoc_sum++;
+	current_state = exec->HEREDOC_OUT - 1;
 	str_cur_state = ft_itoa(current_state);
 	if (!str_cur_state)
 		force_quit(ERNOMEM);

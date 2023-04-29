@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:54 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/19 12:53:50 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/25 13:58:20 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,11 @@ int write_exception(t_minishell *shell, int errno_c, int exit_code, char *txt)
 	return (errno_c);
 }
 
-char *get_custom_error(int errno_c)
+char	*get_custom_error(int errno_c)
 {
-	if(errno_c == 127)
+	if (errno_c == 127)
 		return (ERROR_127);
-	if(errno_c == 130)
+	if (errno_c == 130)
 		return (ERROR_130);
 	if (errno_c == E_ISDIR)
 		return (ERROR_126);
@@ -67,6 +67,8 @@ char *get_custom_error(int errno_c)
 		return (ERROR_VID);
 	if (errno_c == 257)
 		return (ERROR_ARG);
+	if (errno_c == 258)
+		return (ERROR_OLDPWD);
 	if (errno_c == EAMBGRDR)
 		return (ERROR_299);
 	return (ERROR_UNX);

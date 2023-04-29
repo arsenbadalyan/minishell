@@ -46,4 +46,5 @@ void *free_token(t_minishell *shell, t_token *token)
 	free_double((void *)&token->tokens);
 	free_double((void *)&token->redirects);
 	// free(token);
+	return (NULL);
 }
