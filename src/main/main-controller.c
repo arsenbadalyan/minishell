@@ -3,8 +3,6 @@
 int controller(t_minishell *shell, char *user_input)
 {
     pid_t	pid;
-    int		out[2];
-	char	hd[20];
 
     shell->user_input = ft_strtrim(user_input, WHITE_SPACE);
     free_single((void *)&user_input);
@@ -16,17 +14,18 @@ int controller(t_minishell *shell, char *user_input)
     shell->status = check_cmd_line(shell, shell->user_input, 0, 0);
     if (shell->status && !free_single((void *)&shell->user_input))
         return (shell->status);
-    pipe(out);
+	// printf ("STATUS_minchev_fork:%d\n", shell->status);
 	pid = fork();
     if (pid == 0)
-        here_doc_controller(shell, shell->user_input, out);
+        here_doc_controller(shell, shell->user_input);
     else
-        wait(0);
-	read(out[0], hd, 19);
-	shell->execute->HEREDOC_OUT = ft_atoi(hd);
-	close(out[0]);
-	close(out[1]);
-	printf ("OUT:%d\n", shell->execute->HEREDOC_OUT);
+        waitpid(pid, &shell->status, 0);
+	// printf ("STATUS:%d\n", shell->status);
+    if (shell->status == 512)
+        return (0);
+	// printf ("OUT:%d\n", shell->execute->HEREDOC_OUT);
+	shell->execute->HEREDOC_OUT = get_heredoc_count(shell);
+	// printf ("OUT:%d\n", shell->execute->HEREDOC_OUT);
     signal(SIGINT, sigint_handler_in_process);
     signal(SIGQUIT, sigquit_handler_in_process);
     shell->execute->tokens = start_parse_cmds(shell->user_input, 0, 0);

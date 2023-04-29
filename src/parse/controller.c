@@ -14,12 +14,14 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void	here_doc_controller(t_minishell *shell, char *cmd_line, int *out)
+void	here_doc_controller(t_minishell *shell, char *cmd_line)
 {
 	size_t	i;
 	int		quotes[2];
 
 	i = 0;
+	signal(SIGINT, exit);
+	signal(SIGQUIT, SIG_IGN);
 	quotes[0] = 0;
 	quotes[1] = 0;
 	while (cmd_line[i])
@@ -37,9 +39,6 @@ void	here_doc_controller(t_minishell *shell, char *cmd_line, int *out)
 		else
 			i++;
 	}
-	write(out[1], ft_itoa(shell->execute->HEREDOC_OUT), ft_strlen(ft_itoa(shell->execute->HEREDOC_OUT)));
-	close(out[0]);
-	close(out[1]);
 	exit (0);
 }
 

@@ -25,7 +25,7 @@ void	read_shell(t_minishell *shell)
 	rl_catch_signals = 0;
 	while (1)
 	{
-		printf("PID:%d\n",getpid());
+		// printf("PID:%d\n",getpid());
 		tcsetattr(shell->execute->STDIN, TCSANOW, &conf);
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);

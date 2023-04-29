@@ -71,8 +71,8 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 	int		i;
 
 	i = 0;
-	signal(SIGINT, SIG_DFL);
-	signal(SIGQUIT, SIG_IGN);
+	// signal(SIGINT, SIG_DFL);
+	// signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		buf = readline(">");

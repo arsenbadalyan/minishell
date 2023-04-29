@@ -99,7 +99,7 @@ char *open_here_doc_fd(t_minishell *shell, int *fd);
 
 // Controllers
 int controller(t_minishell *shell, char *user_input);
-void	here_doc_controller(t_minishell *shell, char *cmd_line, int *out);
+void	here_doc_controller(t_minishell *shell, char *cmd_line);
 int	quote_controller(t_minishell *shell, char *line);
 
 // here_doc execution (<<)

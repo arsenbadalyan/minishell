@@ -71,7 +71,7 @@ void	remove_heredoc(t_minishell *shell)
 		free_single((void *)&del_num);
 		if (!real_name)
 			force_quit(ENOMEM);
-		printf("%s\n", real_name);
+		// printf("%s\n", real_name);
 		unlink(real_name);
 		free_single((void *)&real_name);
 	}
