@@ -7,7 +7,9 @@ int execute_token(t_minishell *shell, t_token *token)
 	if(token->is_built_in != -1)
 		exit_status = execute_builtin(shell, token);
 	else
+	{
 		exit_status = execve(token->path, token->tokens, shell->envp);
+	}
 	return (exit_status);
 }
 

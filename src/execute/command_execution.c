@@ -1,5 +1,11 @@
 #include "minishell.h"
 
+void sigpipe_handler(int sig)
+{
+	ft_putstr_fd("Received SIGPIPE signal.\n", 1);
+	exit(0);
+}
+
 size_t command_execution(t_minishell *shell, size_t *cmd_index)
 {
 	t_token *current_token;
@@ -49,15 +55,19 @@ size_t command_execution(t_minishell *shell, size_t *cmd_index)
 		}
 		(*cmd_index)++;
 	}
+	int copy1 = dup(shell->execute->STDIN);
+	dup2(shell->execute->STDIN, STDIN_FILENO);
+	close(shell->execute->STDIN);
+	shell->execute->STDIN = copy1;
 	while(--shell->execute->command_wait_list)
 		wait(NULL);
-	if (dup2(shell->execute->STDIN, STDIN_FILENO) == -1)
-		print_error(shell, "stdin");
+	// if (dup2(shell->execute->STDIN, STDIN_FILENO) == -1)
+	// 	print_error(shell, "stdin");
 	if (dup2(shell->execute->STDOUT, STDOUT_FILENO) == -1)
 		print_error(shell, "stdout");
-	close(shell->execute->STDIN);
+	// close(shell->execute->STDIN);
 	close(shell->execute->STDOUT);
-	shell->execute->STDIN = STDIN_FILENO;
+	// shell->execute->STDIN = STDIN_FILENO;
 	shell->execute->STDOUT = STDOUT_FILENO;
 	return (0);
 }
