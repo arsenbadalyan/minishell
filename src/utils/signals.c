@@ -27,6 +27,7 @@ void	sigint_handler_in_process(int sig)
 {
 	(void) sig;
 	printf("\n");
+	exit(130);
 }
 
 void	sigquit_handler_in_process(int sig)

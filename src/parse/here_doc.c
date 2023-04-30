@@ -100,7 +100,8 @@ char	*concat_heredoc(t_exc_line *exec, t_token *token)
 	char	*str_cur_state;
 	char	*concat;
 
-	current_state = exec->HEREDOC_OUT - 1;
+	current_state = token->heredoc_sum;
+	token->heredoc_sum++;
 	str_cur_state = ft_itoa(current_state);
 	if (!str_cur_state)
 		force_quit(ERNOMEM);

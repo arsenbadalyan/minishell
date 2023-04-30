@@ -27,7 +27,11 @@ int heredoc_process_control(t_minishell *shell, char *cmd_line)
 	if (pid == 0)
 		here_doc_controller(shell, shell->user_input);
 	else
+	{
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
 		waitpid(pid, &shell->status, 0);
+	}
 	shell->status = WEXITSTATUS(shell->status);
 	return (shell->status);
 }

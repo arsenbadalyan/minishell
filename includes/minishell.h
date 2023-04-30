@@ -121,7 +121,8 @@ void	here_doc_controller(t_minishell *shell, char *cmd_line);
 int		quote_controller(t_minishell *shell, char *line);
 
 // here_doc execution (<<)
-int	execute_heredoc(t_minishell *shell, char *cmd_line, size_t index);
+int heredoc_process_control(t_minishell *shell, char *cmd_line);
+int execute_heredoc(t_minishell *shell, char *cmd_line, size_t index);
 void exe_here_doc(t_minishell *shell, char *limiter);
 void	wait_limiter(t_minishell *shell, char *limiter, int fd);
 void	remove_heredoc(t_minishell *shell);

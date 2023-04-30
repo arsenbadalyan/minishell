@@ -4,10 +4,13 @@ int	execute_token(t_minishell *shell, t_token *token)
 {
 	int	exit_status;
 
+	signal(SIGINT, sigint_handler_in_process);
+	signal(SIGQUIT, sigquit_handler_in_process);
 	if (token->is_built_in != -1)
 		exit_status = execute_builtin(shell, token);
 	else
 		exit_status = execve(token->path, token->tokens, shell->envp);
+	exit_status = WEXITSTATUS(exit_status);
 	return (exit_status);
 }
 

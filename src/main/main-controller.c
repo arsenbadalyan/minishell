@@ -16,8 +16,8 @@ int	controller(t_minishell *shell, char *user_input)
 		&& !free_single((void *)&shell->user_input))
 		return (shell->status);
 	shell->execute->HEREDOC_OUT = get_heredoc_count(shell);
-	signal(SIGINT, sigint_handler_in_process);
-	signal(SIGQUIT, sigquit_handler_in_process);
+	signal(SIGINT, SIG_IGN);
+	signal(SIGQUIT, SIG_IGN);
 	shell->execute->tokens = start_parse_cmds(shell->user_input, 0, 0);
 	fill_cmd_list(shell);
 	free_single((void *)&shell->user_input);
