@@ -25,12 +25,10 @@ void	read_shell(t_minishell *shell)
 	rl_catch_signals = 0;
 	while (1)
 	{
-		// printf("PID:%d\n",getpid());
 		tcsetattr(shell->execute->STDIN, TCSANOW, &conf);
 		signal(SIGINT, sigint_handler);
 		signal(SIGQUIT, SIG_IGN);
 		user_input = readline(SHELL_NAME);
-		// printf("User_input: %s\n", user_input);
 		if (!user_input)
 			return ;
 		input_cpy = user_input;

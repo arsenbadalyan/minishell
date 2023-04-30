@@ -44,7 +44,7 @@ int	_unset(t_minishell *shell, char **cmd)
 	i = 0;
 	while (cmd[++i])
 	{
-		if (check_valid_export(shell, cmd[i]))
+		if (check_valid_export(shell, cmd[i], "unset: "))
 			continue ;
 		if (ft_strchr(cmd[i], '='))
 		{

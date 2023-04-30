@@ -44,7 +44,7 @@ void fill_cmd_list_token(t_minishell *shell, t_token *cmd)
 		quote_check(&quotes[0], &quotes[1], cmd->cmd[xyz[0]]);
 		if((quotes[0] || quotes[1]) && ++xyz[0] && ++xyz[4])
 			continue;
-		if (xyz[4] && ft_strchr(WHITE_SPACE, cmd->cmd[xyz[0]]))
+		if (xyz[4] && ft_strchr(WHITE_SPACE, cmd->cmd[++xyz[0]]))
 			cut_quotes(cmd->cmd, &cmd->tokens, xyz, &xyz[4]);
 		temp = cmd->cmd[xyz[0]];
 		if(!temp)
@@ -75,10 +75,12 @@ void count_split_size(t_token *token, char *str)
 		{
 			if (!quotes[0] && !quotes[1])
 				is_last_quote = 0;
-			if (ft_strchr(WHITE_SPACE, str[i]))
+			if (!is_last_quote && ft_strchr(WHITE_SPACE, str[i]) && ++i)
 				++token->size_cmd;
 			continue;
 		}
+		if(!str[i])
+			break;
 		if (ft_strchr(REDIRECTS, str[i]) && ++token->size_rdr)
 			skip_word(str, &i, NULL);
 		else

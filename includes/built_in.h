@@ -14,15 +14,17 @@
 # define BUILT_IN_H
 
 // echo
-char *_echo(t_minishell *shell, char **cmd_line);
-char *join_lines(char **cmd_line, size_t i, int has_new_line, char *temp_line);
-char *modify_line(t_minishell *shell, char *line, int hd_mode, int *quotes);
-void get_variable(t_minishell *shell, char **line, char **new_line);
-void get_env_for_echo(t_minishell *shell, char *var, char **new_line);
+char	*_echo(t_minishell *shell, char **cmd_line);
+char	*join_lines(char **cmd_line, size_t i, int has_new_line,
+			char *temp_line);
+char	*modify_line(t_minishell *shell, char *line, int hd_mode, int *quotes);
+void	get_variable(t_minishell *shell, char **line, char **new_line);
+void	get_env_for_echo(t_minishell *shell, char *var, char **new_line);
 // pwd
-int	_pwd(t_token *token);
+int		_pwd(t_token *token);
 // cd
 int		_cd(t_minishell *shell, char **cmd_line);
+int		_cd_check_error(t_minishell *shell, char *cmd);
 char	*join_tilde(t_minishell *shell, char *dir);
 int		_cd_utils(t_minishell *shell, char *cmd, char **cmd_line);
 // exit

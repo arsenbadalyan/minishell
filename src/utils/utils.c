@@ -33,24 +33,32 @@ int	check_slice(char *line, char *SINGLE, char *DOUBLE)
 	return (0);
 }
 
-int	check_valid_export(t_minishell *shell, char *cmd)
+int	check_valid_export(t_minishell *shell, char *cmd, char *order)
 {
-	int	i;
+	int		i;
+	char	*error;
 
 	i = 0;
+	error = ft_strjoin(order, cmd);
+	if (!error)
+		force_quit(ENOMEM);
 	if (ft_strchr("0123456789!@%^&*()-+={}[]|?/><~`;:.,\\", cmd[0]))
-		return (write_exception(shell, 256, 1, cmd));
+		return ((write_exception(shell, 256, 1, error) && free_single((void *)&error)) + 1);
+	free_single((void *)&error);
+	error = ft_strjoin(order, ft_strchr(cmd, '='));
+	if (!error)
+		force_quit(ENOMEM);
 	while (cmd[i] != '=' && cmd[i])
 	{
 		if (ft_strchr("!@#%^&*()-{[]()|};:.,~`<>?/\\", cmd[i])
 			|| (cmd[i] == '+' && cmd[i + 1] != '='))
-			return (write_exception(shell, 256, 1, ft_strchr(cmd, '=')));
+			return ((write_exception(shell, 256, 1, error) && free_single((void *)&error)) + 1);
 		i++;
 	}
 	while (cmd[i])
 	{
 		if (ft_strchr("!&|;()`><", cmd[i]))
-			return (write_exception(shell, 256, 1, ft_strchr(cmd, '=')));
+			return ((write_exception(shell, 256, 1, error) && free_single((void *)&error)) + 1);
 		i++;
 	}
 	return (0);

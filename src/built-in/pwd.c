@@ -22,7 +22,5 @@ int	_pwd(t_token *token)
 		ft_putstr_fd("\n", token->stdout);
 		return (0);
 	}
-	else
-		return (1);
 	return (1);
 }

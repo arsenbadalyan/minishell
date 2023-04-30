@@ -33,6 +33,8 @@ int print_error(t_minishell *shell, char *error_txt)
 	return (errno);
 }
 
+// int	write_specific_exc(t_minishell *shell, int errno_c, int exit_code, )
+
 int write_exception(t_minishell *shell, int errno_c, int exit_code, char *txt)
 {
 	char	*error;
@@ -71,5 +73,7 @@ char	*get_custom_error(int errno_c)
 		return (ERROR_OLDPWD);
 	if (errno_c == EAMBGRDR)
 		return (ERROR_299);
+	if (errno_c == 259)
+		return (ERROR_NUM);
 	return (ERROR_UNX);
 }

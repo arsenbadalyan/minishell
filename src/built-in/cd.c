@@ -40,15 +40,35 @@ int	_cd_utils(t_minishell *shell, char *cmd, char **cmd_line)
 	set_env(shell, "OLDPWD", cwd, 1);
 	getcwd(cwd, PATH_MAX);
 	set_env(shell, "PWD", cwd, 1);
-	// printf ("%s\n", get_env(shell, "PWD"));
-	// printf ("%s \n", get_env(shell, "OLDPWD"));
+	return (1);
+}
+
+int	_cd_check_error(t_minishell *shell, char *cmd)
+{
+	char		*error;
+	struct stat	file_stat;
+
+	stat(cmd, &file_stat);
+	error = ft_strjoin("cd: ", cmd);
+	if (!error)
+		force_quit(ENOMEM);
+	if (S_ISREG(file_stat.st_mode))
+		return ((write_exception(shell, ENOTDIR, 1, error)
+				&& free_single((void *)&error)) + 1);
+	if (access(cmd, F_OK) == -1)
+		return ((write_exception(shell, 2, 1, error)
+				&& free_single((void *)&error)) + 1);
+	if (access(cmd, X_OK) == -1)
+		return (write_exception(shell, EPDEN, 1, error)
+			&& free_single((void *)&error) + 1);
+	free_single((void *)&error);
 	return (0);
 }
 
 int	_cd(t_minishell *shell, char **cmd_line)
 {
 	char		*cmd;
-	struct stat	file_stat;
+	int			error;
 
 	if (!cmd_line[1] || (cmd_line[1][0] == '~' && !cmd_line[1][1]))
 		cmd = get_env(shell, "HOME") + 5;
@@ -62,11 +82,8 @@ int	_cd(t_minishell *shell, char **cmd_line)
 	}
 	else
 		cmd = cmd_line[1];
-		// printf ("%s\n", cmd);
-	stat(cmd, &file_stat);
-	if (S_ISREG(file_stat.st_mode))
-		return (write_exception(shell, ENOTDIR, 20, 0));
-	if (access(cmd, X_OK) == -1)
-		return (write_exception(shell, EPDEN, 20, 0));
+	error = _cd_check_error(shell, cmd);
+	if (error != 0)
+		return (error);
 	return (_cd_utils(shell, cmd, cmd_line));
 }

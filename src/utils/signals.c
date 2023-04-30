@@ -35,4 +35,8 @@ void	sigquit_handler_in_process(int sig)
 	printf("Quit: %d\n", sig);
 }
 
-
+void	hd_sigint(int sig)
+{
+	write(1, "\n", 1);
+	exit (sig);
+}

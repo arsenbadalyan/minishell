@@ -14,26 +14,29 @@ int controller(t_minishell *shell, char *user_input)
     shell->status = check_cmd_line(shell, shell->user_input, 0, 0);
     if (shell->status && !free_single((void *)&shell->user_input))
         return (shell->status);
-	// printf ("STATUS_minchev_fork:%d\n", shell->status);
 	pid = fork();
     if (pid == 0)
         here_doc_controller(shell, shell->user_input);
     else
+    {
+		signal(SIGINT, SIG_IGN);
+		signal(SIGQUIT, SIG_IGN);
         waitpid(pid, &shell->status, 0);
+    }
 	// printf ("STATUS:%d\n", shell->status);
-    if (shell->status == 512)
-        return (0);
+    // if (shell->status == 512)
+    //     return (0);
 	// printf ("OUT:%d\n", shell->execute->HEREDOC_OUT);
 	shell->execute->HEREDOC_OUT = get_heredoc_count(shell);
 	// printf ("OUT:%d\n", shell->execute->HEREDOC_OUT);
-    signal(SIGINT, sigint_handler_in_process);
-    signal(SIGQUIT, sigquit_handler_in_process);
     shell->execute->tokens = start_parse_cmds(shell->user_input, 0, 0);
     fill_cmd_list(shell);
     free_single((void *)&shell->user_input);
     shell->execute->skip_mode = 0;
     shell->execute->skip_phs = 0;
     shell->execute->sub_shell_mode = 0;
+    signal(SIGINT, sigint_handler_in_process);
+    signal(SIGQUIT, sigquit_handler_in_process);
     execution_management(shell, 0);
     // printf("%d\n", shell->status);
     // free_single((void *)shell->execute->cmd_list);

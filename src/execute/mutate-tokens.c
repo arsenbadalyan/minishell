@@ -25,8 +25,8 @@ void mutate_tokens(t_minishell *shell, t_token *token, char ***tokens)
             new_tokens = mutate_wildcards(shell, new_tokens, (*tokens)[i]);
         else
             new_tokens = push_to_double_array(new_tokens, (*tokens)[i]);
-        // if(i == 0 && !ft_strcmp((*tokens)[i], BUILT_IN_ECHO))
-        //     return;
+        if(!i && !ft_strcmp((*tokens)[i], BUILT_IN_ECHO))
+            return;
         i++;
     }
 

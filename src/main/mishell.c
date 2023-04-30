@@ -20,11 +20,10 @@ int	main(int argc, char **argv, char **envp)
 	if (argc > 1)
 		exit(1);
 	shell = init_minishell();
-	if(!shell)
+	if (!shell)
 		return (1);
 	print_header();
 	env_controller(shell, envp);
 	read_shell(shell);
-	return (1);
+	return (0);
 }
-

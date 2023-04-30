@@ -58,13 +58,14 @@ void	exe_here_doc(t_minishell *shell, char *limiter)
 	if (!real_name)
 		force_quit(ERNOMEM);
 	fd = open(real_name, O_WRONLY | O_CREAT | O_TRUNC, 0755);
+	if (fd == -1)
+		exit(print_error(shell, "Cannot create temp file for heredoc"));
 	free_single((void *)&real_name);
 	wait_limiter(shell, limiter, fd);
 	free_single((void *)&limiter);
 	close(fd);
 }
 
-// TODO: norminette
 void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 {
 	char	*buf;
@@ -72,8 +73,6 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 	int		i;
 
 	i = 0;
-	// signal(SIGINT, SIG_DFL);
-	// signal(SIGQUIT, SIG_IGN);
 	while (1)
 	{
 		buf = readline(">");
@@ -82,11 +81,8 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 		tmp = ft_strdup(buf);
 		if (!tmp)
 			force_quit(ERNOMEM);
-		if (!ft_strcmp(buf, limiter))
-		{
-			free_single((void *)&buf);
+		if (!ft_strcmp(buf, limiter) && !free_single((void *)&buf))
 			return ;
-		}
 		write_variable(shell, tmp, fd);
 		free_single((void *)&buf);
 		free_single((void *)&tmp);

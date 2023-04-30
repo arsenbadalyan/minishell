@@ -32,6 +32,7 @@ size_t command_execution(t_minishell *shell, size_t *cmd_index)
 		}
 		if(current_token->token_mode == CMD)
 		{
+			shell->status = 0;
 			shell->execute->RDR_OUT = FALSE;
 			cmd_split(shell, current_token);
 			if (shell->status && (*cmd_index)++)
@@ -41,7 +42,7 @@ size_t command_execution(t_minishell *shell, size_t *cmd_index)
 			}
 			
 			control_new_command_io(shell, current_token);
-			printf("STATUS: %d\n", shell->status);
+			// printf("STATUS: %d\n", shell->status);
 			if(current_token->path || current_token->is_built_in != -1)
 				pipe_command(shell, current_token, token_list[(*cmd_index) + 1].token_mode != PIPE);
 			shell->execute->command_wait_list += 1;
