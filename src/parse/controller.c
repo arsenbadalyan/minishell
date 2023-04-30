@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   controller.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arsen <arsen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 16:42:43 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/02 21:49:36 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:34:52 by arsen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,14 +14,14 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-void handle_heredoc_exit_code()
+void	handle_heredoc_exit_code(int signum)
 {
 	exit(1);
 }
 
-int heredoc_process_control(t_minishell *shell, char *cmd_line)
+int	heredoc_process_control(t_minishell *shell, char *cmd_line)
 {
-	pid_t pid;
+	pid_t	pid;
 
 	pid = fork();
 	if (pid == 0)

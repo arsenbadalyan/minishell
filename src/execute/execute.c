@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arsen <arsen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:45 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/01 13:42:33 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/30 20:52:50 by arsen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 
 void	execution_management(t_minishell *shell, size_t cmd_index)
@@ -16,8 +17,8 @@ void	execution_management(t_minishell *shell, size_t cmd_index)
 	t_token	*current_token;
 	pid_t	pid;
 
-	if (cmd_index >= shell->execute->clist_len)
-		return;
+	if (cmd_index >= shell->execute->clist_len && !free_command_list(shell))
+		return ;
 	current_token = &shell->execute->cmd_list[cmd_index];
 	if (current_token->token_mode == PH_OPEN && !shell->execute->skip_mode
 		&& !shell->execute->sub_shell_mode)

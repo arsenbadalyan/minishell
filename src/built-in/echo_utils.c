@@ -1,0 +1,95 @@
+#include "minishell.h"
+
+char	**copy_echo_lines(char **cmd_line)
+{
+	size_t	size;
+	size_t	i;
+	char	**new_line;
+
+	i = 0;
+	size = get_2d_array_length((void **)cmd_line);
+	new_line = (char **)malloc(sizeof(char *) * (size + 1));
+	new_line[size] = NULL;
+	while (cmd_line[i])
+	{
+		new_line[i] = ft_strtrim(cmd_line[i], WHITE_SPACE);
+		if (!new_line[i])
+			force_quit(ENOMEM);
+		i++;
+	}
+	return (new_line);
+}
+
+char	**echo_lines_trim(t_minishell *shell, char **cmd_line)
+{
+	size_t	i;
+	int		quotes[2];
+	char	*temp;
+
+	i = 0;
+	while (cmd_line[i])
+	{
+		temp = cmd_line[i];
+		ft_bzero((void *)quotes, sizeof(int) * 2);
+		cmd_line[i] = modify_line(shell, cmd_line[i], 0, quotes);
+		if (!free_single((void *)&temp) && !cmd_line[i])
+			force_quit(ENOMEM);
+		i++;
+	}
+	return (cmd_line);
+}
+
+char	**open_echo_wildcards(t_minishell *shell, char **cmd_line, size_t i)
+{
+	char	**wildcards;
+	char	**new_cmd_line;
+	char	*temp;
+
+	new_cmd_line = NULL;
+	while (cmd_line[i])
+	{
+		if (!ft_strcmp(cmd_line[i], "-n")
+			&& !free_single((void *)&cmd_line[i]) && ++i)
+			continue ;
+		wildcards = wildcard(cmd_line[i]);
+		if (wildcards)
+		{
+			new_cmd_line = concat_double_arrays(new_cmd_line, wildcards);
+			free_single((void *)&cmd_line[i]);
+		}
+		else
+			new_cmd_line = push_to_double_array(new_cmd_line, cmd_line[i]);
+		i++;
+	}
+	return (new_cmd_line);
+}
+
+char	*concat_echo_lines(t_minishell *shell, char **cmd_line,
+	size_t i, int has_nl)
+{
+	char	*new_line;
+	char	*temp_line;
+
+	new_line = ft_strdup("");
+	if (!new_line)
+		force_quit(ENOMEM);
+	while (cmd_line[i])
+	{
+		temp_line = new_line;
+		new_line = ft_strjoin(new_line, cmd_line[i]);
+		if (!free_single((void *)&temp_line) && !new_line)
+			force_quit(ERNOMEM);
+		temp_line = new_line;
+		if (cmd_line[i + 1])
+			new_line = ft_strjoin(new_line, " ");
+		else if (has_nl)
+		{
+			new_line = ft_strjoin(new_line, "\n");
+			free_single((void *)&temp_line);
+		}
+		if (!new_line)
+			force_quit(ERNOMEM);
+		i++;
+	}
+	return (new_line);
+}

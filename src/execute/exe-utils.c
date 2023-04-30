@@ -1,9 +1,9 @@
 #include "minishell.h"
 
-char *exec_join_check(char *path, char *command)
+char	*exec_join_check(char *path, char *command)
 {
-	char *temp_path;
-	char *check_path;
+	char	*temp_path;
+	char	*check_path;
 
 	temp_path = ft_strjoin(path, "/");
 	if (!temp_path)
@@ -18,14 +18,14 @@ char *exec_join_check(char *path, char *command)
 	return (0);
 }
 
-char *is_command_executable(t_minishell *shell, char *command, char **paths)
+char	*is_command_executable(t_minishell *shell, char *command, char **paths)
 {
-	size_t i;
-	char *check_path;
+	size_t	i;
+	char	*check_path;
 
 	i = 0;
 	check_path = standard_command_check(shell, command);
-	if(check_path)
+	if (check_path)
 		return (check_path);
 	while (paths[i])
 	{
@@ -38,16 +38,16 @@ char *is_command_executable(t_minishell *shell, char *command, char **paths)
 	return (NULL);
 }
 
-char *standard_command_check(t_minishell *shell, char *command)
+char	*standard_command_check(t_minishell *shell, char *command)
 {
-	char *result;
+	char	*result;
 
 	result = NULL;
 	if (ft_strchr(command, '/') && access(command, X_OK))
 	{
 		check_file(shell, command, X_OK);
 		result = ft_strdup("");
-		if(!result)
+		if (!result)
 			force_quit(ERNOMEM);
 		return (result);
 	}
@@ -61,19 +61,16 @@ char *standard_command_check(t_minishell *shell, char *command)
 	return (result);
 }
 
-char **find_path(t_minishell *shell)
+char	**find_path(t_minishell *shell)
 {
-	char *path;
-	char **paths;
+	char	*path;
+	char	**paths;
 
 	path = get_env(shell, PATH);
 	if (path)
 	{
-		// envp[i][3] = '.';
-		// envp[i][4] = ':';
-		// envp[i] += 5;
 		paths = ft_split(path, ':');
-		if(!paths)
+		if (!paths)
 			force_quit(ERNOMEM);
 		return (paths);
 	}
