@@ -39,12 +39,11 @@ void	*free_double(void ***addr)
 	return (0);
 }
 
-void *free_token(t_minishell *shell, t_token *token)
+void	*free_token(t_minishell *shell, t_token *token)
 {
 	free_single((void *)&token->cmd);
 	free_single((void *)&token->path);
 	free_double((void *)&token->tokens);
 	free_double((void *)&token->redirects);
-	// free(token);
 	return (NULL);
 }

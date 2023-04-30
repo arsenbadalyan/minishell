@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/23 03:04:13 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/23 03:08:48 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:20:11 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,4 @@ void	sigint_handler(int sig_num)
 	rl_replace_line("", 0);
 	rl_redisplay();
 	(void)sig_num;
-}
-
-void	sigint_handler_in_process(int sig)
-{
-	(void) sig;
-	printf("\n");
-	exit(130);
-}
-
-void	sigquit_handler_in_process(int sig)
-{
-	(void) sig;
-	printf("Quit: %d\n", sig);
-}
-
-void	hd_sigint(int sig)
-{
-	write(1, "\n", 1);
-	exit (sig);
 }

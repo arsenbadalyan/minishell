@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/25 14:13:20 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:20:05 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ int		quote_controller(t_minishell *shell, char *line);
 
 // here_doc execution (<<)
 int heredoc_process_control(t_minishell *shell, char *cmd_line);
-int execute_heredoc(t_minishell *shell, char *cmd_line, size_t index);
+int execute_heredoc(t_minishell *shell, char *cmd, size_t i);
 void exe_here_doc(t_minishell *shell, char *limiter);
 void	wait_limiter(t_minishell *shell, char *limiter, int fd);
 void	remove_heredoc(t_minishell *shell);
@@ -168,8 +168,5 @@ int		match_utils(char *str, char *pattern, char *star, char *tmp);
 // Signals
 void	sigint_handler(int sig_num);
 void	global_signal_handler(int action);
-void	sigint_handler_in_process(int sig);
-void	sigquit_handler_in_process(int sig);
-void	hd_sigint(int sig);
 
 #endif

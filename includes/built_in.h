@@ -28,7 +28,7 @@ char	*join_tilde(t_minishell *shell, char *dir);
 int		_cd_utils(t_minishell *shell, char *cmd, char **cmd_line);
 // exit
 void	mini_exit(t_minishell *shell, char **cmd);
-void	check_num(t_minishell *shell, char *str);
+int		check_num(t_minishell *shell, char *str);
 // env
 void	_env(t_minishell *shell, int add);
 void	print_env(char *env);

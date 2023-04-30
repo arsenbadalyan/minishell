@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/12 13:09:23 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:48:31 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,24 @@ void	print_env(char *env)
 	write (1, "\n", 1);
 }
 
+void	print_export(char *env)
+{
+	int	i;
+
+	i = 0;
+	write(1, "declare -x ", 11);
+	while (env[i])
+	{
+		if (env[i - 1] == '=' && env[i] != '"')
+			write (1, "\"", 1);
+		write (1, &env[i], 1);
+		i++;
+	}
+	if (ft_strchr(env, '=') && env[i - 1] != '\"')
+		write(1, "\"", 1);
+	write (1, "\n", 1);
+}
+
 void	_env(t_minishell *shell, int add)
 {
 	size_t	i;
@@ -37,7 +55,7 @@ void	_env(t_minishell *shell, int add)
 		tmp = NULL;
 		if (add)
 		{
-			printf ("%s %s\n", "declare -x ", shell->envp[i++]);
+			print_export(shell->envp[i++]);
 			continue ;
 		}
 		else

@@ -15,8 +15,8 @@
 void	force_quit(int errno_c)
 {
 	char	*error;
-    
-    error = strerror(errno_c);
+
+	error = strerror(errno_c);
 	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
 	ft_putstr_fd(": ", 2);
 	ft_putstr_fd(error, 2);
@@ -24,7 +24,7 @@ void	force_quit(int errno_c)
 	exit(errno_c);
 }
 
-int print_error(t_minishell *shell, char *error_txt)
+int	print_error(t_minishell *shell, char *error_txt)
 {
 	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
 	ft_putstr_fd(": ", 2);
@@ -33,9 +33,7 @@ int print_error(t_minishell *shell, char *error_txt)
 	return (errno);
 }
 
-// int	write_specific_exc(t_minishell *shell, int errno_c, int exit_code, )
-
-int write_exception(t_minishell *shell, int errno_c, int exit_code, char *txt)
+int	write_exception(t_minishell *shell, int errno_c, int exit_code, char *txt)
 {
 	char	*error;
 

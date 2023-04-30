@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:45:14 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/15 20:41:29 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:00:50 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,23 +51,23 @@ int	match(char *str, char *pattern)
 	return (match_utils(str, pattern, star, tmp));
 }
 
-void modify_wildcard_array(char ***wildcards, char *dirname)
+void	modify_wildcard_array(char ***wildcards, char *dirname)
 {
-	size_t size;
-	char **new_arr;
+	size_t	size;
+	char	**new_arr;
 
 	size = 0;
-	while((*wildcards)[size])
+	while ((*wildcards)[size])
 		size++;
 	new_arr = (char **)malloc(sizeof(char *) * (size + 1));
-	if(!new_arr)
+	if (!new_arr)
 		force_quit(ENOMEM);
 	new_arr[size] = NULL;
 	new_arr[size - 1] = ft_strdup(dirname);
-	if(!new_arr[size - 1])
+	if (!new_arr[size - 1])
 		force_quit(ENOMEM);
 	size = 0;
-	while((*wildcards)[size])
+	while ((*wildcards)[size])
 	{
 		new_arr[size] = (*wildcards)[size];
 		size++;
@@ -80,7 +80,7 @@ char	**wildcard(char *pattern)
 	DIR				*dir;
 	struct dirent	*entry;
 	char			**wildcards;
-	char 			*dirname;
+	char			*dirname;
 
 	dir = opendir(".");
 	entry = readdir(dir);
@@ -90,7 +90,7 @@ char	**wildcard(char *pattern)
 		if (match(entry->d_name, pattern))
 		{
 			dirname = ft_strdup(entry->d_name);
-			if(!dirname)
+			if (!dirname)
 				force_quit(ENOMEM);
 			wildcards = push_to_double_array(wildcards, dirname);
 		}

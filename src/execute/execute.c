@@ -3,12 +3,13 @@
 /*                                                        :::      ::::::::   */
 /*   execute.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsbadal <arsbadal@student.42.fr>          +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:45 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/01 13:42:33 by arsbadal         ###   ########.fr       */
+/*   Updated: 2023/04/30 20:44:54 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
 #include "minishell.h"
 
 void	execution_management(t_minishell *shell, size_t cmd_index)
@@ -27,6 +28,7 @@ void	execution_management(t_minishell *shell, size_t cmd_index)
 		if (pid)
 		{
 			waitpid(pid, &shell->status, 0);
+			shell->status = WEXITSTATUS(shell->status);
 			shell->execute->sub_shell_mode = FALSE;
 			commands_skip_execution(shell, &cmd_index);
 			execution_management(shell, cmd_index);

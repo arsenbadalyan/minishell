@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/12 14:56:04 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/25 13:58:47 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 20:13:11 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@
 
 // Custom Errors
 # define ERROR_UNX "unexpected error"
-# define ERROR_127 "command does not exit in the PATH or wrong command name"
+# define ERROR_127 "command does not exist in the PATH or wrong command name"
 # define ERROR_126 "is a directory"
 # define ERROR_ARG "too many arguments"
 # define ERROR_NUM "numeric argument required"

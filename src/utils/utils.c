@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/07 18:13:01 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/19 13:45:24 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:06:53 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,30 +43,26 @@ int	check_valid_export(t_minishell *shell, char *cmd, char *order)
 	if (!error)
 		force_quit(ENOMEM);
 	if (ft_strchr("0123456789!@%^&*()-+={}[]|?/><~`;:.,\\", cmd[0]))
-		return ((write_exception(shell, 256, 1, error) && free_single((void *)&error)) + 1);
-	free_single((void *)&error);
-	error = ft_strjoin(order, ft_strchr(cmd, '='));
-	if (!error)
-		force_quit(ENOMEM);
+		return ((write_exception(shell, 256, 1, error)
+				&& free_single((void *)&error)) + 1);
 	while (cmd[i] != '=' && cmd[i])
 	{
 		if (ft_strchr("!@#%^&*()-{[]()|};:.,~`<>?/\\", cmd[i])
 			|| (cmd[i] == '+' && cmd[i + 1] != '='))
-			return ((write_exception(shell, 256, 1, error) && free_single((void *)&error)) + 1);
+			return ((write_exception(shell, 256, 1, error)
+					&& free_single((void *)&error)) + 1);
 		i++;
 	}
 	while (cmd[i])
-	{
-		if (ft_strchr("!&|;()`><", cmd[i]))
-			return ((write_exception(shell, 256, 1, error) && free_single((void *)&error)) + 1);
-		i++;
-	}
+		if (ft_strchr("!&|;()`><", cmd[i++]))
+			return ((write_exception(shell, 256, 1, error)
+					&& free_single((void *)&error)) + 1);
 	return (0);
 }
 
-int get_line_type(char *line)
+int	get_line_type(char *line)
 {
-	if(!ft_strcmp(line, "||"))
+	if (!ft_strcmp(line, "||"))
 		return (OR);
 	if (!ft_strcmp(line, "&&"))
 		return (AND);
@@ -79,11 +75,12 @@ int get_line_type(char *line)
 	return (CMD);
 }
 
-int quote_check(int *sg_quote, int *db_quote, char c)
+int	quote_check(int *sg_quote, int *db_quote, char c)
 {
-	int *status;
+	int	*status;
 
-	if (!ft_strchr("\'\"", c) || (*sg_quote && c == '\"') || (*db_quote && c == '\''))
+	if (!ft_strchr("\'\"", c) || (*sg_quote && c == '\"')
+		|| (*db_quote && c == '\''))
 		return (1);
 	if (c == '\'')
 		status = sg_quote;

@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 18:17:22 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/23 03:11:58 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:16:26 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,26 +14,25 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
-int	execute_heredoc(t_minishell *shell, char *cmd_line, size_t index)
+int	execute_heredoc(t_minishell *shell, char *cmd, size_t i)
 {
 	size_t	temp_index;
 	char	*limiter;
 	char	*temp_limiter;
 	int		quotes[2];
 
-	temp_index = index;
+	temp_index = i;
 	ft_bzero((void *)quotes, sizeof(int) * 2);
-	while (cmd_line[index])
+	while (cmd[i])
 	{
-		quote_check(&quotes[0], &quotes[1], cmd_line[index]);
-		if ((quotes[0] || quotes[1]) && ++index)
+		quote_check(&quotes[0], &quotes[1], cmd[i]);
+		if ((quotes[0] || quotes[1]) && ++i)
 			continue ;
-		if ((cmd_line[index] == '&' && cmd_line[index] == cmd_line[index + 1])
-			|| (ft_strchr(METASYMBOLS_ALL, cmd_line[index])
-				&& cmd_line[index] != '&') || !(++index))
+		if ((cmd[i] == '&' && cmd[i] == cmd[i + 1])
+			|| (ft_strchr(METASYMBOLS_ALL, cmd[i]) && cmd[i] != '&') || !(++i))
 			break ;
 	}
-	limiter = ft_substr(cmd_line, temp_index, index - temp_index);
+	limiter = ft_substr(cmd, temp_index, i - temp_index);
 	if (!limiter)
 		force_quit(ERNOMEM);
 	temp_limiter = limiter;

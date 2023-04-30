@@ -16,6 +16,7 @@
 
 void handle_heredoc_exit_code()
 {
+	write(1, "\n", 1);
 	exit(1);
 }
 
