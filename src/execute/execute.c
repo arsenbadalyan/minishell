@@ -17,8 +17,8 @@ void	execution_management(t_minishell *shell, size_t cmd_index)
 	t_token	*current_token;
 	pid_t	pid;
 
-	if (cmd_index >= shell->execute->clist_len)
-		return;
+	if (cmd_index >= shell->execute->clist_len && !free_command_list(shell))
+		return ;
 	current_token = &shell->execute->cmd_list[cmd_index];
 	if (current_token->token_mode == PH_OPEN && !shell->execute->skip_mode
 		&& !shell->execute->sub_shell_mode)

@@ -1,24 +1,25 @@
 #include "minishell.h"
 
-size_t command_execution(t_minishell *shell, size_t *cmd_index)
+size_t	command_execution(t_minishell *shell, size_t *cmd_index)
 {
-	t_token *current_token;
-	t_token *token_list;
-	int last_stdin;
-	int last_stdout;
+	t_token	*current_token;
+	t_token	*token_list;
+	int		last_stdin;
+	int		last_stdout;
 
 	token_list = shell->execute->cmd_list;
 	start_execution(shell, *cmd_index);
-	while((*cmd_index) < shell->execute->clist_len)
+	while ((*cmd_index) < shell->execute->clist_len)
 	{
 		current_token = &token_list[(*cmd_index)];
-		if(current_token->token_mode != CMD && current_token->token_mode != PIPE)
+		if (current_token->token_mode != CMD
+			&& current_token->token_mode != PIPE)
 		{
 			close(last_stdin);
 			close(last_stdout);
-			break;
+			break ;
 		}
-		if(current_token->token_mode == CMD)
+		if (current_token->token_mode == CMD)
 			exe_md(shell, cmd_index, &last_stdin, &last_stdout);
 		(*cmd_index)++;
 	}
@@ -26,21 +27,16 @@ size_t command_execution(t_minishell *shell, size_t *cmd_index)
 	return (0);
 }
 
-void pipe_command(t_minishell *shell, t_token *token, int is_last)
+void	pipe_command(t_minishell *shell, t_token *token, int is_last)
 {
-	pid_t pid;
-	int pipe_fd[2];
+	pid_t	pid;
+	int		pipe_fd[2];
 
-	if(check_if_last_command(shell, token, is_last))
+	if (check_if_last_command(shell, token, is_last))
 		return ;
 	pipe(pipe_fd);
 	pid = fork();
-	if (pid == -1)
-	{
-		print_error(shell, "fork");
-		return;
-	}
-	if(pid)
+	if (pid)
 	{
 		close(pipe_fd[1]);
 		token->stdin = dup2(pipe_fd[0], token->stdin);
@@ -53,11 +49,14 @@ void pipe_command(t_minishell *shell, t_token *token, int is_last)
 		child_process_run(shell, token, pipe_fd);
 }
 
-int check_if_last_command(t_minishell *shell, t_token *token, int is_last)
+int	check_if_last_command(t_minishell *shell, t_token *token, int is_last)
 {
-	pid_t pid;
+	pid_t	pid;
 
-	if (shell->execute->is_single_cmd && (token->is_built_in == BIN_CD || token->is_built_in == BIN_EXPORT || token->is_built_in == BIN_EXIT || token->is_built_in == BIN_UNSET))
+	if (shell->execute->is_single_cmd && (token->is_built_in == BIN_CD
+			|| token->is_built_in == BIN_EXPORT
+			|| token->is_built_in == BIN_EXIT
+			|| token->is_built_in == BIN_UNSET))
 	{
 		shell->status = execute_token(shell, token);
 		return (1);
@@ -79,7 +78,7 @@ int check_if_last_command(t_minishell *shell, t_token *token, int is_last)
 	return (0);
 }
 
-void child_process_run(t_minishell *shell, t_token *token, int pipe_fd[2])
+void	child_process_run(t_minishell *shell, t_token *token, int pipe_fd[2])
 {
 	close(pipe_fd[0]);
 	if (!shell->execute->RDR_OUT)

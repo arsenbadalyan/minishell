@@ -72,7 +72,8 @@ size_t	get_redirect_type(char **redirect, int *type)
 	return (i);
 }
 
-int	open_redirect_wildcards(t_minishell *shell, t_token *token, char **redirect, int skip)
+int	open_redirect_wildcards(t_minishell *shell, t_token *token,
+	char **redirect, int skip)
 {
 	char	**wildcards;
 	size_t	wildcard_size;

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   here_doc_utils.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arsen <arsen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/22 18:07:32 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/22 18:07:33 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 19:00:04 by arsen            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ void	write_variable(t_minishell *shell, char *tmp, int fd)
 		}
 	}
 }
-
 
 void	remove_heredoc(t_minishell *shell)
 {

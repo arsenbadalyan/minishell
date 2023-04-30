@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*   By: arsen <arsen@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
 /*   Updated: 2023/04/30 19:20:05 by armartir         ###   ########.fr       */
@@ -134,6 +134,7 @@ int		get_heredoc_count(t_minishell *shell);
 void	*free_single(void **addr);
 void	*free_double(void ***addr);
 void	*free_token(t_minishell *shell, t_token *token);
+void *free_command_list(t_minishell *shell);
 
 // Utils
 int		check_slice(char *line, char *SINGLE, char *DOUBLE);
