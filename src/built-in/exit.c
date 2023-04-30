@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:27 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/30 19:31:06 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 21:34:23 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,8 @@ int	check_num(t_minishell *shell, char *str)
 		str++;
 	while (*str == '0')
 		str++;
-	if ((ft_strcmp(str, "9223372036854775808") > 0 && *dup == '-')
-		|| (ft_strcmp(str, "9223372036854775807") > 0 && *dup != '-'))
+	if ((ft_strcmp(str, "9223372036854775808") > 0 && *(dup + 6) == '-')
+		|| (ft_strcmp(str, "9223372036854775807") > 0 && *(dup + 6) != '-'))
 		return (write_exception(shell, 259, 255, dup));
 	while (*str)
 	{
@@ -39,8 +39,6 @@ int	check_num(t_minishell *shell, char *str)
 void	mini_exit(t_minishell *shell, char **cmd)
 {	
 	size_t		i;
-	long long	num;
-	char		exit_code;
 
 	write(1, "exit\n", 5);
 	i = get_2d_array_length((void **)cmd);

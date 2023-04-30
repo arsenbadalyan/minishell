@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mutate-tokens.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/30 21:24:01 by armartir          #+#    #+#             */
+/*   Updated: 2023/04/30 21:32:06 by armartir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	*mutate_token(t_minishell *shell, char *token)
@@ -17,10 +29,9 @@ char	*mutate_token(t_minishell *shell, char *token)
 	return (token);
 }
 
-void	mutate_tokens(t_minishell *shell, t_token *token, char ***tokens)
+void	mutate_tokens(t_minishell *shell, char ***tokens)
 {
 	size_t	i;
-	char	*temp;
 	char	**new_tokens;
 	char	**double_temp;
 

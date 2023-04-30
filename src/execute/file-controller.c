@@ -1,6 +1,18 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   file-controller.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/30 21:24:09 by armartir          #+#    #+#             */
+/*   Updated: 2023/04/30 21:30:45 by armartir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
-void	file_controller(t_minishell *shell, t_token *token, int type, int fd)
+void	file_controller(t_token *token, int type, int fd)
 {
 	if (type == RDR_INPUT || type == RDR_HERE_DOC)
 	{
@@ -20,13 +32,12 @@ int	stdio_mutate(t_minishell *shell, t_token *token, char *redirect, int type)
 {
 	int	fd;
 	int	io;
-	DIR	*dir;
 
 	io = 0;
 	fd = stdio_check(shell, token, redirect, type);
 	if (fd < 0)
 	{
-		shell->status = errno;
+		shell->status = 1;
 		return (1);
 	}
 	if (redirect[0] == '>' && check_file(shell, redirect, F_OK) != EXIST)
@@ -34,7 +45,7 @@ int	stdio_mutate(t_minishell *shell, t_token *token, char *redirect, int type)
 		shell->status = E_ISDIR;
 		return (1);
 	}
-	file_controller(shell, token, type, fd);
+	file_controller(token, type, fd);
 	return (1);
 }
 
@@ -48,7 +59,7 @@ int	stdio_check(t_minishell *shell, t_token *token, char *redirect, int type)
 	if (type == RDR_INPUT)
 		fd = open(redirect, O_RDONLY);
 	else if (type == RDR_HERE_DOC)
-		here_doc = open_here_doc_fd(shell, token, &fd);
+		here_doc = open_here_doc_fd(token, &fd);
 	else if (type == RDR_OUTPUT)
 		fd = open(redirect, O_WRONLY | O_CREAT | O_TRUNC, 0755);
 	else if (type == RDR_APPEND)
@@ -64,11 +75,11 @@ int	stdio_check(t_minishell *shell, t_token *token, char *redirect, int type)
 	return (fd);
 }
 
-char	*open_here_doc_fd(t_minishell *shell, t_token *token, int *fd)
+char	*open_here_doc_fd(t_token *token, int *fd)
 {
 	char	*here_doc;
 
-	here_doc = concat_heredoc(shell->execute, token);
+	here_doc = concat_heredoc(token);
 	if (!here_doc)
 		force_quit(ERNOMEM);
 	*fd = open(here_doc, O_RDONLY);

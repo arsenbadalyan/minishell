@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   built-in-execution.c                               :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/30 21:24:27 by armartir          #+#    #+#             */
+/*   Updated: 2023/04/30 21:24:28 by armartir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	execute_token(t_minishell *shell, t_token *token)
@@ -10,7 +22,6 @@ int	execute_token(t_minishell *shell, t_token *token)
 		exit_status = execute_builtin(shell, token);
 	else
 		exit_status = execve(token->path, token->tokens, shell->envp);
-	exit_status = WEXITSTATUS(exit_status);
 	return (exit_status);
 }
 
@@ -43,15 +54,15 @@ int	execute_builtin(t_minishell *shell, t_token *token)
 		free_single((void *)&result);
 	}
 	if (token->is_built_in == BIN_PWD)
-		_pwd(token);
+		return (_pwd(token));
 	if (token->is_built_in == BIN_CD)
-		_cd(shell, token->tokens);
+		return (_cd(shell, token->tokens));
 	if (token->is_built_in == BIN_ENV)
-		_env(shell, 0);
+		return (_env(shell, 0));
 	if (token->is_built_in == BIN_EXPORT)
-		_export(shell, token->tokens);
+		return (_export(shell, token->tokens, NULL));
 	if (token->is_built_in == BIN_UNSET)
-		_unset(shell, token->tokens);
+		return (_unset(shell, token->tokens));
 	if (token->is_built_in == BIN_EXIT)
 		mini_exit(shell, token->tokens);
 	return (0);

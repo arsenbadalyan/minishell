@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 18:17:22 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/30 19:16:26 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 21:28:24 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	exe_here_doc(t_minishell *shell, char *limiter)
 	char	*real_name;
 	char	*tmp;
 
-	tmp = ft_itoa(shell->execute->HEREDOC_OUT++);
+	tmp = ft_itoa(shell->execute->heredoc_out++);
 	if (!tmp)
 		force_quit(ERNOMEM);
 	real_name = ft_strjoin(HERE_DOC, tmp);
@@ -93,7 +93,7 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 	write(fd, "\n", 1);
 }
 
-char	*concat_heredoc(t_exc_line *exec, t_token *token)
+char	*concat_heredoc(t_token *token)
 {
 	int		current_state;
 	char	*str_cur_state;

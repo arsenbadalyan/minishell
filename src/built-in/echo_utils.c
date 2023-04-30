@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   echo_utils.c                                       :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/30 21:24:30 by armartir          #+#    #+#             */
+/*   Updated: 2023/04/30 21:33:57 by armartir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char	**copy_echo_lines(char **cmd_line)
@@ -39,11 +51,10 @@ char	**echo_lines_trim(t_minishell *shell, char **cmd_line)
 	return (cmd_line);
 }
 
-char	**open_echo_wildcards(t_minishell *shell, char **cmd_line, size_t i)
+char	**open_echo_wildcards(char **cmd_line, size_t i)
 {
 	char	**wildcards;
 	char	**new_cmd_line;
-	char	*temp;
 
 	new_cmd_line = NULL;
 	while (cmd_line[i])
@@ -64,8 +75,7 @@ char	**open_echo_wildcards(t_minishell *shell, char **cmd_line, size_t i)
 	return (new_cmd_line);
 }
 
-char	*concat_echo_lines(t_minishell *shell, char **cmd_line,
-	size_t i, int has_nl)
+char	*concat_echo_lines(char **cmd_line, size_t i, int has_nl)
 {
 	char	*new_line;
 	char	*temp_line;

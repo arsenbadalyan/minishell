@@ -60,12 +60,11 @@ int	check_equal(char *cmd)
 	return (0);
 }
 
-void	_export(t_minishell *shell, char **cmd)
+int	_export(t_minishell *shell, char **cmd, char *value)
 {
 	size_t	i;
 	size_t	j;
 	char	*var;
-	char	*value;
 
 	if (get_2d_array_length((void **)cmd) < 2)
 		return (_env(shell, 1));
@@ -87,4 +86,5 @@ void	_export(t_minishell *shell, char **cmd)
 			force_quit(12);
 		_export_exe(shell, var, value, check_equal(cmd[i]));
 	}
+	return (shell->status);
 }

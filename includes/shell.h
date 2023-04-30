@@ -18,26 +18,26 @@
 // child to get how many childs have one parent
 
 typedef struct s_minishell {
-	struct s_exc_line *execute;
-	struct s_local_env *local_env;
-	char *user_input;
-	char **envp;
-	int status;
-	int exit_code;
-} t_minishell;
+	struct s_exc_line	*execute;
+	struct s_local_env	*local_env;
+	char				*user_input;
+	char				**envp;
+	int					status;
+	int					exit_code;
+}	t_minishell;
 
 typedef struct s_exc_line {
 	struct s_token	*cmd_list;
 	size_t			clist_len;
 	char			**tokens;
-	int				STDIN;
-	int				STDOUT;
-	int				HEREDOC_IN;
-	int				HEREDOC_OUT;
-	int				HEREDOC_CUR;
-	int				HEREDOC_SKIP;
-	int				PIPE_IN;
-	int				RDR_OUT;
+	int				std_in;
+	int				std_out;
+	int				heredoc_in;
+	int				heredoc_out;
+	int				heredoc_cur;
+	int				heredoc_skip;
+	int				pipe_in;
+	int				rdr_out;
 	size_t			command_wait_list;
 	int				skip_phs;
 	int				skip_mode;

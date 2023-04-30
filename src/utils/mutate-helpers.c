@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/30 19:08:18 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/30 19:08:59 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 21:26:39 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,15 +26,16 @@ char	**init_2d_array(void)
 char	**mutate_wildcards(t_minishell *shell,
 	char **new_tokens, char *mdf_token)
 {
-	char	**temp;
 	char	**wildcards;
 
+	(void)shell;
 	wildcards = wildcard(mdf_token);
 	if (!wildcards || (!wildcards[0] && !free_double((void *)&wildcards)))
 	{
 		new_tokens = push_to_double_array(new_tokens, mdf_token);
 		return (new_tokens);
 	}
+	free_single((void *)&mdf_token);
 	if (!new_tokens)
 	{
 		new_tokens = (char **)malloc(sizeof(char *));

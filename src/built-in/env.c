@@ -44,7 +44,7 @@ void	print_export(char *env)
 	write (1, "\n", 1);
 }
 
-void	_env(t_minishell *shell, int add)
+int	_env(t_minishell *shell, int add)
 {
 	size_t	i;
 	char	*tmp;
@@ -64,4 +64,5 @@ void	_env(t_minishell *shell, int add)
 			print_env(shell->envp[i]);
 		i++;
 	}
+	return (0);
 }

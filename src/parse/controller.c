@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   controller.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsen <arsen@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/02 16:42:43 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/30 19:34:52 by arsen            ###   ########.fr       */
+/*   Updated: 2023/04/30 21:27:22 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,12 @@
 
 void	handle_heredoc_exit_code(int signum)
 {
+	(void)signum;
 	write(1, "\n", 1);
 	exit(1);
 }
 
-int	heredoc_process_control(t_minishell *shell, char *cmd_line)
+int	heredoc_process_control(t_minishell *shell)
 {
 	pid_t	pid;
 

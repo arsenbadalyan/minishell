@@ -20,7 +20,7 @@ int	_pwd(t_token *token)
 	{
 		ft_putstr_fd(cwd, token->stdout);
 		ft_putstr_fd("\n", token->stdout);
-		return (0);
+		return (1);
 	}
-	return (1);
+	return (0);
 }

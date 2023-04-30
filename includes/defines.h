@@ -18,7 +18,7 @@
 # define SHELL_NAME_CONSOLE "minishell"
 # define WHITE_SPACE " \t\n"
 # define HERE_DOC "/tmp/.minishell_here_doc_"
-# define ECHO_BRAKEPOINT "@#%^$*}]{+=? \n\t.,-[|/>'<;:~\\\""
+# define BR "@#%^$*}]{+=? \n\t.,-[|/>'<;:~\\\""
 # define METASYMBOLS_ALL "><|&)( \t\n"
 # define SEPARATORS_ALL "(&<|>)"
 # define SINGLE_SEPARATORS "<|>"

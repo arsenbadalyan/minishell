@@ -59,8 +59,8 @@ int	_cd_check_error(t_minishell *shell, char *cmd)
 		return ((write_exception(shell, 2, 1, error)
 				&& free_single((void *)&error)) + 1);
 	if (access(cmd, X_OK) == -1)
-		return (write_exception(shell, EPDEN, 1, error)
-			&& free_single((void *)&error) + 1);
+		return ((write_exception(shell, EPDEN, 1, error)
+				&& free_single((void *)&error)) + 1);
 	free_single((void *)&error);
 	return (0);
 }
@@ -83,7 +83,7 @@ int	_cd(t_minishell *shell, char **cmd_line)
 	else
 		cmd = cmd_line[1];
 	error = _cd_check_error(shell, cmd);
-	if (error != 0)
+	if (error)
 		return (error);
 	return (_cd_utils(shell, cmd, cmd_line));
 }

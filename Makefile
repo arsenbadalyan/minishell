@@ -1,8 +1,7 @@
 # Main Variables
 NAME     = minishell
 GCC      = gcc
-# CFLAGS   = -Wall -Wextra -Werror
-CFLAGS   =
+CFLAGS   = -Wall -Wextra -Werror
 RM       = rm -rf
 OUTPUT   = ./$(NAME)
 LIBS     = -I./includes/ -I./readline/include

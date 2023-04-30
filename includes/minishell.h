@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsen <arsen@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/03/25 20:07:24 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/30 19:20:05 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/30 21:31:55 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 void	print_header(void);
 
 // Work with readline
-void read_shell(t_minishell *shell, char *user_input, char *input_cpy);
+void	read_shell(t_minishell *shell, char *user_input, char *input_cpy);
 
 // Parse Checkers
 int		check_cmd_line(t_minishell *shell, char *line,
@@ -62,31 +62,31 @@ void	cut_part(char *line, char ***cmds, int *xyz);
 int		get_cmds_size(char *line, int sg_quote, int db_quote);
 
 // EXECUTION
-void execution_management(t_minishell *shell, size_t cmd_index);
-void continue_execution(t_minishell *shell, size_t *cmd_index);
-void execution_controller(t_minishell *shell, size_t *cmd_index);
-size_t command_execution(t_minishell *shell, size_t *cmd_index);
-void start_execution(t_minishell *shell, size_t cmd_index);
-void exe_md(t_minishell *shell, size_t *cmd_index, int *l_in, int *l_out);
-void finish_execution(t_minishell *shell, size_t cmd_index);
-int check_if_last_command(t_minishell *shell, t_token *token, int is_last);
-void child_process_run(t_minishell *shell, t_token *token, int pipe_fd[2]);
-void commands_skip_execution(t_minishell *shell, size_t *cmd_index);
-void control_new_command_io(t_minishell *shell, t_token *token);
-void control_command_input(t_minishell *shell, t_token *token);
-void control_command_output(t_minishell *shell, t_token *token);
-void pipe_command(t_minishell *shell, t_token *token, int is_last);
-void mutate_tokens(t_minishell *shell, t_token *token, char ***tokens);
-int tr_echo(char ***tokens);
-char **mutate_wildcards(t_minishell *shell, char **new_tokens, char *mdf_token);
+void	execution_management(t_minishell *shell, size_t cmd_index);
+void	continue_execution(t_minishell *shell, size_t *cmd_index);
+void	execution_controller(t_minishell *shell, size_t *cmd_index);
+size_t	command_execution(t_minishell *shell, size_t *cmd_index);
+void	start_execution(t_minishell *shell, size_t cmd_index);
+void	exe_md(t_minishell *shell, size_t *cmd_index, int *l_in, int *l_out);
+void	finish_execution(t_minishell *shell);
+int		check_if_last_command(t_minishell *shell, t_token *token, int is_last);
+void	child_process_run(t_minishell *shell, t_token *token, int pipe_fd[2]);
+void	commands_skip_execution(t_minishell *shell, size_t *cmd_index);
+void	control_new_command_io(t_minishell *shell, t_token *token);
+void	control_command_input(t_minishell *shell, t_token *token);
+void	control_command_output(t_minishell *shell, t_token *token);
+void	pipe_command(t_minishell *shell, t_token *token, int is_last);
+void	mutate_tokens(t_minishell *shell, char ***tokens);
+int		tr_echo(char ***tokens);
+char	**mutate_wildcards(t_minishell *shell,
+			char **new_tokens, char *mdf_token);
 
 // Redirect mutation
 void	mutate_redirects(t_minishell *shell, t_token *token, char ***redirects);
 int		redirect_manipulation(t_minishell *shell, t_token *token,
 			char **redirect);
 size_t	get_redirect_type(char **redirect, int *type);
-int		open_redirect_wildcards(t_minishell *shell, t_token *token,
-			char **redirect, int skip);
+int		open_redirect_wildcards(t_minishell *shell, char **redirect, int skip);
 
 // BUILT-IN EXECUTION
 int		execute_token(t_minishell *shell, t_token *token);
@@ -97,7 +97,7 @@ int		execute_builtin(t_minishell *shell, t_token *token);
 void	cmd_split(t_minishell *shell, t_token *cmd);
 void	count_split_size(t_token *token, char *str);
 void	skip_word(char *str, size_t *i, size_t *j);
-void	fill_cmd_list_token(t_minishell *shell, t_token *cmd);
+void	fill_cmd_list_token(t_token *cmd);
 void	cut_quotes(char *line, char ***cmds, size_t *xyz, size_t *quote_size);
 
 // Finding path of command
@@ -107,13 +107,13 @@ char	*exec_join_check(char *path, char *command);
 char	*standard_command_check(t_minishell *shell, char *command);
 
 // File Descriptors management
-void	file_controller(t_minishell *shell, t_token *token, int type, int fd);
+void	file_controller(t_token *token, int type, int fd);
 int		stdio_mutate(t_minishell *shell, t_token *token,
 			char *redirect, int type);
 int		stdio_check(t_minishell *shell, t_token *token,
 			char *redirect, int type);
 int		check_file(t_minishell *shell, char *file, int check_flags);
-char	*open_here_doc_fd(t_minishell *shell, t_token *token, int *fd);
+char	*open_here_doc_fd(t_token *token, int *fd);
 
 // Controllers
 int		controller(t_minishell *shell, char *user_input);
@@ -121,12 +121,12 @@ void	here_doc_controller(t_minishell *shell, char *cmd_line);
 int		quote_controller(t_minishell *shell, char *line);
 
 // here_doc execution (<<)
-int heredoc_process_control(t_minishell *shell, char *cmd_line);
-int execute_heredoc(t_minishell *shell, char *cmd, size_t i);
-void exe_here_doc(t_minishell *shell, char *limiter);
+int		heredoc_process_control(t_minishell *shell);
+int		execute_heredoc(t_minishell *shell, char *cmd, size_t i);
+void	exe_here_doc(t_minishell *shell, char *limiter);
 void	wait_limiter(t_minishell *shell, char *limiter, int fd);
 void	remove_heredoc(t_minishell *shell);
-char	*concat_heredoc(t_exc_line *exec, t_token *token);
+char	*concat_heredoc(t_token *token);
 void	write_variable(t_minishell *shell, char *tmp, int fd);
 int		get_heredoc_count(t_minishell *shell);
 
@@ -134,7 +134,7 @@ int		get_heredoc_count(t_minishell *shell);
 void	*free_single(void **addr);
 void	*free_double(void ***addr);
 void	*free_token(t_minishell *shell, t_token *token);
-void *free_command_list(t_minishell *shell);
+void	*free_command_list(t_minishell *shell);
 
 // Utils
 int		check_slice(char *line, char *SINGLE, char *DOUBLE);

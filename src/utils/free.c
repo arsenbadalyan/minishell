@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: arsen <arsen@student.42.fr>                +#+  +:+       +#+        */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:25:52 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/30 20:52:24 by arsen            ###   ########.fr       */
+/*   Updated: 2023/04/30 21:26:19 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,7 @@ void	*free_double(void ***addr)
 
 void	*free_token(t_minishell *shell, t_token *token)
 {
+	(void)shell;
 	free_single((void *)&token->cmd);
 	free_single((void *)&token->path);
 	free_double((void *)&token->tokens);
@@ -48,12 +49,12 @@ void	*free_token(t_minishell *shell, t_token *token)
 	return (NULL);
 }
 
-void *free_command_list(t_minishell *shell)
+void	*free_command_list(t_minishell *shell)
 {
-	size_t i;
+	size_t	i;
 
 	i = 0;
-	while(i < shell->execute->clist_len)
+	while (i < shell->execute->clist_len)
 	{
 		free_token(shell, &shell->execute->cmd_list[i]);
 		i++;

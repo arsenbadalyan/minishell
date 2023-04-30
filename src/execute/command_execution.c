@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   command_execution.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/30 21:24:20 by armartir          #+#    #+#             */
+/*   Updated: 2023/04/30 21:29:22 by armartir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 size_t	command_execution(t_minishell *shell, size_t *cmd_index)
@@ -23,7 +35,7 @@ size_t	command_execution(t_minishell *shell, size_t *cmd_index)
 			exe_md(shell, cmd_index, &last_stdin, &last_stdout);
 		(*cmd_index)++;
 	}
-	finish_execution(shell, *cmd_index);
+	finish_execution(shell);
 	return (0);
 }
 
@@ -42,11 +54,27 @@ void	pipe_command(t_minishell *shell, t_token *token, int is_last)
 		token->stdin = dup2(pipe_fd[0], token->stdin);
 		if (token->stdin == -1)
 			print_error(shell, "stdin");
-		shell->execute->PIPE_IN = token->stdin;
+		shell->execute->pipe_in = token->stdin;
 		close(pipe_fd[0]);
 	}
 	else
 		child_process_run(shell, token, pipe_fd);
+}
+
+void	catch_child_process_signal(t_minishell *shell)
+{
+	if (WTERMSIG(shell->status) == 2)
+	{
+		ft_putstr_fd("\n", 1);
+		shell->status = 130;
+	}
+	else if (WTERMSIG(shell->status) == 3)
+	{
+		ft_putstr_fd("Quit: 3\n", 1);
+		shell->status = 131;
+	}
+	else
+		shell->status = WEXITSTATUS(shell->status);
 }
 
 int	check_if_last_command(t_minishell *shell, t_token *token, int is_last)
@@ -65,14 +93,12 @@ int	check_if_last_command(t_minishell *shell, t_token *token, int is_last)
 	{
 		pid = fork();
 		if (pid == -1)
-		{
-			print_error(shell, "fork");
-			return (1);
-		}
+			return (print_error(shell, "fork"));
 		if (!pid)
 			exit(execute_token(shell, token));
 		else
 			waitpid(pid, &shell->status, 0);
+		catch_child_process_signal(shell);
 		return (1);
 	}
 	return (0);
@@ -81,7 +107,7 @@ int	check_if_last_command(t_minishell *shell, t_token *token, int is_last)
 void	child_process_run(t_minishell *shell, t_token *token, int pipe_fd[2])
 {
 	close(pipe_fd[0]);
-	if (!shell->execute->RDR_OUT)
+	if (!shell->execute->rdr_out)
 	{
 		if (dup2(pipe_fd[1], token->stdout) == -1)
 			print_error(shell, "stdout");

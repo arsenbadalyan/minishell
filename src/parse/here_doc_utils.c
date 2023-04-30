@@ -61,10 +61,10 @@ void	remove_heredoc(t_minishell *shell)
 	char	*real_name;
 	char	*del_num;
 
-	while (shell->execute->HEREDOC_OUT > shell->execute->HEREDOC_IN)
+	while (shell->execute->heredoc_out > shell->execute->heredoc_in)
 	{
-		shell->execute->HEREDOC_OUT--;
-		del_num = ft_itoa(shell->execute->HEREDOC_OUT);
+		shell->execute->heredoc_out--;
+		del_num = ft_itoa(shell->execute->heredoc_out);
 		if (!del_num)
 			force_quit(ENOMEM);
 		real_name = ft_strjoin(HERE_DOC, del_num);

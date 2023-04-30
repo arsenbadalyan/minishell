@@ -1,11 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   mutate-redirects.c                                 :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/30 21:24:05 by armartir          #+#    #+#             */
+/*   Updated: 2023/04/30 21:31:36 by armartir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	mutate_redirects(t_minishell *shell, t_token *token, char ***redirects)
 {
 	size_t	i;
 	char	*temp;
-	size_t	skip;
-	int		rdr_type;
 
 	i = 0;
 	while ((*redirects)[i])
@@ -44,7 +54,7 @@ int	redirect_manipulation(t_minishell *shell, t_token *token, char **redirect)
 	if (type == RDR_HERE_DOC
 		&& stdio_mutate(shell, token, (*redirect) + skip, type))
 		return (shell->status);
-	if (open_redirect_wildcards(shell, token, redirect, skip))
+	if (open_redirect_wildcards(shell, redirect, skip))
 		return (shell->status);
 	if (ft_strchr(REDIRECTS, (*redirect)[0]))
 		stdio_mutate(shell, token, (*redirect) + skip, type);
@@ -72,8 +82,7 @@ size_t	get_redirect_type(char **redirect, int *type)
 	return (i);
 }
 
-int	open_redirect_wildcards(t_minishell *shell, t_token *token,
-	char **redirect, int skip)
+int	open_redirect_wildcards(t_minishell *shell, char **redirect, int skip)
 {
 	char	**wildcards;
 	size_t	wildcard_size;

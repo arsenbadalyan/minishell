@@ -33,12 +33,12 @@ t_exc_line	*init_exc_line(void)
 		force_quit(12);
 	exc_line->cmd_list = NULL;
 	exc_line->clist_len = 0;
-	exc_line->STDIN = STDIN_FILENO;
-	exc_line->STDOUT = STDOUT_FILENO;
-	exc_line->HEREDOC_IN = 0;
-	exc_line->HEREDOC_OUT = 0;
-	exc_line->HEREDOC_CUR = 0;
-	exc_line->HEREDOC_SKIP = 0;
+	exc_line->std_in = STDIN_FILENO;
+	exc_line->std_out = STDOUT_FILENO;
+	exc_line->heredoc_in = 0;
+	exc_line->heredoc_out = 0;
+	exc_line->heredoc_cur = 0;
+	exc_line->heredoc_skip = 0;
 	return (exc_line);
 }
 

@@ -33,8 +33,8 @@ size_t	get_heredoc_sum(t_minishell *shell, char *str)
 	if (sum)
 	{
 		i = sum;
-		sum = shell->execute->HEREDOC_SKIP;
-		shell->execute->HEREDOC_SKIP += i;
+		sum = shell->execute->heredoc_skip;
+		shell->execute->heredoc_skip += i;
 	}
 	return (sum);
 }

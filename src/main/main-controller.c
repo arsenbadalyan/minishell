@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main-controller.c                                  :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/30 21:23:58 by armartir          #+#    #+#             */
+/*   Updated: 2023/04/30 21:27:48 by armartir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 int	controller(t_minishell *shell, char *user_input)
@@ -12,10 +24,10 @@ int	controller(t_minishell *shell, char *user_input)
 	shell->status = check_cmd_line(shell, shell->user_input, 0, 0);
 	if (shell->status && !free_single((void *)&shell->user_input))
 		return (shell->status);
-	if (heredoc_process_control(shell, shell->user_input)
+	if (heredoc_process_control(shell)
 		&& !free_single((void *)&shell->user_input))
 		return (shell->status);
-	shell->execute->HEREDOC_OUT = get_heredoc_count(shell);
+	shell->execute->heredoc_out = get_heredoc_count(shell);
 	signal(SIGINT, SIG_IGN);
 	signal(SIGQUIT, SIG_IGN);
 	shell->execute->tokens = start_parse_cmds(shell->user_input, 0, 0);

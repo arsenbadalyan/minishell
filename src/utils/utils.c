@@ -57,6 +57,7 @@ int	check_valid_export(t_minishell *shell, char *cmd, char *order)
 		if (ft_strchr("!&|;()`><", cmd[i++]))
 			return ((write_exception(shell, 256, 1, error)
 					&& free_single((void *)&error)) + 1);
+	free_single((void *)&error);
 	return (0);
 }
 

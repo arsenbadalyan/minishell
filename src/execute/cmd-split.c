@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   cmd-split.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2023/04/30 21:24:24 by armartir          #+#    #+#             */
+/*   Updated: 2023/04/30 21:32:01 by armartir         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 void	cmd_split(t_minishell *shell, t_token *cmd)
@@ -9,11 +21,11 @@ void	cmd_split(t_minishell *shell, t_token *cmd)
 	cmd->redirects = (char **)malloc(sizeof(char *) * cmd->size_rdr);
 	cmd->tokens[cmd->size_cmd - 1] = NULL;
 	cmd->redirects[cmd->size_rdr - 1] = NULL;
-	fill_cmd_list_token(shell, cmd);
+	fill_cmd_list_token(cmd);
 	mutate_redirects(shell, cmd, &cmd->redirects);
 	if (!shell->status && cmd->tokens[0])
 	{
-		mutate_tokens(shell, cmd, &cmd->tokens);
+		mutate_tokens(shell, &cmd->tokens);
 		check_builtin(cmd, cmd->tokens[0]);
 		if (cmd->is_built_in != -1)
 			return ;
@@ -29,7 +41,7 @@ void	cmd_split(t_minishell *shell, t_token *cmd)
 	}
 }
 
-void	fill_cmd_list_token(t_minishell *shell, t_token *cmd)
+void	fill_cmd_list_token(t_token *cmd)
 {
 	size_t	xyz[5];
 	int		quotes[2];
