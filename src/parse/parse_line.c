@@ -5,9 +5,7 @@ char **start_parse_cmds(char *line, int sg_quote, int db_quote)
 	int xyz[3];
 	char **cmds;
 	
-	xyz[0] = 0;
-	xyz[1] = 0;
-	xyz[2] = 0;
+	ft_bzero((void *)xyz, sizeof(int) * 3);
 	cmds = malloc(sizeof(char *) * get_cmds_size(line, 0, 0) + 1);
 	while(line[xyz[0]])
 	{
@@ -17,12 +15,6 @@ char **start_parse_cmds(char *line, int sg_quote, int db_quote)
 		cut_part(line, &cmds, xyz);
 	}
 	cmds[xyz[2]] = NULL;
-	// int i = 0;
-	// while(cmds[i])
-	// {
-	// 	printf("%s|\n", cmds[i]);
-	// 	i++;
-	// }
 	return (cmds);
 }
 

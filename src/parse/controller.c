@@ -14,13 +14,31 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 
+void handle_heredoc_exit_code()
+{
+	exit(1);
+}
+
+int heredoc_process_control(t_minishell *shell, char *cmd_line)
+{
+	pid_t pid;
+
+	pid = fork();
+	if (pid == 0)
+		here_doc_controller(shell, shell->user_input);
+	else
+		waitpid(pid, &shell->status, 0);
+	shell->status = WEXITSTATUS(shell->status);
+	return (shell->status);
+}
+
 void	here_doc_controller(t_minishell *shell, char *cmd_line)
 {
 	size_t	i;
 	int		quotes[2];
 
 	i = 0;
-	signal(SIGINT, exit);
+	signal(SIGINT, handle_heredoc_exit_code);
 	signal(SIGQUIT, SIG_IGN);
 	quotes[0] = 0;
 	quotes[1] = 0;

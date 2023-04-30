@@ -1,5 +1,16 @@
 #include "minishell.h"
 
+char **init_2d_array(void)
+{
+    char **arr;
+
+    arr = (char **)malloc(sizeof(char *));
+    if(!arr)
+        force_quit(ENOMEM);
+    arr[0] = NULL;
+    return (arr);
+}
+
 char **mutate_wildcards(t_minishell *shell, char **new_tokens, char *mdf_token)
 {
     char **temp;
@@ -28,12 +39,7 @@ char **push_to_double_array(char **arr, char *new_line)
     size_t size;
 
     if (!arr)
-    {
-        arr = (char **)malloc(sizeof(char *));
-        if (!arr)
-            force_quit(ENOMEM);
-        arr[0] = NULL;
-    }
+        arr = init_2d_array();
     size = get_2d_array_length((void **)arr) + 2;
     new_arr = (char **)malloc(sizeof(char *) * size);
     if (!new_arr)
@@ -56,6 +62,8 @@ char **concat_double_arrays(char **arr_1, char **arr_2)
     size_t size_2;
     char **new_arr;
 
+    if(!arr_1)
+        arr_1 = init_2d_array();
     size_1 = get_2d_array_length((void **)arr_1);
     size_2 = get_2d_array_length((void **)arr_2);
     new_arr = (char **)malloc(sizeof(char *) * (size_1 + size_2 + 1));

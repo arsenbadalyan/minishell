@@ -23,29 +23,55 @@ char *_echo(t_minishell *shell, char **cmd_line)
 		return (ft_strdup("\n"));
 	if (!cmd_line[1] && ft_strcmp(cmd_line[1], "-n") && !cmd_line[2])
 		return (ft_strdup(""));
-	result = join_lines(++cmd_line, 0, TRUE, NULL);
-	temp_res = result;
-	result = modify_line(shell, result, FALSE, quotes);
-	free_single((void *)&temp_res);
+	result = join_lines(shell, ++cmd_line, TRUE, NULL);
 	return (result);
 }
 
-char *join_lines(char **cmd_line, size_t i, int has_new_line, char *temp_line)
+char *join_lines(t_minishell *shell, char **cmd_line, int has_new_line, char *temp_line)
 {
 	char *new_line;
+	char *temp;
+	int quotes[2];
+	size_t i;
+	char **new_cmd_line;
+	char **wildcards;
 
 	new_line = ft_strdup("");
-	while (*cmd_line && !ft_strcmp(*cmd_line, "-n") && ++cmd_line)
-		has_new_line = FALSE;
+	i = 0;
 	while (cmd_line[i])
 	{
-		
+		ft_bzero((void *)quotes, sizeof(int) * 2);
+		temp = cmd_line[i];
+		cmd_line[i] = modify_line(shell, cmd_line[i], 0, quotes);
+		i++;
+	}
+	while(*cmd_line && !ft_strcmp(*cmd_line, "-n") && ++cmd_line)
+		has_new_line = FALSE;
+	
+	new_cmd_line = NULL;
+	i = 0;
+	while(cmd_line[i])
+	{
+		wildcards = wildcard(cmd_line[i]);
+		if(wildcards)
+			new_cmd_line = concat_double_arrays(new_cmd_line, wildcards);
+		else
+		{
+			ft_bzero((void *)quotes, sizeof(int) * 2);
+			temp = modify_line(shell, cmd_line[i], 0, quotes);
+			new_cmd_line = push_to_double_array(new_cmd_line, temp);
+		}
+		i++;
+	}
+	i = 0;
+	while (new_cmd_line[i])
+	{
 		temp_line = new_line;
-		new_line = ft_strjoin(new_line, cmd_line[i]);
+		new_line = ft_strjoin(new_line, new_cmd_line[i]);
 		if (!free_single((void *)&temp_line) && !new_line)
 			force_quit(ERNOMEM);
 		temp_line = new_line;
-		if (cmd_line[i + 1])
+		if (new_cmd_line[i + 1])
 			new_line = ft_strjoin(new_line, " ");
 		else if(has_new_line)
 		{
@@ -117,7 +143,7 @@ void get_env_for_echo(t_minishell *shell, char *var, char **new_line)
 
 	if(!ft_strcmp(var, "?"))
 	{
-		env = ft_itoa(shell->status);
+		env = ft_itoa(shell->exit_code);
 		temp_line = *new_line;
 		*new_line = ft_strjoin(*new_line, env);
 		if (!free_single((void *)&temp_line) && !free_single((void *)&env) && !(*new_line))

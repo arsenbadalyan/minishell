@@ -11,15 +11,16 @@
 /* ************************************************************************** */
 #include "minishell.h"
 
-void execution_management(t_minishell *shell, size_t cmd_index)
+void	execution_management(t_minishell *shell, size_t cmd_index)
 {
-	t_token *current_token;
+	t_token	*current_token;
 	pid_t	pid;
 
-	if(cmd_index >= shell->execute->clist_len)
+	if (cmd_index >= shell->execute->clist_len)
 		return;
 	current_token = &shell->execute->cmd_list[cmd_index];
-	if (current_token->token_mode == PH_OPEN && !shell->execute->skip_mode && !shell->execute->sub_shell_mode)
+	if (current_token->token_mode == PH_OPEN && !shell->execute->skip_mode
+		&& !shell->execute->sub_shell_mode)
 	{
 		shell->execute->sub_shell_mode = TRUE;
 		pid = fork();
@@ -33,53 +34,66 @@ void execution_management(t_minishell *shell, size_t cmd_index)
 		else
 			execution_management(shell, cmd_index + 1);
 	}
-	else if (current_token->token_mode == PH_OPEN)
+	else
+		continue_execution(shell, &cmd_index);
+}
+
+void	continue_execution(t_minishell *shell, size_t *cmd_index)
+{
+	t_token	*current_token;
+
+	current_token = &shell->execute->cmd_list[(*cmd_index)];
+	if (current_token->token_mode == PH_OPEN)
 	{
 		shell->execute->skip_phs++;
-		execution_management(shell, cmd_index + 1);
+		execution_management(shell, (*cmd_index) + 1);
 	}
 	else if (current_token->token_mode == PH_CLOSE && !shell->execute->skip_phs)
 		exit(shell->status);
 	else if (current_token->token_mode == PH_CLOSE)
 	{
 		shell->execute->skip_phs--;
-		execution_management(shell, cmd_index + 1);
+		execution_management(shell, (*cmd_index) + 1);
 	}
 	else
-		execution_controller(shell, &cmd_index);
+		execution_controller(shell, cmd_index);
 }
 
-void execution_controller(t_minishell *shell, size_t *cmd_index)
+void	execution_controller(t_minishell *shell, size_t *cmd_index)
 {
-	t_token *current_token;
+	t_token	*current_token;
 
 	current_token = &shell->execute->cmd_list[(*cmd_index)];
-	if (!shell->execute->skip_mode || shell->execute->skip_mode == (shell->execute->skip_phs + 1))
+	if (!shell->execute->skip_mode
+		|| shell->execute->skip_mode == (shell->execute->skip_phs + 1))
 	{
-		if ((!shell->status && current_token->token_mode == OR) || (shell->status && current_token->token_mode == AND))
+		if ((!shell->status && current_token->token_mode == OR)
+			|| (shell->status && current_token->token_mode == AND))
 			shell->execute->skip_mode = (shell->execute->skip_phs + 1);
-		else if ((!shell->status && current_token->token_mode == AND) || (shell->status && current_token->token_mode == OR))
+		else if ((!shell->status && current_token->token_mode == AND)
+			|| (shell->status && current_token->token_mode == OR))
 			shell->execute->skip_mode = FALSE;
 	}
-	if (shell->execute->skip_mode || current_token->token_mode == OR || current_token->token_mode == AND)
-		execution_management(shell, (*cmd_index) + 1); 
-	else if(current_token->token_mode == CMD)
+	if (shell->execute->skip_mode || current_token->token_mode == OR
+		|| current_token->token_mode == AND)
+		execution_management(shell, (*cmd_index) + 1);
+	else if (current_token->token_mode == CMD)
 	{
 		command_execution(shell, cmd_index);
 		execution_management(shell, (*cmd_index));
 	}
 }
 
-void commands_skip_execution(t_minishell *shell, size_t *cmd_index)
+void	commands_skip_execution(t_minishell *shell, size_t *cmd_index)
 {
-	t_token *current_token;
-	int parenthesis;
+	t_token	*current_token;
+	int		parenthesis;
 
 	parenthesis = 0;
 	while ((*cmd_index) < shell->execute->clist_len)
 	{
 		current_token = &shell->execute->cmd_list[(*cmd_index)];
-		if(current_token->token_mode == PH_OPEN)
+		if (current_token->token_mode == PH_OPEN)
 			parenthesis++;
 		else if (current_token->token_mode == PH_CLOSE)
 			parenthesis--;

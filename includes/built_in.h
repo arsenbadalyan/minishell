@@ -15,7 +15,7 @@
 
 // echo
 char *_echo(t_minishell *shell, char **cmd_line);
-char *join_lines(char **cmd_line, size_t i, int has_new_line, char *temp_line);
+char *join_lines(t_minishell *shell, char **cmd_line, int has_new_line, char *temp_line);
 char *modify_line(t_minishell *shell, char *line, int hd_mode, int *quotes);
 void get_variable(t_minishell *shell, char **line, char **new_line);
 void get_env_for_echo(t_minishell *shell, char *var, char **new_line);

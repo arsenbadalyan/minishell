@@ -23,6 +23,7 @@ typedef struct s_minishell {
 	char *user_input;
 	char **envp;
 	int status;
+	int exit_code;
 } t_minishell;
 
 typedef struct s_exc_line {

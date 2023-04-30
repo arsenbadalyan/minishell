@@ -23,10 +23,11 @@ int	get_heredoc_count(t_minishell *shell)
 	entry = readdir(dir);
 	while (entry != NULL)
 	{
-		if (ft_strncmp(entry->d_name, ".minishell_here_doc_", 20) == 0)
+		if (!ft_strcmp(entry->d_name, ".minishell_here_doc_"))
 			here_doc_count++;
 		entry = readdir(dir);
 	}
+	closedir(dir);
 	return (here_doc_count);
 }
 

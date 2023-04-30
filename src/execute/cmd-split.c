@@ -39,15 +39,15 @@ void fill_cmd_list_token(t_minishell *shell, t_token *cmd)
 
 	ft_bzero((void *)xyz, sizeof(size_t) * 5);
 	ft_bzero((void *)quotes, sizeof(int) * 2);
-	while(cmd->cmd[xyz[0]])
+	while (cmd->cmd[xyz[0]])
 	{
 		quote_check(&quotes[0], &quotes[1], cmd->cmd[xyz[0]]);
-		if((quotes[0] || quotes[1]) && ++xyz[0] && ++xyz[4])
+		if ((quotes[0] || quotes[1]) && ++xyz[0] && ++xyz[4])
 			continue;
-		if (xyz[4] && ft_strchr(WHITE_SPACE, cmd->cmd[xyz[0]]))
+		if (xyz[4] && ft_strchr(WHITE_SPACE, cmd->cmd[++xyz[0]]))
 			cut_quotes(cmd->cmd, &cmd->tokens, xyz, &xyz[4]);
 		temp = cmd->cmd[xyz[0]];
-		if(!temp)
+		if (!temp)
 			break;
 		skip_word(cmd->cmd, &xyz[0], &xyz[1]);
 		if (ft_strchr(REDIRECTS, temp))
@@ -58,7 +58,6 @@ void fill_cmd_list_token(t_minishell *shell, t_token *cmd)
 	}
 }
 
-
 void count_split_size(t_token *token, char *str)
 {
 	size_t i;
@@ -68,17 +67,19 @@ void count_split_size(t_token *token, char *str)
 	i = 0;
 	is_last_quote = 0;
 	ft_bzero((void *)quotes, sizeof(int) * 2);
-	while(str[i])
+	while (str[i])
 	{
 		quote_check(&quotes[0], &quotes[1], str[i]);
 		if ((quotes[0] || quotes[1] || is_last_quote) && ++i && ++is_last_quote)
 		{
 			if (!quotes[0] && !quotes[1])
 				is_last_quote = 0;
-			if (ft_strchr(WHITE_SPACE, str[i]))
+			if (!is_last_quote && ft_strchr(WHITE_SPACE, str[i]) && ++i)
 				++token->size_cmd;
 			continue;
 		}
+		if (!str[i])
+			break;
 		if (ft_strchr(REDIRECTS, str[i]) && ++token->size_rdr)
 			skip_word(str, &i, NULL);
 		else

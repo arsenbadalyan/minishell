@@ -20,6 +20,7 @@ t_minishell	*init_minishell(void)
     if(!minishell)
         force_quit(12);
     minishell->execute = init_exc_line();
+    minishell->exit_code = 0;
     return (minishell);
 }
 
