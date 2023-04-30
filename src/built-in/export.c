@@ -72,7 +72,7 @@ void	_export(t_minishell *shell, char **cmd)
 	i = 0;
 	while (cmd[++i])
 	{
-		if (check_valid_export(shell, cmd[i]))
+		if (check_valid_export(shell, cmd[i], "export: "))
 			continue ;
 		j = 0;
 		while (cmd[i][j] && cmd[i][j] != '=')
@@ -83,7 +83,6 @@ void	_export(t_minishell *shell, char **cmd)
 		if (!var)
 			force_quit(12);
 		value = get_value(shell, var, cmd[i]);
-		// printf ("%s\n",value);
 		if (!value)
 			force_quit(12);
 		_export_exe(shell, var, value, check_equal(cmd[i]));

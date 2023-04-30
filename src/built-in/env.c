@@ -25,6 +25,7 @@ void	print_env(char *env)
 	}
 	write (1, "\n", 1);
 }
+
 void	_env(t_minishell *shell, int add)
 {
 	size_t	i;

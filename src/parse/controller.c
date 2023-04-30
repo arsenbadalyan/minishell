@@ -45,8 +45,8 @@ void	here_doc_controller(t_minishell *shell, char *cmd_line)
 	while (cmd_line[i])
 	{
 		quote_check(&quotes[0], &quotes[1], cmd_line[i]);
-		if((quotes[0] || quotes[1]) && ++i)
-			continue;
+		if ((quotes[0] || quotes[1]) && ++i)
+			continue ;
 		if (cmd_line[i] == '<' && cmd_line[i + 1] == '<')
 		{
 			i += 2;
@@ -60,22 +60,22 @@ void	here_doc_controller(t_minishell *shell, char *cmd_line)
 	exit (0);
 }
 
-int quote_controller(t_minishell *shell, char *line)
+int	quote_controller(t_minishell *shell, char *line)
 {
-	size_t i;
-	int db_quote;
-	int sg_quote;
+	size_t	i;
+	int		db_quote;
+	int		sg_quote;
 
 	i = 0;
 	db_quote = 0;
 	sg_quote = 0;
-	while(line[i])
+	while (line[i])
 	{
-		if(!quote_check(&sg_quote, &db_quote, line[i]))
+		if (!quote_check(&sg_quote, &db_quote, line[i]))
 			return (write_exception(shell, 130, 130, "(\') or (\")"));
 		i++;
 	}
-	if(db_quote || sg_quote)
+	if (db_quote || sg_quote)
 		return (write_exception(shell, 130, 130, "(\') or (\")"));
 	return (0);
 }

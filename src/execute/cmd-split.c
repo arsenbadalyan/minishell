@@ -78,8 +78,6 @@ void count_split_size(t_token *token, char *str)
 				++token->size_cmd;
 			continue;
 		}
-		if (!str[i])
-			break;
 		if (ft_strchr(REDIRECTS, str[i]) && ++token->size_rdr)
 			skip_word(str, &i, NULL);
 		else
