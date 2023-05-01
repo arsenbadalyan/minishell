@@ -36,7 +36,7 @@ int	check_num(t_minishell *shell, char *str)
 	return (0);
 }
 
-void	mini_exit(t_minishell *shell, char **cmd)
+int	mini_exit(t_minishell *shell, char **cmd)
 {	
 	size_t		i;
 
@@ -54,7 +54,8 @@ void	mini_exit(t_minishell *shell, char **cmd)
 	{
 		write_exception(shell, 257, 1, "exit");
 		shell->status = 1;
-		return ;
+		return (1);
 	}
 	exit(shell->status);
+	return (0);
 }

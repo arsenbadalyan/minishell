@@ -16,12 +16,12 @@ void	cmd_split(t_minishell *shell, t_token *cmd)
 {
 	char	**paths;
 
-	count_split_size(cmd, cmd->cmd);
+	count_split_size(cmd, cmd->cmd, 0);
 	cmd->tokens = (char **)malloc(sizeof(char *) * cmd->size_cmd);
 	cmd->redirects = (char **)malloc(sizeof(char *) * cmd->size_rdr);
+	fill_cmd_list_token(cmd);
 	cmd->tokens[cmd->size_cmd - 1] = NULL;
 	cmd->redirects[cmd->size_rdr - 1] = NULL;
-	fill_cmd_list_token(cmd);
 	mutate_redirects(shell, cmd, &cmd->redirects);
 	if (!shell->status && cmd->tokens[0])
 	{
@@ -34,10 +34,8 @@ void	cmd_split(t_minishell *shell, t_token *cmd)
 		free_double((void *)&paths);
 		if (!cmd->path && ++shell->status)
 			write_exception(shell, ECMDNF, ECMDNF, cmd->tokens[0]);
-		else if (!ft_strlen(cmd->path) && ++shell->status)
-			free_single((void *)&cmd->path);
-		if (shell->status)
-			return ;
+		else if (!ft_strlen(cmd->path) && !free_single((void *)&cmd->path))
+			shell->status = ECMDNF;
 	}
 }
 
@@ -70,13 +68,11 @@ void	fill_cmd_list_token(t_token *cmd)
 	}
 }
 
-void	count_split_size(t_token *token, char *str)
+void	count_split_size(t_token *token, char *str, size_t i)
 {
-	size_t	i;
 	int		quotes[2];
 	int		is_last_quote;
 
-	i = 0;
 	is_last_quote = 0;
 	ft_bzero((void *)quotes, sizeof(int) * 2);
 	while (str[i])
@@ -86,8 +82,10 @@ void	count_split_size(t_token *token, char *str)
 		{
 			if (!quotes[0] && !quotes[1])
 				is_last_quote = 0;
-			if (!is_last_quote && ft_strchr(WHITE_SPACE, str[i]) && ++i)
+			if (!is_last_quote && ft_strchr(WHITE_SPACE, str[i]))
 				++token->size_cmd;
+			if (!is_last_quote && str[i])
+				i++;
 			continue ;
 		}
 		if (ft_strchr(REDIRECTS, str[i]))
@@ -129,7 +127,8 @@ void	skip_word(char *str, size_t *i, size_t *j)
 
 void	cut_quotes(char *line, char ***cmds, size_t *xyz, size_t *quote_size)
 {
-	xyz[0]++;
+	if (line[xyz[0]])
+		xyz[0]++;
 	(*cmds)[xyz[2]] = ft_substr(line, xyz[1], xyz[0] - xyz[1]);
 	if (!(*cmds)[xyz[2]])
 		force_quit(ERNOMEM);

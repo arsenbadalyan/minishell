@@ -64,6 +64,6 @@ int	execute_builtin(t_minishell *shell, t_token *token)
 	if (token->is_built_in == BIN_UNSET)
 		return (_unset(shell, token->tokens));
 	if (token->is_built_in == BIN_EXIT)
-		mini_exit(shell, token->tokens);
+		return (mini_exit(shell, token->tokens));
 	return (0);
 }

@@ -30,6 +30,8 @@ int	print_error(t_minishell *shell, char *error_txt)
 	ft_putstr_fd(": ", 2);
 	perror(error_txt);
 	shell->status = errno;
+	if (!ft_strcmp(error_txt, "fork"))
+		shell->status = 1;
 	return (errno);
 }
 

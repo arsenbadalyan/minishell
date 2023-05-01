@@ -59,7 +59,7 @@ int	check_before_ph(t_minishell *shell, char *line, int index, char c)
 							|| (line[index + 1] == line[index] && c == ')')))))
 				return (0);
 			else
-				return (write_exception(shell, 130, 130, &c));
+				return (one_char_exception(shell, 130, 130, c));
 			if (index < 0 || !line[index])
 				break ;
 		}

@@ -95,7 +95,7 @@ int		execute_builtin(t_minishell *shell, t_token *token);
 
 // Split of commands
 void	cmd_split(t_minishell *shell, t_token *cmd);
-void	count_split_size(t_token *token, char *str);
+void	count_split_size(t_token *token, char *str, size_t i);
 void	skip_word(char *str, size_t *i, size_t *j);
 void	fill_cmd_list_token(t_token *cmd);
 void	cut_quotes(char *line, char ***cmds, size_t *xyz, size_t *quote_size);
@@ -145,6 +145,8 @@ int		check_valid_export(t_minishell *shell, char *cmd, char *order);
 char	**push_to_double_array(char **arr, char *new_line);
 char	**concat_double_arrays(char **arr_1, char **arr_2);
 size_t	get_heredoc_sum(t_minishell *shell, char *str);
+int		one_char_exception(t_minishell *shell, int errno_c,
+			int exit_code, char c);
 
 // env controller
 char	**env_dup(char **env);
@@ -168,6 +170,5 @@ int		match_utils(char *str, char *pattern, char *star, char *tmp);
 
 // Signals
 void	sigint_handler(int sig_num);
-void	global_signal_handler(int action);
 
 #endif

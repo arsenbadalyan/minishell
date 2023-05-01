@@ -38,3 +38,12 @@ size_t	get_heredoc_sum(t_minishell *shell, char *str)
 	}
 	return (sum);
 }
+
+int	one_char_exception(t_minishell *shell, int errno_c, int exit_code, char c)
+{
+	char	str[2];
+
+	ft_bzero((void *)str, sizeof(char) * 2);
+	str[0] = c;
+	return (write_exception(shell, errno_c, exit_code, str));
+}

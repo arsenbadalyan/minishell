@@ -33,7 +33,7 @@ void	exe_md(t_minishell *shell, size_t *cmd_index, int *l_in, int *l_out)
 	shell->execute->rdr_out = FALSE;
 	cmd_split(shell, current_token);
 	control_new_command_io(shell, current_token);
-	if (shell->status && ++(*cmd_index) && !free_token(shell, current_token))
+	if (shell->status && !free_token(shell, current_token))
 		return ;
 	if (current_token->path || current_token->is_built_in != -1)
 	{
