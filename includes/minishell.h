@@ -26,6 +26,7 @@
 # include <sys/ioctl.h>
 # include <sys/wait.h>
 # include <termios.h>
+# include <limits.h>
 # include <curses.h>
 
 // Custom Libs

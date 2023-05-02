@@ -37,6 +37,7 @@ int		_cd_utils(t_minishell *shell, char *cmd, char **cmd_line);
 // exit
 int		mini_exit(t_minishell *shell, char **cmd);
 int		check_num(t_minishell *shell, char *str);
+int		overflow_or_not(char *str);
 // env
 int		_env(t_minishell *shell, int add);
 void	print_env(char *env);

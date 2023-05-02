@@ -6,11 +6,39 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:27 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/30 21:34:23 by armartir         ###   ########.fr       */
+/*   Updated: 2023/04/19 12:16:47 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+int	overflow_or_not(char *str)
+{
+	int					minus;
+	int					i;
+	unsigned long long	oper;
+
+	oper = 0;
+	i = 0;
+	minus = 1;
+	if (str[i] == '-')
+	{
+		minus = -1;
+		i++;
+	}
+	else if (str[i] == '+')
+		i++;
+	while (str[i] != '\0')
+	{
+		oper = oper * 10 + str[i] - '0';
+		i++;
+	}
+	if (minus == -1 && oper > (unsigned long long)(9223372036854775807) + 1)
+		return (1);
+	if (minus == 1 && oper > LONG_MAX)
+		return (1);
+	return (0);
+}
 
 int	check_num(t_minishell *shell, char *str)
 {
@@ -19,13 +47,10 @@ int	check_num(t_minishell *shell, char *str)
 	dup = ft_strjoin("exit: ", str);
 	if (!dup)
 		force_quit(12);
+	if (overflow_or_not(str))
+		return (write_exception(shell, 259, 255, dup));
 	if (*str == '-' || *str == '+')
 		str++;
-	while (*str == '0')
-		str++;
-	if ((ft_strcmp(str, "9223372036854775808") > 0 && *(dup + 6) == '-')
-		|| (ft_strcmp(str, "9223372036854775807") > 0 && *(dup + 6) != '-'))
-		return (write_exception(shell, 259, 255, dup));
 	while (*str)
 	{
 		if (!ft_isdigit(*str))
