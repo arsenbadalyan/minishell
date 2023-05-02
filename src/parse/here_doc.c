@@ -69,9 +69,7 @@ void	wait_limiter(t_minishell *shell, char *limiter, int fd)
 {
 	char	*buf;
 	char	*tmp;
-	int		i;
 
-	i = 0;
 	while (1)
 	{
 		buf = readline(">");

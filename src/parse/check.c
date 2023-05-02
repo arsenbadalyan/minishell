@@ -29,13 +29,13 @@ int	check_cmd_line(t_minishell *shell, char *line, int sg_quote, int db_quote)
 		if (check_before_ph(shell, line, i, line[i])
 			|| check_ph(shell, line, i, &ph)
 			|| check_meta_s(shell, line, &sym_counter, &i))
-			return (130);
+			return (258);
 		if (!ft_strchr(METASYMBOLS_ALL, line[i]))
 			sym_counter++;
 		i++;
 	}
-	if ((ph && write_exception(shell, 130, 130, ")")))
-		return (130);
+	if ((ph && write_exception(shell, 130, 258, ")")))
+		return (258);
 	return (0);
 }
 
@@ -59,7 +59,7 @@ int	check_before_ph(t_minishell *shell, char *line, int index, char c)
 							|| (line[index + 1] == line[index] && c == ')')))))
 				return (0);
 			else
-				return (one_char_exception(shell, 130, 130, c));
+				return (one_char_exception(shell, 130, 258, c));
 			if (index < 0 || !line[index])
 				break ;
 		}
@@ -80,17 +80,17 @@ int	check_ph(t_minishell *shell, char *line, size_t index, int *parenthesis)
 			if (!ft_strchr(METASYMBOLS_ALL, line[index]))
 				is_empty++;
 			if (line[index] == ')' && !is_empty)
-				return (write_exception(shell, 130, 130, ")"));
+				return (write_exception(shell, 130, 258, ")"));
 			else if (line[index] == ')')
 				return (0);
 			index++;
 		}
-		return (write_exception(shell, 130, 130, "("));
+		return (write_exception(shell, 130, 258, "("));
 	}
 	else if (line[index] == ')')
 		*parenthesis -= 1;
 	if (*parenthesis < 0)
-		return (write_exception(shell, 130, 130, ")"));
+		return (write_exception(shell, 130, 258, ")"));
 	return (0);
 }
 
@@ -108,13 +108,13 @@ int	check_meta_s(t_minishell *shell, char *line, size_t *sym_c, int *index)
 			&& ft_strchr(STRICT_META, *(line + (*index))))
 		{
 			ft_memcpy(last_meta, (line + (*index)), (size_t)slice_size);
-			return (write_exception(shell, 130, 130, last_meta));
+			return (write_exception(shell, 130, 258, last_meta));
 		}
 		ft_memcpy(last_meta, (line + (*index)), (size_t)slice_size);
 		*index += slice_size;
 		*sym_c = 0;
 		if (!check_syntax(line, *index))
-			return (write_exception(shell, 130, 130, last_meta));
+			return (write_exception(shell, 130, 258, last_meta));
 		*index -= 1;
 	}
 	return (0);

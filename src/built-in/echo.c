@@ -28,19 +28,16 @@ char	*_echo(t_minishell *shell, char **cmd_line)
 
 char	*join_lines(t_minishell *shell, char **cmd_line, int has_nl)
 {
-	size_t	i;
 	char	*new_line;
 	char	**new_cmd_line;
 
-	i = 0;
 	new_cmd_line = NULL;
 	new_cmd_line = copy_echo_lines(cmd_line);
 	new_cmd_line = echo_lines_trim(shell, cmd_line);
-	if (new_cmd_line && !ft_strcmp(*new_cmd_line, "-n"))
-		has_nl = FALSE;
+	has_nl = TRUE;
 	if (new_cmd_line && *new_cmd_line)
 	{
-		new_cmd_line = open_echo_wildcards(new_cmd_line, 0);
+		new_cmd_line = open_echo_wildcards(new_cmd_line, 0, &has_nl);
 		new_line = concat_echo_lines(new_cmd_line, 0, has_nl);
 	}
 	else

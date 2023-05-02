@@ -51,17 +51,17 @@ char	**echo_lines_trim(t_minishell *shell, char **cmd_line)
 	return (cmd_line);
 }
 
-char	**open_echo_wildcards(char **cmd_line, size_t i)
+char	**open_echo_wildcards(char **cmd_line, size_t i, int *has_nl)
 {
 	char	**wildcards;
 	char	**new_cmd_line;
 
 	new_cmd_line = NULL;
+	i = get_echo_options(cmd_line, 0, 1);
+	if (i)
+		*has_nl = FALSE;
 	while (cmd_line[i])
 	{
-		if (!ft_strcmp(cmd_line[i], "-n")
-			&& !free_single((void *)&cmd_line[i]) && ++i)
-			continue ;
 		wildcards = wildcard(cmd_line[i]);
 		if (wildcards)
 		{
@@ -102,4 +102,30 @@ char	*concat_echo_lines(char **cmd_line, size_t i, int has_nl)
 		i++;
 	}
 	return (new_line);
+}
+
+size_t	get_echo_options(char **cmd_line, size_t i, size_t j)
+{
+	while (cmd_line[i])
+	{
+		if (ft_strlen(cmd_line[i]) > 1 && cmd_line[i][0] == '-')
+		{
+			j = 1;
+			while (cmd_line[i][j])
+			{
+				if (cmd_line[i][j] != 'n')
+				{
+					j = 0;
+					break ;
+				}
+				j++;
+			}
+			if (!j)
+				break ;
+		}
+		else
+			break ;
+		i++;
+	}
+	return (i);
 }

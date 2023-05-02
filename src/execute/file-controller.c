@@ -31,9 +31,7 @@ void	file_controller(t_token *token, int type, int fd)
 int	stdio_mutate(t_minishell *shell, t_token *token, char *redirect, int type)
 {
 	int	fd;
-	int	io;
 
-	io = 0;
 	fd = stdio_check(shell, token, redirect, type);
 	if (fd < 0)
 	{
@@ -63,7 +61,7 @@ int	stdio_check(t_minishell *shell, t_token *token, char *redirect, int type)
 	else if (type == RDR_OUTPUT)
 		fd = open(redirect, O_WRONLY | O_CREAT | O_TRUNC, 0755);
 	else if (type == RDR_APPEND)
-		fd = open(redirect, O_WRONLY | O_CREAT | O_TRUNC | O_APPEND, 0755);
+		fd = open(redirect, O_WRONLY | O_CREAT | O_APPEND, 0755);
 	if (fd < 0)
 	{
 		if (here_doc)

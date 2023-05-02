@@ -45,13 +45,13 @@ int	write_exception(t_minishell *shell, int errno_c, int exit_code, char *txt)
 		error = strerror(errno_c);
 	ft_putstr_fd(SHELL_NAME_CONSOLE, 2);
 	ft_putstr_fd(": ", 2);
-	if (error)
-		ft_putstr_fd(error, 2);
 	if (txt)
 	{
-		ft_putstr_fd(": ", 2);
 		ft_putstr_fd(txt, 2);
+		ft_putstr_fd(": ", 2);
 	}
+	if (error)
+		ft_putstr_fd(error, 2);
 	ft_putstr_fd("\n", 2);
 	shell->status = exit_code;
 	return (errno_c);

@@ -23,8 +23,9 @@ void	get_env_for_echo(t_minishell *shell, char *var, char **new_line);
 // echo helpers
 char	**copy_echo_lines(char **cmd_line);
 char	**echo_lines_trim(t_minishell *shell, char **cmd_line);
-char	**open_echo_wildcards(char **cmd_line, size_t i);
+char	**open_echo_wildcards(char **cmd_line, size_t i, int *has_nl);
 char	*concat_echo_lines(char **cmd_line, size_t i, int has_nl);
+size_t	get_echo_options(char **cmd_line, size_t i, size_t j);
 
 // pwd
 int		_pwd(t_token *token);

@@ -1,4 +1,4 @@
-##Bonus part execution cases
+## Cases to check parse eror throwing
 (ls || (ls -la && ls || ls)) && ls
 
 ## Parse Check Cases
@@ -67,7 +67,6 @@ command arg1 |& | command2
 command arg1 |& arg2 | command3
 ((ls ) &&ls)
 export ii=l---------------------- && "$ii"s
-
 
 ## Test cases
 ### __cd__:
@@ -349,12 +348,107 @@ cd a/b
 rm -rf ../../a
 cd ../
 ```
-___
-### Useful links
-[Udemy - bash-mastery course](https://www.udemy.com/course/bash-mastery/) <br>
-[Unix Processes in C](https://www.youtube.com/watch?v=cex9XrZCU14&list=PLfqABt5AS4FkW5mOn2Tn9ZZLLDwA3kZUY)
-___
-### Additional information
-In my implementation I don't use any global variable and the project doesn't have any memory leak.
 
-![Minishell and 42Yerevan](./Minishell.jpg)
+// Additional cases
+ls
+pwd
+echo "hello world"
+echo "hello" > file.txt
+echo "world" >> file.txt
+sort < file.txt
+ls | wc -l
+ls | grep ".txt"
+cat file1.txt file2.txt > file3.txt
+rm file.txt
+cp file.txt file_copy.txt
+mv file.txt new_location.txt
+cd /
+cd ..
+cd ~
+mkdir new_directory
+ls -l && echo "All good"
+cd directory && ls
+rm file.txt && echo "File removed"
+ls -l || echo "Something went wrong"
+cd directory || echo "Directory does not exist"
+rm file.txt || echo "File not found"
+(ls && echo "Success") || echo "Failure"
+(cd directory || mkdir directory) && ls
+(ls || echo "Error") && (echo "Continuing" || echo "Stopping")
+ls *.txt
+cat file*.txt
+rm *backup*
+echo "hello world" | grep "hello"
+ls -l | grep ".txt" | wc -l
+echo "hello world" > output.txt
+echo "hello" >> output.txt
+sort < input.txt | uniq > output.txt
+cat file1.txt file2.txt file3.txt | sort | uniq
+grep "error" file.log | wc -l
+ls -la | grep "file.txt"
+find . -type f -name "*.txt"
+sed 's/hello/goodbye/g' input.txt > output.txt
+awk '{print $1}' input.txt
+grep -v "exclude" input.txt > output.txt
+ps aux | grep "nginx"
+whoami
+date
+cal
+uptime
+uname -a
+df -h
+du -h
+tar -czvf archive.tar.gz directory/
+sudo apt-get update && sudo apt-get upgrade
+
+// Test cases for bonus part
+ls
+cd /
+cd ..
+cd ~
+pwd
+mkdir new_dir
+touch file.txt
+rm file.txt
+echo "hello world" > file.txt
+echo "goodbye world" >> file.txt
+cat file.txt
+sort file.txt
+uniq file.txt
+grep "hello" file.txt
+ls *.txt
+rm *
+ls && echo "ls succeeded"
+ls -l || echo "ls failed"
+(ls && echo "ls succeeded") || echo "ls failed"
+ls -l && (echo "Listing files..."; echo "Done.")
+cd new_dir && (ls -l || echo "Failed to list files.")
+rm non_existent_file.txt || echo "File does not exist."
+rm non_existent_file.txt && echo "Error: File does not exist."
+echo "hello" > file.txt && (cat file.txt || echo "Failed to read file.")
+echo "world" >> file.txt && (cat file.txt | sort | uniq)
+(cd non_existent_dir || mkdir non_existent_dir) && echo "Directory created."
+ls -l && (echo "Listing files..."; echo "Done.") || echo "ls failed"
+ls -l || (echo "Failed to list files."; exit 1)
+(ls || echo "ls failed") && (echo "Continuing..." || echo "Stopping...")
+echo "hello world" | grep "world"
+ls -l | grep "file.txt"
+find . -type f -name "*.txt"
+sed 's/hello/goodbye/g' file.txt > new_file.txt
+awk '{print $1}' file.txt
+grep -v "goodbye" file.txt > output.txt
+ps aux | grep "nginx"
+whoami
+date
+cal
+uptime
+uname -a
+df -h
+du -h
+tar -czvf archive.tar.gz directory/
+sudo apt-get update && sudo apt-get upgrade
+echo "hello world" && echo "goodbye world"
+echo "hello world" || echo "goodbye world"
+echo "hello world" && (echo "continuing..."; echo "done.") || echo "failed"
+(echo "hello" && echo "world") || echo "failed"
+(echo "hello" || echo "world") && echo "done."

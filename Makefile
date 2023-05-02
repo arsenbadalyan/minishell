@@ -1,6 +1,6 @@
 # Main Variables
 NAME     = minishell
-GCC      = gcc
+GCC      = cc
 CFLAGS   = -Wall -Wextra -Werror
 RM       = rm -rf
 OUTPUT   = ./$(NAME)
