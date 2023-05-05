@@ -29,13 +29,15 @@ void	print_env(char *env)
 void	print_export(char *env)
 {
 	int	i;
+	int	j;
 
 	i = 0;
+	j = 0;
 	write(1, "declare -x ", 11);
 	while (env[i])
 	{
-		if (env[i - 1] == '=' && env[i] != '"')
-			write (1, "\"", 1);
+		if (env[i - 1] == '=' && env[i] != '"' && !j)
+			j = write (1, "\"", 1);
 		write (1, &env[i], 1);
 		i++;
 	}

@@ -78,7 +78,8 @@ int	_cd(t_minishell *shell, char **cmd_line)
 		cmd = join_tilde(shell, cmd_line[1]);
 	else if (cmd_line[1][0] == '-' && !cmd_line[1][1])
 	{
-		if (!ft_strchr(get_env(shell, "OLDPWD"), '='))
+		if (!get_env(shell, "OLDPWD")
+			|| !ft_strchr(get_env(shell, "OLDPWD"), '='))
 			return (write_exception(shell, 258, 1, 0));
 		cmd = get_env(shell, "OLDPWD") + 7;
 	}
