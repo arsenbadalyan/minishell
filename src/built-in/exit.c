@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/01 12:26:27 by arsbadal          #+#    #+#             */
-/*   Updated: 2023/04/19 12:16:47 by armartir         ###   ########.fr       */
+/*   Updated: 2023/05/05 21:02:45 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,17 @@ int	overflow_or_not(char *str)
 	return (0);
 }
 
+int	check_len(char *str)
+{
+	if (*str == '-' || *str == '+')
+		str++;
+	while (*str && *str == '0')
+		str++;
+	if (ft_strlen(str) >= 20)
+		return (1);
+	return (0);
+}
+
 int	check_num(t_minishell *shell, char *str)
 {
 	char	*dup;
@@ -47,7 +58,7 @@ int	check_num(t_minishell *shell, char *str)
 	dup = ft_strjoin("exit: ", str);
 	if (!dup)
 		force_quit(12);
-	if (overflow_or_not(str))
+	if (overflow_or_not(str) || check_len(str))
 		return (write_exception(shell, 259, 255, dup));
 	if (*str == '-' || *str == '+')
 		str++;

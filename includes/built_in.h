@@ -6,7 +6,7 @@
 /*   By: armartir <armartir@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/04/10 16:55:39 by armartir          #+#    #+#             */
-/*   Updated: 2023/04/30 21:33:53 by armartir         ###   ########.fr       */
+/*   Updated: 2023/05/05 21:03:18 by armartir         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,7 @@ int		_cd_utils(t_minishell *shell, char *cmd, char **cmd_line);
 int		mini_exit(t_minishell *shell, char **cmd);
 int		check_num(t_minishell *shell, char *str);
 int		overflow_or_not(char *str);
+int		check_len(char *str);
 // env
 int		_env(t_minishell *shell, int add);
 void	print_env(char *env);
