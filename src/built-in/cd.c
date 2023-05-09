@@ -42,7 +42,7 @@ int	_cd_utils(t_minishell *shell, char *cmd, char **cmd_line)
 	set_env(shell, "PWD", cwd, 1);
 	if (cmd_line[1] && cmd_line[1][0] == '~' && cmd_line[1][1])
 		free_single((void *)&cmd);
-	return (1);
+	return (0);
 }
 
 int	_cd_check_error(t_minishell *shell, char *cmd)
