@@ -1,8 +1,7 @@
 # Main Variables
 NAME     = minishell
-GCC      = gcc
-# CFLAGS   = -Wall -Wextra -Werror
-CFLAGS   =
+GCC      = cc
+CFLAGS   = -Wall -Wextra -Werror
 RM       = rm -rf
 OUTPUT   = ./$(NAME)
 LIBS     = -I./includes/ -I./readline/include
@@ -40,7 +39,7 @@ GREEN  = \033[32m
 YELLOW = \033[33m
 BLUE   = \033[34m
 
-all: $(NAME)
+all: readline $(NAME)
 	@echo > /dev/null
 
 bonus: all
@@ -61,13 +60,6 @@ readline-util:
 	@make -C ./$(RDLINE_RESERV) install
 	@$(RM) $(RDLINE_RESERV)
 	@make READLINE_READY
-
-#$(NAME): $(LIB_DIR) Makefile $(OBJS)
-#	@make WAIT_COMPILE_MSG
-#	@echo "${GREEN}-> Compiling LIBFT...${RESET}"
-#	@make -C $(LIBFT_DIR) all
-#	@$(GCC) -g $(CFLAGS) $(LIBS) -L$(LIBFT_DIR) -l$(LIBFT) -L$(RDLINE_DIR) -l$(RDLINE) $(OBJS) -o $(NAME)
-#	@make DONE_MSG
 
 $(NAME): $(LIB_DIR) Makefile $(OBJS)
 	@make WAIT_COMPILE_MSG
@@ -92,7 +84,7 @@ re: fclean all
 
 # Helper messages
 READLINE_READY:
-	@echo "${GREEN}Readline is Ready!${RESET}"
+	@echo "${GREEN}Readline is Ready!${RESET}" > /dev/null
 WAIT_COMPILE_MSG:
 	@echo "${YELLOW}Please wait until program compiling...${RESET}"
 DONE_MSG:

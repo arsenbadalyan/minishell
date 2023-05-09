@@ -11,56 +11,61 @@
 /* ************************************************************************** */
 
 #ifndef SHELL_H
-#define SHELL_H
+# define SHELL_H
 
 // main for one check global
 // parent to go deeper in one line
 // child to get how many childs have one parent
 
 typedef struct s_minishell {
-	struct s_exc_line *execute;
-	struct s_local_env *local_env;
-	char *user_input;
-	char **envp;
-	int status;
-} t_minishell;
+	struct s_exc_line	*execute;
+	struct s_local_env	*local_env;
+	char				*user_input;
+	char				**envp;
+	int					status;
+	int					exit_code;
+}	t_minishell;
 
 typedef struct s_exc_line {
-	struct s_token *cmd_list;
-	size_t clist_len;
-	int heredoc_sum;
-	int current_hd_state;
-	char **tokens;
-	int STDIN;
-	int STDOUT;
-	int PIPE_IN;
-	int RDR_OUT;
-	size_t command_wait_list;
-	int skip_phs;
-	int skip_mode;
-	int is_single_cmd;
-} t_exc_line;
+	struct s_token	*cmd_list;
+	size_t			clist_len;
+	char			**tokens;
+	int				std_in;
+	int				std_out;
+	int				heredoc_in;
+	int				heredoc_out;
+	int				heredoc_cur;
+	int				heredoc_skip;
+	int				pipe_in;
+	int				rdr_out;
+	size_t			command_wait_list;
+	int				skip_phs;
+	int				skip_mode;
+	int				sub_shell_mode;
+	int				is_single_cmd;
+}	t_exc_line;
 
 typedef struct s_token {
-	size_t token_mode;
-	char *cmd;
-	char *path;
-	char **tokens;
-	char **redirects;
-	int stdin;
-	int stdout;
-	size_t size_cmd;
-	size_t size_rdr;
-	int status;
-	int is_built_in;
-} t_token;
+	size_t	token_mode;
+	char	*cmd;
+	char	*path;
+	char	**tokens;
+	char	**redirects;
+	int		stdin;
+	int		stdout;
+	size_t	size_cmd;
+	size_t	size_rdr;
+	size_t	heredoc_sum;
+	int		status;
+	int		is_built_in;
+}	t_token;
 
 // Initialize
-t_minishell *init_minishell();
-t_exc_line *init_exc_line();
-t_token *init_tokens(size_t size);
+t_minishell	*init_minishell(void);
+t_exc_line	*init_exc_line(void);
+t_token		*init_tokens(size_t size);
 
-enum token_modes {
+enum e_token_modes {
 	CMD,
 	PIPE,
 	OR,
@@ -69,28 +74,23 @@ enum token_modes {
 	PH_CLOSE
 };
 
-enum file_state {
+enum e_file_state {
 	NOT_EXIST,
 	PERMISSION_DENIED,
 	IS_DIR,
 	EXIST
 };
 
-// TRUE and FALSE
-enum boolean {
-    TRUE = 1,
-    FALSE = 0
-};
-
-enum errors {
-    ENOSUCHFILE = 2,
-    ERNOMEM = 12,
-    EPDEN = 13,
+enum e_errors {
+	ENOSUCHFILE = 2,
+	ERNOMEM = 12,
+	EPDEN = 13,
 	E_ISDIR = 126,
-    ECMDNF = 127,
+	ECMDNF = 127,
+	EAMBGRDR = 299
 };
 
-enum builtin {
+enum e_builtin {
 	BIN_ECHO,
 	BIN_CD,
 	BIN_PWD,
@@ -98,6 +98,13 @@ enum builtin {
 	BIN_UNSET,
 	BIN_ENV,
 	BIN_EXIT
+};
+
+enum e_redirects {
+	RDR_HERE_DOC,
+	RDR_INPUT,
+	RDR_OUTPUT,
+	RDR_APPEND
 };
 
 #endif
