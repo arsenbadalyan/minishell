@@ -28,7 +28,7 @@ char	*concat_echo_lines(char **cmd_line, size_t i, int has_nl);
 size_t	get_echo_options(char **cmd_line, size_t i, size_t j);
 
 // pwd
-int		_pwd(t_token *token);
+int		_pwd(t_minishell *shell, t_token *token);
 // cd
 int		_cd(t_minishell *shell, char **cmd_line);
 int		_cd_check_error(t_minishell *shell, char *cmd);

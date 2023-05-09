@@ -79,10 +79,7 @@ int	mini_exit(t_minishell *shell, char **cmd)
 	write(1, "exit\n", 5);
 	i = get_2d_array_length((void **)cmd);
 	if (!cmd[1])
-	{
-		shell->status = 0;
-		exit(shell->status);
-	}
+		exit(g_exit_code);
 	if (check_num(shell, cmd[1]))
 		exit(shell->status);
 	shell->status = (ft_atoi(cmd[1]) % 256);

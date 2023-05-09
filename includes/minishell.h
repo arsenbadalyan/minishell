@@ -40,6 +40,9 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 
+// Global variable for ctrl+C signal to change exit code
+extern int	g_exit_code;
+
 // Printf Minishell header on start
 void	print_header(void);
 

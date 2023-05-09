@@ -37,7 +37,7 @@
 
 // Custom Errors
 # define ERROR_UNX "unexpected error"
-# define ERROR_127 "command does not exist in the PATH or wrong command name"
+# define ERROR_127 "command not found"
 # define ERROR_126 "is a directory"
 # define ERROR_ARG "too many arguments"
 # define ERROR_NUM "numeric argument required"

@@ -12,15 +12,15 @@
 
 #include "minishell.h"
 
-int	_pwd(t_token *token)
+int	_pwd(t_minishell *shell, t_token *token)
 {
 	char	cwd[PATH_MAX];
 
+	(void)shell;
 	if (getcwd(cwd, PATH_MAX))
 	{
 		ft_putstr_fd(cwd, token->stdout);
 		ft_putstr_fd("\n", token->stdout);
-		return (0);
 	}
 	return (0);
 }

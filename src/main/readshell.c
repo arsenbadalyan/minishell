@@ -36,6 +36,7 @@ void	read_shell(t_minishell *shell, char *user_input, char *input_cpy)
 		add_history(user_input);
 		shell->execute->heredoc_skip = shell->execute->heredoc_in;
 		shell->exit_code = controller(shell, user_input);
+		g_exit_code = shell->exit_code;
 		remove_heredoc(shell);
 	}
 }

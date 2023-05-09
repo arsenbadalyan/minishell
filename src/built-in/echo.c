@@ -108,7 +108,7 @@ void	get_env_for_echo(t_minishell *shell, char *var, char **new_line)
 
 	if (!ft_strcmp(var, "?"))
 	{
-		env = ft_itoa(shell->exit_code);
+		env = ft_itoa(g_exit_code);
 		temp_line = *new_line;
 		*new_line = ft_strjoin(*new_line, env);
 		if (!free_single((void *)&temp_line) && !free_single((void *)&env)

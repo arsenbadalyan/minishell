@@ -12,6 +12,8 @@
 
 #include "minishell.h"
 
+int	g_exit_code = 0;
+
 int	main(int argc, char **argv, char **envp)
 {
 	t_minishell	*shell;
@@ -26,5 +28,5 @@ int	main(int argc, char **argv, char **envp)
 	print_header();
 	env_controller(shell, envp);
 	read_shell(shell, NULL, NULL);
-	return (shell->exit_code);
+	return (g_exit_code);
 }

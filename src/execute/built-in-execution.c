@@ -54,7 +54,7 @@ int	execute_builtin(t_minishell *shell, t_token *token)
 		free_single((void *)&result);
 	}
 	if (token->is_built_in == BIN_PWD)
-		return (_pwd(token));
+		return (_pwd(shell, token));
 	if (token->is_built_in == BIN_CD)
 		return (_cd(shell, token->tokens));
 	if (token->is_built_in == BIN_ENV)
